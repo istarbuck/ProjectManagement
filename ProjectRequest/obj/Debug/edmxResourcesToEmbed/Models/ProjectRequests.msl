@@ -1,0 +1,282 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="ProjectRequestModelStoreContainer" CdmEntityContainer="ProjectRequestEntities">
+    <EntitySetMapping Name="Answers">
+      <EntityTypeMapping TypeName="ProjectRequestModel.Answer">
+        <MappingFragment StoreEntitySet="Answer">
+          <ScalarProperty Name="subrequestID" ColumnName="subrequestID" />
+          <ScalarProperty Name="AnswerID" ColumnName="AnswerID" />
+          <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
+          <ScalarProperty Name="AnswerText" ColumnName="AnswerText" />
+          <ScalarProperty Name="AnswerValue" ColumnName="AnswerValue" />
+          <ScalarProperty Name="requestID" ColumnName="requestID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Categories">
+      <EntityTypeMapping TypeName="ProjectRequestModel.Category">
+        <MappingFragment StoreEntitySet="Category">
+          <ScalarProperty Name="version" ColumnName="version" />
+          <ScalarProperty Name="categoryName" ColumnName="categoryName" />
+          <ScalarProperty Name="categoryID" ColumnName="categoryID" />
+          <ScalarProperty Name="category1" ColumnName="category" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Questions">
+      <EntityTypeMapping TypeName="ProjectRequestModel.Question">
+        <MappingFragment StoreEntitySet="Question">
+          <ScalarProperty Name="Class" ColumnName="Class" />
+          <ScalarProperty Name="selectionName" ColumnName="selectionName" />
+          <ScalarProperty Name="questionID" ColumnName="questionID" />
+          <ScalarProperty Name="categoryID" ColumnName="categoryID" />
+          <ScalarProperty Name="Question1" ColumnName="Question" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RequestAssignments">
+      <EntityTypeMapping TypeName="ProjectRequestModel.RequestAssignment">
+        <MappingFragment StoreEntitySet="RequestAssignment">
+          <ScalarProperty Name="staffID" ColumnName="staffID" />
+          <ScalarProperty Name="requestID" ColumnName="requestID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Staffs">
+      <EntityTypeMapping TypeName="ProjectRequestModel.Staff">
+        <MappingFragment StoreEntitySet="Staff">
+          <ScalarProperty Name="emailAddress" ColumnName="emailAddress" />
+          <ScalarProperty Name="lastName" ColumnName="lastName" />
+          <ScalarProperty Name="firstName" ColumnName="firstName" />
+          <ScalarProperty Name="staffID" ColumnName="staffID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Locations">
+      <EntityTypeMapping TypeName="ProjectRequestModel.Location">
+        <MappingFragment StoreEntitySet="Location">
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="locationID" ColumnName="locationID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DOAs">
+      <EntityTypeMapping TypeName="ProjectRequestModel.DOA">
+        <MappingFragment StoreEntitySet="DOA">
+          <ScalarProperty Name="doaName" ColumnName="doaName" />
+          <ScalarProperty Name="doaID" ColumnName="doaID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Attachments">
+      <EntityTypeMapping TypeName="ProjectRequestModel.Attachment">
+        <MappingFragment StoreEntitySet="Attachment">
+          <ScalarProperty Name="dateAdded" ColumnName="dateAdded" />
+          <ScalarProperty Name="staffID" ColumnName="staffID" />
+          <ScalarProperty Name="caption" ColumnName="caption" />
+          <ScalarProperty Name="filePath" ColumnName="filePath" />
+          <ScalarProperty Name="requestID" ColumnName="requestID" />
+          <ScalarProperty Name="attachmentID" ColumnName="attachmentID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Templates">
+      <EntityTypeMapping TypeName="ProjectRequestModel.Template">
+        <MappingFragment StoreEntitySet="Template">
+          <ScalarProperty Name="templateName" ColumnName="templateName" />
+          <ScalarProperty Name="templateID" ColumnName="templateID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TaskStatus1">
+      <EntityTypeMapping TypeName="ProjectRequestModel.TaskStatus">
+        <MappingFragment StoreEntitySet="TaskStatus">
+          <ScalarProperty Name="status" ColumnName="status" />
+          <ScalarProperty Name="statusID" ColumnName="statusID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TaskAssignments">
+      <EntityTypeMapping TypeName="ProjectRequestModel.TaskAssignment">
+        <MappingFragment StoreEntitySet="TaskAssignment">
+          <ScalarProperty Name="templateID" ColumnName="templateID" />
+          <ScalarProperty Name="staffID" ColumnName="staffID" />
+          <ScalarProperty Name="taskID" ColumnName="taskID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Chores">
+      <EntityTypeMapping TypeName="ProjectRequestModel.Chore">
+        <MappingFragment StoreEntitySet="Chores">
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="timeSpent" ColumnName="timeSpent" />
+          <ScalarProperty Name="chore1" ColumnName="chore" />
+          <ScalarProperty Name="requestID" ColumnName="requestID" />
+          <ScalarProperty Name="sheetID" ColumnName="sheetID" />
+          <ScalarProperty Name="choreID" ColumnName="choreID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TimeSheets">
+      <EntityTypeMapping TypeName="ProjectRequestModel.TimeSheet">
+        <MappingFragment StoreEntitySet="TimeSheet">
+          <ScalarProperty Name="completed" ColumnName="completed" />
+          <ScalarProperty Name="sheetDate" ColumnName="sheetDate" />
+          <ScalarProperty Name="staffID" ColumnName="staffID" />
+          <ScalarProperty Name="sheetID" ColumnName="sheetID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Calenders">
+      <EntityTypeMapping TypeName="ProjectRequestModel.Calender">
+        <MappingFragment StoreEntitySet="Calender">
+          <ScalarProperty Name="eventType" ColumnName="eventType" />
+          <ScalarProperty Name="location" ColumnName="location" />
+          <ScalarProperty Name="className" ColumnName="className" />
+          <ScalarProperty Name="allDay" ColumnName="allDay" />
+          <ScalarProperty Name="end" ColumnName="end" />
+          <ScalarProperty Name="start" ColumnName="start" />
+          <ScalarProperty Name="title" ColumnName="title" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TaskLists">
+      <EntityTypeMapping TypeName="ProjectRequestModel.TaskList">
+        <MappingFragment StoreEntitySet="TaskList">
+          <ScalarProperty Name="subRequestID" ColumnName="subRequestID" />
+          <ScalarProperty Name="Comments" ColumnName="Comments" />
+          <ScalarProperty Name="priority" ColumnName="priority" />
+          <ScalarProperty Name="orderNum" ColumnName="orderNum" />
+          <ScalarProperty Name="TemplateID" ColumnName="TemplateID" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="DueDate" ColumnName="DueDate" />
+          <ScalarProperty Name="Task" ColumnName="Task" />
+          <ScalarProperty Name="requestID" ColumnName="requestID" />
+          <ScalarProperty Name="taskID" ColumnName="taskID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PONums">
+      <EntityTypeMapping TypeName="ProjectRequestModel.PONum">
+        <MappingFragment StoreEntitySet="PONum">
+          <ScalarProperty Name="poID" ColumnName="poID" />
+          <ScalarProperty Name="PONum1" ColumnName="PONum" />
+          <ScalarProperty Name="requestID" ColumnName="requestID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ProjectStatus1">
+      <EntityTypeMapping TypeName="ProjectRequestModel.ProjectStatus">
+        <MappingFragment StoreEntitySet="ProjectStatus">
+          <ScalarProperty Name="status" ColumnName="status" />
+          <ScalarProperty Name="statusID" ColumnName="statusID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Requests">
+      <EntityTypeMapping TypeName="ProjectRequestModel.Request">
+        <MappingFragment StoreEntitySet="Request">
+          <ScalarProperty Name="approvedBy" ColumnName="approvedBy" />
+          <ScalarProperty Name="department" ColumnName="department" />
+          <ScalarProperty Name="denialReason" ColumnName="denialReason" />
+          <ScalarProperty Name="publication" ColumnName="publication" />
+          <ScalarProperty Name="printerSpecifications" ColumnName="printerSpecifications" />
+          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+          <ScalarProperty Name="total" ColumnName="total" />
+          <ScalarProperty Name="tax" ColumnName="tax" />
+          <ScalarProperty Name="subtotal" ColumnName="subtotal" />
+          <ScalarProperty Name="shipTo" ColumnName="shipTo" />
+          <ScalarProperty Name="vendor" ColumnName="vendor" />
+          <ScalarProperty Name="subProjects" ColumnName="subProjects" />
+          <ScalarProperty Name="status" ColumnName="status" />
+          <ScalarProperty Name="customID" ColumnName="customID" />
+          <ScalarProperty Name="dueDate" ColumnName="dueDate" />
+          <ScalarProperty Name="cost" ColumnName="cost" />
+          <ScalarProperty Name="detail" ColumnName="detail" />
+          <ScalarProperty Name="poNumber" ColumnName="poNumber" />
+          <ScalarProperty Name="comment" ColumnName="comment" />
+          <ScalarProperty Name="additionalInfo" ColumnName="additionalInfo" />
+          <ScalarProperty Name="templateID" ColumnName="templateID" />
+          <ScalarProperty Name="email" ColumnName="email" />
+          <ScalarProperty Name="projectName" ColumnName="projectName" />
+          <ScalarProperty Name="doaAttachment" ColumnName="doaAttachment" />
+          <ScalarProperty Name="doaName" ColumnName="doaName" />
+          <ScalarProperty Name="completed" ColumnName="completed" />
+          <ScalarProperty Name="currentTrackID" ColumnName="currentTrackID" />
+          <ScalarProperty Name="dateRequested" ColumnName="dateRequested" />
+          <ScalarProperty Name="contactInfo" ColumnName="contactInfo" />
+          <ScalarProperty Name="location" ColumnName="location" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="categoryID" ColumnName="categoryID" />
+          <ScalarProperty Name="reuqestID" ColumnName="reuqestID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="VelocifyStatuses">
+      <EntityTypeMapping TypeName="ProjectRequestModel.VelocifyStatus">
+        <MappingFragment StoreEntitySet="VelocifyStatuses">
+          <ScalarProperty Name="statusName" ColumnName="statusName" />
+          <ScalarProperty Name="statusID" ColumnName="statusID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Vendors">
+      <EntityTypeMapping TypeName="ProjectRequestModel.Vendor">
+        <MappingFragment StoreEntitySet="Vendor">
+          <ScalarProperty Name="brand" ColumnName="brand" />
+          <ScalarProperty Name="publication" ColumnName="publication" />
+          <ScalarProperty Name="vendorID" ColumnName="vendorID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="vendorContacts">
+      <EntityTypeMapping TypeName="ProjectRequestModel.vendorContact">
+        <MappingFragment StoreEntitySet="vendorContact">
+          <ScalarProperty Name="vendorID" ColumnName="vendorID" />
+          <ScalarProperty Name="email" ColumnName="email" />
+          <ScalarProperty Name="phone" ColumnName="phone" />
+          <ScalarProperty Name="contact" ColumnName="contact" />
+          <ScalarProperty Name="vendorContactID" ColumnName="vendorContactID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SubRequests">
+      <EntityTypeMapping TypeName="ProjectRequestModel.SubRequest">
+        <MappingFragment StoreEntitySet="SubRequest">
+          <ScalarProperty Name="categoryID" ColumnName="categoryID" />
+          <ScalarProperty Name="requestID" ColumnName="requestID" />
+          <ScalarProperty Name="subRequestID" ColumnName="subRequestID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Departments">
+      <EntityTypeMapping TypeName="ProjectRequestModel.Department">
+        <MappingFragment StoreEntitySet="Departments">
+          <ScalarProperty Name="department1" ColumnName="department" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Approvers">
+      <EntityTypeMapping TypeName="ProjectRequestModel.Approver">
+        <MappingFragment StoreEntitySet="Approvers">
+          <ScalarProperty Name="sullivanID" ColumnName="sullivanID" />
+          <ScalarProperty Name="department" ColumnName="department" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="email" ColumnName="email" />
+          <ScalarProperty Name="approverID" ColumnName="approverID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SelectionItems">
+      <EntityTypeMapping TypeName="ProjectRequestModel.SelectionItem">
+        <MappingFragment StoreEntitySet="SelectionItems">
+          <ScalarProperty Name="selectionText" ColumnName="selectionText" />
+          <ScalarProperty Name="selectionValue" ColumnName="selectionValue" />
+          <ScalarProperty Name="selectionName" ColumnName="selectionName" />
+          <ScalarProperty Name="selectionID" ColumnName="selectionID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

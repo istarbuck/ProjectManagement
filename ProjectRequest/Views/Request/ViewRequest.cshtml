@@ -1,0 +1,592 @@
+﻿@model ProjectRequest.Models.RequestInfoViewModel
+
+@{
+    ViewBag.Title = Model.request.reuqestID + " - " + Model.request.projectName;
+    Layout = "~/Views/Shared/_LayoutCopy2017.cshtml";
+    
+   <link rel="stylesheet" href="~/css/magnific-popup.css"> 
+    <link rel="stylesheet" href="~/css/printCase.css"> 
+    
+   <style type="text/css">
+
+        .white-popup {
+          position: relative;
+          background: #FFF;
+          padding: 20px;
+          width: auto;
+          max-width: 800px;
+          margin: 30px auto;
+        }
+
+    </style>
+
+    <script src="https://api.trello.com/1/client.js?key=18a0487d95aaf89f9ff8ff894fcf4972"></script>
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        //if(getUrlVars()["position"] != null)
+        //{
+        //    var position = $("#" + getUrlVars()["position"]).position();
+
+        //    $(window).scrollTop(parseInt(position.top));
+        //}
+
+
+    });
+
+    function DisplayReport() {
+        $.magnificPopup.open({
+            items: {
+                src: '#addTime'
+            },
+            type: 'inline',
+            callbacks: {
+                close: function () {
+                    $("#Chore").val('');
+                    $("#TimeSpent").val('');
+                    $("#reportResponse").html('');
+                }
+            }
+        });
+    }
+
+    function DisplayScully() {
+        $.magnificPopup.open({
+            items: {
+                src: '#Scully'
+            },
+            type: 'inline'
+        });
+    }
+
+    function AddTime() {
+        var currentDate = $.datepicker.formatDate('mm/dd/yy', new Date());
+
+        $.ajax({
+            type: "POST",
+            url: "/ProjectRequest/ProjectRequest/TimeSheet/AddTime",
+            data: '{"id":"' + $("#Request").val() + '", "description":"' + $("#Chore").val() + '", "time":"' + $("#TimeSpent").val() + '"}',
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+                $("#reportResponse").html(response);
+            },
+            failure: function (response) {
+                $("#reportResponse").html(response);
+            }
+        });
+    }
+
+    function TrelloUpload()
+    {
+        var authenticationSuccess = function ()
+        {
+            console.log('Successful authentication');
+        };
+        var authenticationFailure = function () { console.log('Failed authentication'); };
+
+        Trello.authorize({
+            type: 'popup',
+            name: 'Getting Started Application',
+            scope: {
+                read: 'true',
+                write: 'true'
+            },
+            expiration: 'never',
+            success: authenticationSuccess,
+            error: authenticationFailure,
+            interactive: true
+        });
+
+        $.ajax({
+            type: "GET",
+            url: "/ProjectRequest/ProjectRequest/Request/GetTrelloInfo",
+            data: { id: getUrlParameter('requestID') },
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+
+                var data = $.parseJSON(response);
+
+                var myList = '58ebcc9d36e943f39afee321';
+                var creationSuccess = function (trelloData) {
+
+                    console.log('Card created successfully. Data returned:' + JSON.stringify(trelloData));
+
+                    var cardData = $.parseJSON(JSON.stringify(trelloData));
+
+                    var files = data.attachment;
+
+                    for (var file in files) {
+                        var formData = new FormData();
+
+                        formData.append('token', Trello.token());
+                        formData.append('key', '18a0487d95aaf89f9ff8ff894fcf4972');
+                        formData.append('name', files[file]);
+
+                        // HTML file input, chosen by user
+                        formData.append('url', 'https://secure.sullivan.edu/ProjectRequest/ProjectRequest/Attachments/' + files[file]);
+
+                        var request = new XMLHttpRequest();
+                        request.open("POST", 'https://api.trello.com/1/cards/' + cardData.id + '/attachments');
+                        request.send(formData);
+                        console.log(request.responseText);
+
+                        //?token=' + Trello.token + '&key=18a0487d95aaf89f9ff8ff894fcf4972&file=https://secure.sullivan.edu/ProjectRequest/ProjectRequest/Attachments/' + file);
+                    }
+                    
+                };
+                var newCard = {
+                    name: data.cardTitle,
+                    desc: data.description,
+                    due: data.dueDate,
+                    // Place this card at the top of our list 
+                    idList: myList,
+                    pos: 'top'
+                };
+                Trello.post('/cards/', newCard, creationSuccess);
+
+            },
+            failure: function (response) {
+                console.log(response);
+            }
+        });
+
+
+    }
+
+    function getUrlParameter(sParam) {
+        var sPageURL = window.location.search.substring(1);
+        var sURLVariables = sPageURL.split('&');
+        for (var i = 0; i < sURLVariables.length; i++) {
+            var sParameterName = sURLVariables[i].split('=');
+            if (sParameterName[0] == sParam) {
+                return sParameterName[1];
+            }
+        }
+    }
+</script>
+
+@*<input type="hidden" id="scrollPosition" name="scrollPosition" class="scrollPosition" value="@ViewBag.Position" />*@
+ 
+<br />
+
+
+
+<div class="row">
+
+    <div class="col s12 m6 l6">
+
+        <fieldset class="ViewCase">
+
+            <legend>Case Info</legend>
+            
+            @if (ViewBag.Role == "Agent")
+            {
+                <div class="row row--no-spacing">
+                    <div class="col s6">
+                        <a href="RequestInfo?requestID=@Model.request.reuqestID.ToString()">Edit Case File</a>
+                    </div>
+                </div>
+            }
+
+            <div class="row">
+
+                <div class="col s12 m12 l6">
+                    <p><span class="ViewHeader"><b>Case Name:</b></span><br /> @Model.request.projectName</p>
+                </div>
+
+                <div class="col s12 m12 l6">
+                    <p><span class="ViewHeader"><b>Case ID:</b></span><br /> @Model.request.reuqestID</p>
+                </div>
+
+            </div>
+
+            <div class="row ">
+
+                <div class="col s12 m12 l6">
+                    <p><span class="ViewHeader"><b>Completed?</b></span><br /> @Model.request.completed.ToString()</p>
+                </div>
+
+
+                <div class="col s12 m12 l6">
+                    <p><span class="ViewHeader"><b>Status</b></span><br /> @Model.request.status </p>
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <div class="col s12 m12 l6">
+                    <p><span class="ViewHeader"><b>Date Submitted:</b></span><br /> @Model.request.dateRequested </p>
+                </div>
+
+                <div class="col s12 m12 l6">
+                    <p><span class="ViewHeader"><b>Due Date:</b></span><br /> @Model.request.dueDate </p>
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <div class="col s12 m12 l6">
+                    <p><span class="ViewHeader"><b>Category:</b></span><br /> @Model.request.categoryID </p>
+                </div>
+
+                <div class="col s12 m12 l6">
+                    <p><span class="ViewHeader"><b>Location:</b></span><br /> @Model.request.location </p>
+                </div>
+
+            </div>
+
+        </fieldset> <!-- End Case Info -->
+
+    </div> <!-- End Col-->
+
+    <div class="col s12 m6 l6">
+
+    <fieldset class="ViewCase">
+
+    <legend>Contact Info</legend>
+
+        @if (ViewBag.Role == "Agent")
+        {
+            <div class="row row--no-spacing">
+                <div class="col s6">
+                    <a href="RequestInfo?requestID=@Model.request.reuqestID.ToString()">Edit Case File</a>
+                </div>
+            </div>
+        }
+
+        <div class="row">
+            <div class="col s12 m12 l6">
+                <p><span class="ViewHeader"><b>Requester Name:</b></span><br /> @Model.request.name </p>
+            </div>
+
+            <div class="col s12 m12 l6">
+                <p><span class="ViewHeader"><b>Email Address:</b></span><br /><a href="mailTo:@Model.request.email?subject=@Model.request.projectName" >@Model.request.email</a></p>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col s12 m12 l6">
+                <p><span class="ViewHeader"><b>Phone Number/Contact Info:</b></span><br /> @Model.request.contactInfo</p>
+            </div>
+
+            <div class="col s12 m12 l6">
+                <p><span class="ViewHeader"><b>Approved By:</b></span><br /> @Model.request.doaName</p>
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col s12 m12 l6">
+                <p><span class="ViewHeader"><b>Vendor:</b></span><br /> 
+                @if (Model.vendor != null)
+                {
+                    Model.vendor.publication.ToString();
+                }
+                else
+                {
+                    @Model.request.vendor 
+                }
+                </p>
+            </div>
+            
+            <div class="col s12 m12 l6">
+                <p><span class="ViewHeader"><b>Ship To:</b></span><br /> @Model.request.shipTo </p>
+            </div>
+
+        </div>
+
+        @if (Model.vendor != null)
+        {
+            <div class="row">
+
+                <div class="col s12 m12 l6">
+                    <p><span class="ViewHeader"><b>Brand:</b></span><br /> @Model.vendor.brand</p>
+                </div>
+
+                @if (Model.vendorContacts != null)
+                {
+                    foreach (var vendor in Model.vendorContacts)
+                    {
+                        <div class="col s12 m12 l6">
+                            <p><span class="ViewHeader"><b>Contact:</b></span><br />@vendor.contact</p>
+                        </div>
+
+                        <div class="col s12 m12 l6">
+                            <p><span class="ViewHeader"><b>Phone:</b></span><br />@vendor.phone</p>
+                        </div>
+
+                        <div class="col s12 m12 l6">
+                            <p><span class="ViewHeader"><b>Email:</b></span><br />@vendor.email</p>
+                        </div>
+                    }
+
+                }
+            </div>
+        }
+
+
+        <div class="row">
+
+             <!-- Assign Agents -->
+            @{
+                var projectAssignment = Model.assignments.Where(a => a.requestID == Model.request.reuqestID);
+                string assignedTo = "";
+                foreach (var staff in projectAssignment)
+                {
+                    assignedTo += staff.staffID + "; ";
+                }
+            }
+
+            <div class="col s12 m12 l12">
+                <p><span class="ViewHeader"><b>Assigned To:</b></span><br /> @assignedTo </p>
+            </div>
+
+        </div>
+
+    </fieldset> <!-- End Contact Info -->
+
+    </div> <!-- End Col -->
+
+</div> <!-- End First Row -->
+
+<div class="row">
+
+
+    <div class="col s12 m6 l6">
+
+        <fieldset class="ViewCase">
+
+            <legend>Additional Info</legend>
+
+            <div class="row">
+                <div class="col s12">
+                    <p><span class="ViewHeader"><b>Details:</b></span><br /> @Html.Raw(Html.Encode(Model.request.detail).Replace(Environment.NewLine, "<br />"))</p>
+                </div>
+
+                <div class="col s12">
+                    <p><span class="ViewHeader"><b>Comments:</b></span><br /> @Html.Raw(Html.Encode(Model.request.comment).Replace(Environment.NewLine, "<br />"))</p>
+                </div>
+
+                <div class="col s12">
+                    <p><span class="ViewHeader"><b>Additional Info</b></span><br /> @Html.Raw(Html.Encode(Model.request.additionalInfo).Replace(Environment.NewLine, "<br />"))</p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col s12">
+                    <p><span class="ViewHeader"><b>Attachments</b></span></p>
+
+                    @if (@Model.request.doaAttachment != "Submitted by DOA" && @Model.request.doaAttachment != "Submitted by DOA or Staff" && @Model.request.doaAttachment != "Approval not needed" && @Model.request.doaAttachment != null)
+                    {
+                        <p><a href="~/Attachments/@Model.request.doaAttachment" target="_blank">@Model.request.doaAttachment (Approval File)</a></p>
+                    }
+
+                    @foreach (var attachment in Model.attachment)
+                    {
+                        <p><a href="~/Attachments/@attachment.filePath" target="_blank">@attachment.filePath</a></p>
+                    }
+
+                </div>
+            </div>
+
+        </fieldset>
+
+    </div> <!-- End Col -->
+
+
+    <div class="col s12 m6 l6">
+
+    <fieldset class="ViewCase">
+
+    <legend>Accounting Info</legend>
+
+        <div class="row">
+
+            <div class="col s12 m12 l6">
+                <p><span class="ViewHeader"><b>Cost:</b></span><br /> @Model.request.cost.ToString() </p>
+            </div>
+
+                        <div class="col s12 m12 l6">
+                <p><span class="ViewHeader"><b>Subtotal:</b></span><br /> @Model.request.subtotal </p>
+            </div>
+
+       </div>
+
+        <div class="row">
+
+            <div class="col s12 m12 l6">
+                <p><span class="ViewHeader"><b>Tax:</b></span><br /> @Model.request.tax </p>
+            </div>
+
+            <div class="col s12 m12 l6">
+                <p><span class="ViewHeader"><b>Total:</b></span><br /> @Model.request.total </p>
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col s12 m12 l6">
+                <p><span class="ViewHeader"><b>Quantity:</b></span><br /> @Model.request.Quantity </p>
+            </div>
+
+            <div class="col s12 m12 l6">
+                <p><span class="ViewHeader"><b>Printer Specifications:</b></span><br /> @Model.request.printerSpecifications </p>
+            </div>
+
+        </div>
+
+        <div class="row">
+            @{
+                int poCount = 0;
+
+                foreach (var po in Model.poNum)
+                {
+                    poCount++;
+
+                    <div class="col s12 m12 l6">
+                        <p><span class="ViewHeader"><b>PO# @poCount:</b></span><br /> @po.PONum1 </p>
+                    </div>
+                }
+            }
+        </div>
+
+
+    </fieldset> <!-- End Accounting Info -->
+    </div> <!-- End Col -->
+
+</div> <!-- End Row 2 -->
+
+<div class="row">
+
+    <fieldset class="ViewCase">
+    <legend>Detailed Case Info</legend> 
+
+        @for (var i = 0; i < Model.answerList.Count(); i += 2)
+        {
+
+            <div class="row">
+
+                @foreach (var request in Model.answerList.Skip(i).Take(2))
+                {
+                    <div class="col s12 m12 l6">
+
+                        <p><span class="ViewHeader"><b>@request.question</b></span><br /> @Html.Raw(Html.Encode(request.answer.AnswerText).Replace(Environment.NewLine, "<br />"))</p>
+
+                    </div>
+                }
+
+            </div>
+        }
+
+    </fieldset>
+
+</div> <!-- End Third Row -->
+
+    <fieldset id="EditTask" class="ViewCase">
+
+        <legend>CC Task File</legend>
+
+        @if (ViewBag.Role == "Agent")
+        {
+        <div class="row row--no-spacing">
+            <div class="col s6">
+                <a href="RequestInfo?requestID=@Model.request.reuqestID.ToString()&position=EditTask">Edit Case File</a>
+            </div>
+        </div>
+        }
+
+        @foreach (var task in Model.taskList)
+        {
+            string assignments = "";
+
+            try
+            {
+                var currentAssignments = Model.taskAssignments.Where(t => t.taskID == task.taskID);
+
+                foreach (var assigned in currentAssignments)
+                {
+                    assignments += assigned.staffID + ", ";
+                }
+            }
+            catch { }
+
+            <p class="collegeHeader noTopSpace noBottomSpace" @if (task.priority == true) { <text> style="color: #CC0000;" </text> }>Task Info</p>
+
+            <div class="row">
+
+                <div class="col s1">
+                    <p><span class="ViewHeader"><b>Order:</b></span><br /> @task.orderNum.ToString() </p>
+                </div>
+
+                <div class="col s3">
+                    <p><span class="ViewHeader"><b>Due Date:</b></span><br /> @task.DueDate.ToString() </p>
+                </div>
+
+                <div class="col s3">
+                    <p><span class="ViewHeader"><b>Status:</b></span><br /> @task.Status.ToString() </p>
+                </div>
+
+                <div class="col s5">
+                    <p><span class="ViewHeader"><b>Assigned To:</b></span><br /> @assignments.ToString() </p>
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <div class="col s12">
+                    <p><span class="ViewHeader"><b>Task:</b></span><br /> @task.Task.ToString() </p>
+                </div>
+
+                <div class="col s12">
+                    @if (@task.Comments != null)
+                    {
+                        <p><span class="ViewHeader"><b>Comments:</b></span><br /> @task.Comments.ToString() </p>
+                    }
+                    else
+                    {
+                        <p><span class="ViewHeader"><b>Comments:</b></span><br /></p>
+                    }
+                </div>
+
+            </div>
+
+       }
+
+</fieldset>
+
+@if (ViewBag.Role == "Agent")
+{
+
+    <div class="right-align">
+        @using (Html.BeginForm("CloseRequest", "Request", new { requestID = Convert.ToInt16(Request.QueryString["requestID"]) }, FormMethod.Post, new { enctype = "multipart/form-data", name = "ReuqestForm", id = "RequestForm" }))
+        {
+            <button class="btn waves-effect waves-light button" name="action">
+                Case Closed
+                <i class="material-icons right">thumb_up</i>
+            </button>
+            <br />
+        }
+    </div>
+
+   <div class="right-align">
+        <button class="btn waves-effect waves-light button" type="submit" name="action" onclick="TrelloUpload()">
+            Trello Upload
+            <i class="material-icons right">folder_shared</i>
+        </button>
+    </div> 
+
+} 
+
+
+
+
+
+
+

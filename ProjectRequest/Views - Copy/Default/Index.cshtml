@@ -1,0 +1,50 @@
+﻿@model IEnumerable<ProjectRequest.Models.Category>
+
+@{
+    ViewBag.Title = "The CC Files";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h4>Welcome to <span style="color: #336666">The CC Files</span> CC Agent @ViewBag.Name.</h4>
+
+<p><a href="~/RequestForm.aspx">Open a Case</a></p>
+<p><a href="~/Request/Index">View All Cases</a></p>
+<p><a href="~/Request/MyProjects">View My Assigned Cases</a></p>
+<p><a href="~/Request/TaskList">Task View</a></p>
+<p><a href="~/TimeSheet/Index">Create/Edit Reports</a></p>
+<p><a href="~/Template/Index">Create/Edit Guidelines</a></p>
+<p><a href="~/Calendar/Index">Event Calendar</a></p>
+
+
+<table>
+<tr >
+<td>
+<h4 style="margin: 10px;">CC Agent Peapod: Gaze upon <br />his gracefulness and raw, <br /> unbridled, masculinity.</h4>
+</td>
+<td><h4 style="margin: 10px;">CC Agent Willow: A beauty <br />so great, it's magical.</h4></td>
+</tr>
+<tr>
+<td>
+<img src="~/images/Peapod.jpg" height="400px" alt="Peapod" />
+</td>
+<td>
+    <img src="~/images/Willow 1.jpg" height="200px" alt="Willow" />
+    <br />
+    <img src="~/images/Willow 2.jpg" height="200px" alt="Willow" />
+</td>
+</tr>
+</table>
+
+@*@using (Html.BeginForm("SearchCurrentTrack", "Request"))
+{
+    <h4>Search by Current Track ID:</h4>
+    <p><input type="text" name="currentTrackID" id="currentTrackID" />
+    <input type="submit" name="search" value="search" /></p>
+}
+
+
+<h4>View requests by category:</h4>
+@foreach (var category in @Model)
+{
+    <p><a href="~/Request/Index?category=@category.categoryID">@category.categoryName</a></p>
+}*@

@@ -1,0 +1,435 @@
+﻿@{
+    ViewBag.Title = "Event Calender";
+    Layout = "~/Views/Shared/_LayoutCopy2017.cshtml";
+
+    <link href='~/css/fullcalendar.css' rel='stylesheet' />
+    <link href='~/css/fullcalendar.print.css' rel='stylesheet' media='print' />
+
+    <script src="https://secure.sullivan.edu/ProjectRequest/ProjectRequest/js/moment.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="https://secure.sullivan.edu/ProjectRequest/ProjectRequest/js/fullcalendar.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://secure.sullivan.edu/ProjectRequest/ProjectRequest/js/date.js" type="text/javascript" charset="utf-8"></script>
+
+    <link rel="stylesheet" href="~/css/magnific-popup.css"> 
+
+    <style type="text/css">
+
+        .white-popup {
+          position: relative;
+          background: #FFF;
+          padding: 20px;
+          padding-top: 10px;
+          padding-bottom: 10px;
+          width: auto;
+          max-width: 1100px;
+          margin: 20px auto;
+          font-size: 18px;
+          font-family: 'Roboto Condensed', sans-serif;
+        }
+
+        #eventInfo
+        {
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+      body {
+
+		font-family: 'Roboto', sans-serif;
+		font-size: 14px;
+	}
+
+	#calendar {
+		max-width: 1100px;
+		margin: 0 auto;
+        border-radius: 0.2em;
+        background: white;
+        box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.16);
+        margin-top: 25px;
+        padding: 10px;
+	}
+
+    h2
+    {
+        font-size: 25px;  
+        font-family: 'Oswald', sans-serif;
+        color: #2c7aff;  
+    }
+
+    .fc-toolbar
+    {
+        padding-top: 25px;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .fc-event
+    {
+        border: none;
+        background: #2c7aff;
+        padding: 2px;
+        padding-left: 3px;
+    }
+
+    .fc-title, .fc-time
+    {
+        color: white;
+        font-size: 13px;
+        font-family: 'Roboto Condensed', sans-serif;
+        font-weight: 600;
+    }
+
+    .fc-day-grid-event .fc-time
+    {
+        font-weight: 600;
+    }
+
+    .eventHeader
+    {
+        font-family: 'Oswald', sans-serif;
+        font-size: 22px;
+        color: #2F5E5E;
+        font-weight: 500;
+        width: 100%;
+        /*margin-left: 15px;
+        margin-right: 15px;*/
+        border-bottom: solid 1px #708090;
+        /*box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);*/
+        background: white;
+        padding: 10px;
+        padding-bottom: 5px;
+        padding-left: 0px;
+        margin-bottom: 15px;
+    }
+
+    .eventHeader h5
+    {
+        margin: 0px;
+        color: #2c7aff;
+    }
+
+    thead
+    {
+        border-bottom: none;
+    }
+
+    .noTopSpace
+    {
+        padding-top: 0px;
+        margin-top: 0px;
+    }
+
+    .videoEvent,
+    .videoEvent div,
+    .videoEvent span {
+        background-color: #2F5E5E; /* background color */
+    }
+
+    .fc-today.fc-state-highlight
+    {
+        background-color: #F1F3F4;
+    }
+
+    </style>
+}
+<script>
+	$(document).ready(function() {
+	    $('.time').hide();
+	    $('#clearEvent').hide();
+	    $('.deleteContainer').hide();
+
+
+	    //$('#allDay').change(function () {
+	    //    if ($('#allDay').val() == 'true') {
+	    //        $('.time').hide();
+	    //    }
+	    //    else {
+	    //        $('.time').show();
+	    //    }
+	    //});
+
+		$('#calendar').fullCalendar({
+			header: {
+				left: 'prev,next today',
+				center: 'title',
+				right: 'month,basicWeek,basicDay'
+			},
+			eventRender: function (event, element) {
+			    element.attr('href', 'javascript:void(0);');
+			    element.click(function() {
+			        $("#startTime").html(moment(event.start).format('MM/DD/YYYY h:mm A'));
+			        $("#endTime").html(moment(event.end).format('MM/DD/YYYY h:mm A'));
+			        $("#eventInfo").html(event.title);
+			        $.magnificPopup.open({
+			            items: {
+			                src: '#eventContent'
+			            },
+			            type: 'inline'
+			        });
+
+			        $('#id').val(event.id);
+
+			        $('#title').val(event.title);
+
+			        //if (event.allDay) {
+			        //    $('#allDay').val('true');
+			        //    //$('.time').hide();
+			        //}
+			        //else {
+			        //    $('#allDay').val('false');
+			        //    //$('.time').show();
+			        //}
+
+			        //if (event.className == "videoEvent") {
+			        //    $('#video').val('true');
+			        //}
+			        //else {
+			        //    $('#video').val('false');
+			        //}
+
+			        var startDate = moment(event.start).format('MM/DD/YYYY hh:mm A').split(" ");
+			        var startTime = startDate[1].split(':');
+			        $('#startDate').val(startDate[0]);
+			        $('#startTime1').val(startTime[0]);
+			        $('#startTime2').val(startTime[1]);
+			        $('#startAmPm').val(startDate[2]);
+
+			        var endDate = moment(event.end).format('MM/DD/YYYY hh:mm A').split(" ");
+			        $('#endDate').val(endDate[0]);
+
+			        //if (event.allDay) {
+			        //    $('#endDate').val(Date.parse(endDate[0]).addDays(-1).toString('M/d/yyyy'));
+			        //}
+			        //else {
+			        //    $('#endDate').val(endDate[0]);
+			        //}
+
+			        var endTime = endDate[1].split(':');
+			        
+			        $('#endTime1').val(endTime[0]);
+			        $('#endTime2').val(endTime[1]);
+			        $('#endAmPm').val(endDate[2]);
+
+			        $('#clearEvent').show();
+			        $('.deleteContainer').show();
+			        $('.addContent').addClass('active');
+			        $('select').material_select();
+			    });
+			},
+			editable: false,
+			eventLimit: true, // allow "more" link when too many events
+			events: "/ProjectRequest/ProjectRequest/Calendar/GetEvents",
+			displayEventEnd: true,
+		    displayEventTime: false,
+            timezone: 'local'
+		});
+		
+
+		$('#clearEvent').click(function () {
+		    $('#id').val('0');
+		    $('#title').val("");
+		    $('#allDay').val('true');
+		    $('.time').hide();
+		    $('#startDate').val("");
+		    $('#startTime1').val("00");
+		    $('#startTime2').val("00");
+		    $('#startAmPm').val("AM");
+		    $('#endDate').val("");
+		    $('#endTime1').val("00");
+		    $('#endTime2').val("00");
+		    $('#endAmPm').val("AM");
+		    $('#clearEvent').hide();
+		    $('select').material_select();
+		    $('.deleteContainer').hide();
+		});
+	});
+
+</script>
+@using (Html.BeginForm("AddEvent", "Calendar"))
+{
+
+    <div id="eventContent" title="Event Details" class="white-popup mfp-hide">
+    <div class="eventHeader">
+        <h5>CC Event Info</h5>
+    </div>
+        Start: <span id="startTime"></span><br>
+        End: <span id="endTime"></span><br>
+        <p id="eventInfo"></p>
+    </div>
+
+<div class="row">
+<div class="col s12">
+
+	<div id='calendar' ></div>
+
+</div>
+</div>
+
+<div class="row">
+<div class="col s12">
+
+<fieldset class="sectionGroup">
+<legend>Add / Edit Event</legend>
+
+
+    @*Track if editing an event, or adding a new one*@
+    <input type="hidden" name="id" id="id" value="0" />
+    
+    <div class="row">
+
+        <div class="input-field col s12" >
+            <input type="text" name="title" id="title" />
+            <label class="addContent">Description:</label>
+        </div>
+
+        @*<div class="input-field col s12 m2 l2" >
+            <select name="allDay" id="allDay">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </select>
+            <label>All Day Event?</label>
+        </div>*@
+
+        @*<div class="input-field col s12 m2 l2" >
+            <select name="video" id="video">
+                <option value="true">Yes</option>
+                <option value="false" selected>No</option>
+            </select>
+            <label>Video Event?</label>
+        </div>*@
+    
+    </div>
+
+    <div class="row">
+
+        <div class="input-field col s12 m6 l 6" >
+            <input type="text" name="startDate" id="startDate" class="datepicker" />
+            <label class="addContent">Start Date:</label>
+        </div>
+
+        <div class="input-field col s12 m6 l 6" >
+            <input type="text" name="endDate" id="endDate" class="datepicker" />
+            <label class="addContent">End Date:</label>
+        </div>
+    </div>
+
+    
+   <div class="time row">
+        <div class="input-field col s4 m2 l2" >
+            
+            <select name="startTime1" id="startTime1">
+                <option value="00">00</option>
+                <option value="01">01</option>
+                <option value="02">02</option>
+                <option value="03">03</option>
+                <option value="04">04</option>
+                <option value="05">05</option>
+                <option value="06">06</option>
+                <option value="07">07</option>
+                <option value="08">08</option>
+                <option value="09">09</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+            </select>
+            <label >Start Time:</label>
+        </div>
+        <div class="input-field col s4 m2 l2" >    
+            <select name="startTime2" id="startTime2">
+            @for (int i = 0; i <= 60; i++)
+            {
+                string time;
+                if (i < 10)
+                {
+                    time = "0" + i.ToString();
+                }
+                else
+                {
+                    time = i.ToString();
+                }
+
+                <option value="@time">@time</option>
+
+            } 
+            </select>
+        </div>
+        <div class="input-field col s4 m2 l2" > 
+           <select name="startAmPm">
+                <option value="AM">AM</option>
+                <option value="PM">PM</option>
+            </select>
+       </div>
+
+        <div class="input-field col s4 m2 l2" >
+            <select name="endTime1" id="endTime1">
+                <option value="00">00</option>
+                <option value="01">01</option>
+                <option value="02">02</option>
+                <option value="03">03</option>
+                <option value="04">04</option>
+                <option value="05">05</option>
+                <option value="06">06</option>
+                <option value="07">07</option>
+                <option value="08">08</option>
+                <option value="09">09</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+            </select>
+            <label >End Time:</label>
+        </div>
+        <div class="input-field col s4 m2 l2" >
+            <select name="endTime2" id="endTime2">
+            @for (int i = 0; i <= 60; i++)
+            {
+                string time;
+                if (i < 10)
+                {
+                    time = "0" + i.ToString();
+                }
+                else
+                {
+                    time = i.ToString();
+                }
+
+                <option value="@time">@time</option>
+
+            }   
+            </select>
+        </div>
+        <div class="input-field col s4 m2 l2" >
+            <select name="endAmPm" id="endAmPm">
+                <option value="AM">AM</option>
+                <option value="PM">PM</option>
+            </select>
+       </div>
+        
+    </div> @*End Time Row*@
+
+    <div class="row extraSpace deleteContainer noTopSpace">
+
+    <div class="input-field col s3 noTopSpace">
+        <div class="switch">
+        <label>
+            <input type="checkbox" name="delete" id="delete" />
+            <span class="lever"></span>
+            Delete This Event
+        </label>
+        </div>
+    </div>
+
+    </div>
+    <br />
+
+</fieldset>
+
+<div class="right-align">
+    <button class="btn waves-effect waves-light button" type="submit" name="action">Save Event
+        <i class="material-icons right">event</i>
+    </button>
+    <button class="btn waves-effect waves-light button" type="button" id="clearEvent">New Event
+        <i class="material-icons right">clear</i>
+    </button>
+</div>
+</div>
+</div>
+}

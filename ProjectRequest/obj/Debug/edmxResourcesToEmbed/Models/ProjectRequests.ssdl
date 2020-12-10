@@ -1,0 +1,292 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ProjectRequestModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Answer">
+    <Key>
+      <PropertyRef Name="AnswerID" />
+    </Key>
+    <Property Name="AnswerID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="QuestionID" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="AnswerText" Type="varchar(max)" Nullable="false" />
+    <Property Name="AnswerValue" Type="varchar" MaxLength="50" />
+    <Property Name="requestID" Type="int" Nullable="false" />
+    <Property Name="subrequestID" Type="int" />
+  </EntityType>
+  <EntityType Name="Approvers">
+    <Key>
+      <PropertyRef Name="approverID" />
+    </Key>
+    <Property Name="approverID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="email" Type="varchar" MaxLength="50" />
+    <Property Name="name" Type="varchar" MaxLength="50" />
+    <Property Name="department" Type="varchar" MaxLength="50" />
+    <Property Name="sullivanID" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Attachment">
+    <Key>
+      <PropertyRef Name="attachmentID" />
+    </Key>
+    <Property Name="attachmentID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="requestID" Type="int" Nullable="false" />
+    <Property Name="filePath" Type="varchar(max)" Nullable="false" />
+    <Property Name="caption" Type="varchar(max)" />
+    <Property Name="staffID" Type="varchar" MaxLength="25" />
+    <Property Name="dateAdded" Type="datetime" />
+  </EntityType>
+  <EntityType Name="Calender">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="title" Type="varchar(max)" Nullable="false" />
+    <Property Name="start" Type="datetime" Nullable="false" />
+    <Property Name="end" Type="datetime" Nullable="false" />
+    <Property Name="allDay" Type="bit" />
+    <Property Name="className" Type="varchar" MaxLength="25" />
+    <Property Name="location" Type="varchar" MaxLength="50" />
+    <Property Name="eventType" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Category">
+    <Key>
+      <PropertyRef Name="categoryID" />
+    </Key>
+    <Property Name="categoryID" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="category" Type="varchar" MaxLength="100" />
+    <Property Name="categoryName" Type="varchar" MaxLength="50" />
+    <Property Name="version" Type="varchar" MaxLength="5" />
+  </EntityType>
+  <EntityType Name="Chores">
+    <Key>
+      <PropertyRef Name="choreID" />
+    </Key>
+    <Property Name="choreID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="sheetID" Type="int" Nullable="false" />
+    <Property Name="requestID" Type="int" />
+    <Property Name="chore" Type="varchar(max)" Nullable="false" />
+    <Property Name="timeSpent" Type="decimal" Precision="4" Scale="2" />
+    <Property Name="name" Type="varchar" MaxLength="500" />
+  </EntityType>
+  <EntityType Name="Departments">
+    <Key>
+      <PropertyRef Name="department" />
+    </Key>
+    <Property Name="department" Type="varchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="DOA">
+    <Key>
+      <PropertyRef Name="doaID" />
+    </Key>
+    <Property Name="doaID" Type="varchar" MaxLength="25" Nullable="false" />
+    <Property Name="doaName" Type="varchar" MaxLength="75" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Location">
+    <Key>
+      <PropertyRef Name="locationID" />
+    </Key>
+    <Property Name="locationID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="name" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="PONum">
+    <Key>
+      <PropertyRef Name="poID" />
+    </Key>
+    <Property Name="requestID" Type="int" Nullable="false" />
+    <Property Name="PONum" Type="nchar" MaxLength="10" Nullable="false" />
+    <Property Name="poID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ProjectStatus">
+    <Key>
+      <PropertyRef Name="statusID" />
+    </Key>
+    <Property Name="statusID" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="status" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Question">
+    <Key>
+      <PropertyRef Name="questionID" />
+    </Key>
+    <Property Name="questionID" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="categoryID" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="Question" Type="varchar(max)" />
+    <Property Name="selectionName" Type="varchar" MaxLength="50" />
+    <Property Name="Class" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Request">
+    <Key>
+      <PropertyRef Name="reuqestID" />
+    </Key>
+    <Property Name="reuqestID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="categoryID" Type="varchar" MaxLength="20" />
+    <Property Name="name" Type="varchar" MaxLength="500" />
+    <Property Name="location" Type="varchar" MaxLength="50" />
+    <Property Name="contactInfo" Type="varchar" MaxLength="100" />
+    <Property Name="dateRequested" Type="datetime" Nullable="false" />
+    <Property Name="currentTrackID" Type="varchar" MaxLength="50" />
+    <Property Name="completed" Type="bit" />
+    <Property Name="doaName" Type="varchar" MaxLength="75" />
+    <Property Name="doaAttachment" Type="varchar(max)" />
+    <Property Name="projectName" Type="varchar" MaxLength="500" />
+    <Property Name="email" Type="varchar" MaxLength="50" />
+    <Property Name="templateID" Type="int" />
+    <Property Name="additionalInfo" Type="varchar(max)" />
+    <Property Name="comment" Type="varchar(max)" />
+    <Property Name="poNumber" Type="varchar" MaxLength="50" />
+    <Property Name="detail" Type="varchar(max)" />
+    <Property Name="cost" Type="float" />
+    <Property Name="dueDate" Type="datetime" />
+    <Property Name="customID" Type="varchar" MaxLength="100" />
+    <Property Name="status" Type="varchar" MaxLength="50" />
+    <Property Name="subProjects" Type="smallint" />
+    <Property Name="vendor" Type="varchar" MaxLength="100" />
+    <Property Name="shipTo" Type="varchar" MaxLength="250" />
+    <Property Name="subtotal" Type="varchar" MaxLength="15" />
+    <Property Name="tax" Type="varchar" MaxLength="15" />
+    <Property Name="total" Type="varchar" MaxLength="15" />
+    <Property Name="Quantity" Type="varchar" MaxLength="15" />
+    <Property Name="printerSpecifications" Type="varchar(max)" />
+    <Property Name="publication" Type="varchar" MaxLength="100" />
+    <Property Name="denialReason" Type="varchar(max)" />
+    <Property Name="department" Type="varchar" MaxLength="50" />
+    <Property Name="approvedBy" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="RequestAssignment">
+    <Key>
+      <PropertyRef Name="requestID" />
+      <PropertyRef Name="staffID" />
+    </Key>
+    <Property Name="requestID" Type="int" Nullable="false" />
+    <Property Name="staffID" Type="varchar" MaxLength="25" Nullable="false" />
+  </EntityType>
+  <EntityType Name="SelectionItems">
+    <Key>
+      <PropertyRef Name="selectionID" />
+    </Key>
+    <Property Name="selectionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="selectionName" Type="varchar" MaxLength="50" />
+    <Property Name="selectionValue" Type="varchar" MaxLength="100" />
+    <Property Name="selectionText" Type="varchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="Staff">
+    <Key>
+      <PropertyRef Name="staffID" />
+    </Key>
+    <Property Name="staffID" Type="varchar" MaxLength="25" Nullable="false" />
+    <Property Name="firstName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="lastName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="emailAddress" Type="varchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="SubRequest">
+    <Key>
+      <PropertyRef Name="subRequestID" />
+    </Key>
+    <Property Name="subRequestID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="requestID" Type="int" Nullable="false" />
+    <Property Name="categoryID" Type="varchar" MaxLength="20" Nullable="false" />
+  </EntityType>
+  <EntityType Name="TaskAssignment">
+    <Key>
+      <PropertyRef Name="taskID" />
+      <PropertyRef Name="staffID" />
+    </Key>
+    <Property Name="taskID" Type="int" Nullable="false" />
+    <Property Name="staffID" Type="varchar" MaxLength="25" Nullable="false" />
+    <Property Name="templateID" Type="int" />
+  </EntityType>
+  <EntityType Name="TaskList">
+    <Key>
+      <PropertyRef Name="taskID" />
+    </Key>
+    <Property Name="taskID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="requestID" Type="int" />
+    <Property Name="Task" Type="varchar(max)" />
+    <Property Name="DueDate" Type="datetime" />
+    <Property Name="Status" Type="varchar" MaxLength="50" />
+    <Property Name="TemplateID" Type="int" />
+    <Property Name="orderNum" Type="int" />
+    <Property Name="priority" Type="bit" />
+    <Property Name="Comments" Type="varchar(max)" />
+    <Property Name="subRequestID" Type="int" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'ProjectRequest.dbo.TaskStatus' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="TaskStatus">
+    <Key>
+      <PropertyRef Name="statusID" />
+      <PropertyRef Name="status" />
+    </Key>
+    <Property Name="statusID" Type="int" Nullable="false" />
+    <Property Name="status" Type="varchar" MaxLength="25" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Template">
+    <Key>
+      <PropertyRef Name="templateID" />
+    </Key>
+    <Property Name="templateID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="templateName" Type="varchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="TimeSheet">
+    <Key>
+      <PropertyRef Name="sheetID" />
+    </Key>
+    <Property Name="sheetID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="staffID" Type="varchar" MaxLength="15" />
+    <Property Name="sheetDate" Type="datetime" />
+    <Property Name="completed" Type="bit" />
+  </EntityType>
+  <EntityType Name="VelocifyStatuses">
+    <Key>
+      <PropertyRef Name="statusID" />
+    </Key>
+    <Property Name="statusID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="statusName" Type="varchar" MaxLength="200" />
+  </EntityType>
+  <EntityType Name="Vendor">
+    <Key>
+      <PropertyRef Name="vendorID" />
+    </Key>
+    <Property Name="vendorID" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="publication" Type="varchar" MaxLength="100" />
+    <Property Name="brand" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="vendorContact">
+    <Key>
+      <PropertyRef Name="vendorContactID" />
+    </Key>
+    <Property Name="vendorContactID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="contact" Type="varchar" MaxLength="50" />
+    <Property Name="phone" Type="varchar" MaxLength="50" />
+    <Property Name="email" Type="varchar" MaxLength="50" />
+    <Property Name="vendorID" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityContainer Name="ProjectRequestModelStoreContainer">
+    <EntitySet Name="Answer" EntityType="Self.Answer" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Approvers" EntityType="Self.Approvers" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Attachment" EntityType="Self.Attachment" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Calender" EntityType="Self.Calender" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Chores" EntityType="Self.Chores" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Departments" EntityType="Self.Departments" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DOA" EntityType="Self.DOA" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Location" EntityType="Self.Location" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PONum" EntityType="Self.PONum" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ProjectStatus" EntityType="Self.ProjectStatus" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Question" EntityType="Self.Question" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Request" EntityType="Self.Request" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="RequestAssignment" EntityType="Self.RequestAssignment" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SelectionItems" EntityType="Self.SelectionItems" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Staff" EntityType="Self.Staff" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SubRequest" EntityType="Self.SubRequest" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TaskAssignment" EntityType="Self.TaskAssignment" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TaskList" EntityType="Self.TaskList" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Template" EntityType="Self.Template" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TimeSheet" EntityType="Self.TimeSheet" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="VelocifyStatuses" EntityType="Self.VelocifyStatuses" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Vendor" EntityType="Self.Vendor" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="vendorContact" EntityType="Self.vendorContact" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TaskStatus" EntityType="Self.TaskStatus" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+[TaskStatus].[statusID] AS [statusID], 
+[TaskStatus].[status] AS [status]
+FROM [dbo].[TaskStatus] AS [TaskStatus]</DefiningQuery>
+    </EntitySet>
+  </EntityContainer>
+</Schema>

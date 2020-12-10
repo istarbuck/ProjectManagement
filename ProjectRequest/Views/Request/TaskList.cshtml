@@ -1,0 +1,220 @@
+﻿@model ProjectRequest.Models.TaskListInfo
+@using ProjectRequest.HTMLHelpers;
+@{
+    ViewBag.Title = "Task Files";
+    Layout = "~/Views/Shared/_LayoutCopy2017.cshtml";
+    <link rel="stylesheet" href="~/css/print.css"> 
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+
+    });
+</script>
+
+
+@using (Html.BeginForm((string)ViewBag.Method, "Request"))
+{
+
+<fieldset class="CaseFilter">
+<legend>Filter CC Task Files</legend>
+
+
+    <div class="row">
+
+        <div class="input-field col s12 m6 l3" >
+            <select name="assignedTo" id="assignedTo">
+                <option value="00">Please Select:</option>
+                @foreach (var staff in Model.staffList)
+                {
+                    if (staff.staffID == Model.PagingInfo.assignedTo)
+                    {
+                        <option value="@staff.staffID" selected="selected">@staff.firstName @staff.lastName</option>
+                    }
+
+                    else
+                    {
+                        <option value="@staff.staffID">@staff.firstName @staff.lastName</option>
+                    }
+                }
+            </select>
+            <label for="assignedTo">Assigned To:</label>
+        </div>
+
+        <div class="input-field col s12 m6 l3" >
+            <select name="completed" id="completed">
+                <option value="00">Please Select:</option>
+
+                    @if (Model.PagingInfo.completed == "false")
+                    {
+                        <option value="true">Yes</option>
+                        <option value="false" selected="selected">No</option>
+                    }
+
+                    else
+                    {
+                        <option value="true" selected="selected">Yes</option>
+                        <option value="false">No</option>
+                    }
+         
+            </select>
+            <label for="completed">Show Completed Tasks:</label>
+        </div>
+
+       <div class="input-field col s12 m6 l3" >
+            <select name="projectCompleted" id="projectCompleted">
+                <option value="00">Please Select:</option>
+
+                    @if (Model.PagingInfo.completed == "false")
+                    {
+                        <option value="true">Yes</option>
+                        <option value="false" selected="selected">No</option>
+                    }
+
+                    else
+                    {
+                        <option value="true" selected="selected">Yes</option>
+                        <option value="false">No</option>
+                    }
+         
+            </select>
+            <label for="projectCompleted">Show Tasks for Completed Case</label>
+        </div>
+
+        <div class="input-field col s12 m6 l3" >
+            <select name="priority" id="priority">
+                <option value="00">Please Select:</option>
+                    @if (Model.PagingInfo.priority == "false")
+                    {
+                        <option value="true">Yes</option>
+                        <option value="false" selected="selected">No</option>
+                    }
+
+                    else
+                    {
+                        <option value="true" selected="selected">Yes</option>
+                        <option value="false">No</option>
+                    }
+         
+            </select>
+            <label for="priority">CC priority tasks only:</label>
+        </div>
+
+        <div class="input-field col s12 m6 l3" >
+            <select name="status" id="status">
+                <option value="00">Please Select:</option>
+                @foreach (var status in Model.status)
+                {
+                    if (status.status == Model.PagingInfo.status)
+                    {
+                        <option value="@status.status" selected="selected">@status.status</option>      
+                    }
+                    else
+                    {
+                        <option value="@status.status" >@status.status</option>
+                    }
+                }
+            </select>
+            <label for="status">Task Status:</label>
+        </div>
+
+        <div class="input-field col s12 m6 l3" >
+            <input type="text" name="dateStart" class="datepicker" id="dateStart" value="@Model.PagingInfo.dateStart" />
+            <label for="dateStart">Due Date Start:</label>
+        </div>
+
+        <div class="input-field col s12 m6 l3" >
+            <input type="text" name="dateEnd" class="datepicker" id="dateEnd" value="@Model.PagingInfo.dateEnd" />
+            <label for="dateEnd">Due Date End:</label>
+        </div>
+
+    </div>
+
+</fieldset>
+
+
+<div class="right-align">
+    <button class="btn waves-effect waves-light button" type="submit" name="action">
+        Filter Task Files
+        <i class="material-icons right">search</i>
+    </button>
+</div>
+
+}
+
+
+<fieldset class="z-depth-1">
+<legend>CC Task Files - @ViewBag.TaskTotal Tasks</legend>
+<br />
+
+
+<table class="infoTable bordered striped centered">
+<thead><tr><th class="hide-on-med-and-down">Due Date</th><th class="noPrint hide-on-med-and-down">Details</th><th>Case Name</th><th>Task</th><th class="hide-on-med-and-down">Assigned To</th><th class="hide-on-med-and-down">Status</th></thead>
+<tbody>
+
+
+@foreach (var task in Model.taskView)
+{
+    string assignments = "";
+
+    foreach (var staff in task.staffList)
+    {
+        assignments += staff + ", ";
+    }
+
+    <tr>
+    <td class="hide-on-med-and-down">@task.taskList.DueDate.ToString().Replace("12:00:00 AM", "")</td>
+
+    @*Determine if the user is sent to the old edit views (single category), or the new edit veiws (multi category).*@
+    @if (task.request.categoryID == "multi")
+    {
+        <td class="hide-on-med-and-down">
+            @Html.ActionLink((task.request.reuqestID).ToString() + " (Edit)", "EditCase", new { requestID = @task.request.reuqestID }, new { target = "_blank" })
+        </td>
+    }
+    else
+    {
+        <td class="hide-on-med-and-down">
+            @Html.ActionLink((task.request.reuqestID).ToString() + " (Edit)", "RequestInfo", new { requestID = @task.request.reuqestID }, new { target = "_blank" })
+        </td>
+    }
+
+    @*Determine if the user is sent to the old read only views (single category), or new read only veiws (multi category).*@
+    @if (task.request.categoryID == "multi")
+    {
+        <td class="hide-on-med-and-down">
+            @Html.ActionLink((task.request.projectName).ToString(), "ViewCase", new { requestID = @task.request.reuqestID }, new { target = "_blank" })
+        </td>
+    }
+    else
+    {
+        <td class="hide-on-med-and-down">
+            @Html.ActionLink((task.request.projectName).ToString(), "ViewRequest", new { requestID = @task.request.reuqestID }, new { target = "_blank" })
+        </td>
+    }
+
+    @*@if(task.request.projectName != null)
+    {
+        <td >@Html.ActionLink(task.request.projectName, "ViewRequest", new { requestID = @task.request.reuqestID }, new { target = "_blank" }) </td>
+    }
+    else
+    {
+        <td >@Html.ActionLink("This case does not have a name", "ViewRequest", new { requestID = @task.request.reuqestID }, new { target = "_blank" }) </td>
+    }*@
+
+    <td>@task.taskList.Task</td>
+    <td class="hide-on-med-and-down">@assignments</td>
+    <td class="hide-on-med-and-down">@task.taskList.Status</td>
+    </tr>
+}
+
+</tbody>
+
+</table>
+
+<div class="row">
+    <div class="col s12">
+        <p class="paging">@Html.PageLinks(Model.PagingInfo, x => Url.Action((string)ViewBag.Method, new { page = x }))</p>
+     </div>
+</div>
+
+</fieldset>

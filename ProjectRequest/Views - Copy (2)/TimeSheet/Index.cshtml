@@ -1,0 +1,69 @@
+﻿@model IEnumerable<ProjectRequest.Models.TimeSheet>
+
+@{
+    ViewBag.Title = "CC Investigational Reports";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#sheetDate').datepicker();
+
+        $('#TimeSheet').submit(function (e) {
+
+            e.preventDefault();
+
+            if ($("#timeSheet").val() != "00") {
+                document.TimeSheet.action = "/ProjectRequest/ProjectRequest/TimeSheet/CreateTimeSheet?sheetID=" + $("#timeSheet").val();
+
+                document.TimeSheet.submit();
+            }
+            else {
+                alert("Please select a report to view");
+            }
+        });
+    });
+</script>
+
+@using (Html.BeginForm("CreateTimeSheet", "TimeSheet", FormMethod.Post, new { name = "TimeSheet", id = "TimeSheet" }))
+{
+    <fieldset class="CaseFilter mdl-shadow--2dp">
+    <legend>CC Reports</legend>
+    <br />
+
+    <label>Select Report</label>
+    <select id="timeSheet" name="timeSheet">
+        <option value="00">Please Select:</option>
+        @foreach(var sheet in Model)
+        {
+            DateTime date = sheet.sheetDate.GetValueOrDefault();
+            <option value="@sheet.sheetID">@date.DayOfWeek.ToString() (@date.ToShortDateString())</option>
+        }
+    </select>
+    <br />
+    
+    <input type="submit" value="File Report" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent button" />
+    </fieldset>
+}
+<br />
+
+@using (Html.BeginForm("LookUpSheet", "TimeSheet", FormMethod.Post, new { name = "OldTimeSheet", id = "OldTimeSheet" }))
+{
+    
+    <fieldset class="CaseFilter mdl-shadow--2dp">
+    <legend>Look Up CC Report</legend>
+    <br />
+
+    @if(Request.QueryString["sheet"] == "Fail") 
+    {
+        <p><b>Could not find report with this date.</b></p>
+    }
+    
+    <label>Look up by date:</label>
+    <input type="text" name="sheetDate" id="sheetDate" />
+    <br />
+    
+    <input type="submit" value="Look Up Report" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent button"  />
+    </fieldset>
+}
+

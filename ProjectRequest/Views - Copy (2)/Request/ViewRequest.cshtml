@@ -1,0 +1,404 @@
+﻿@model ProjectRequest.Models.RequestInfoViewModel
+
+@{
+    ViewBag.Title = "CC Case File";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    
+   <link rel="stylesheet" href="~/css/magnific-popup.css"> 
+    <link rel="stylesheet" href="~/css/printCase.css"> 
+    
+   <style type="text/css">
+
+        .white-popup {
+          position: relative;
+          background: #FFF;
+          padding: 20px;
+          width: auto;
+          max-width: 800px;
+          margin: 30px auto;
+        }
+
+    </style>
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        if(getUrlVars()["position"] != null)
+        {
+            var position = $("#" + getUrlVars()["position"]).position();
+
+            $(window).scrollTop(parseInt(position.top) - 75);
+        }
+
+
+    });
+
+    function DisplayReport() {
+        $.magnificPopup.open({
+            items: {
+                src: '#addTime'
+            },
+            type: 'inline',
+            callbacks: {
+                close: function () {
+                    $("#Chore").val('');
+                    $("#TimeSpent").val('');
+                    $("#reportResponse").html('');
+                }
+            }
+        });
+    }
+
+    function DisplayScully() {
+        $.magnificPopup.open({
+            items: {
+                src: '#Scully'
+            },
+            type: 'inline'
+        });
+    }
+
+    function AddTime() {
+        var currentDate = $.datepicker.formatDate('mm/dd/yy', new Date());
+
+        $.ajax({
+            type: "POST",
+            url: "/ProjectRequest/ProjectRequest/TimeSheet/AddTime",
+            data: '{"id":"' + $("#Request").val() + '", "description":"' + $("#Chore").val() + '", "time":"' + $("#TimeSpent").val() + '"}',
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+                $("#reportResponse").html(response);
+            },
+            failure: function (response) {
+                $("#reportResponse").html(response);
+            }
+        });
+    }
+
+    function getUrlVars() {
+        var vars = [], hash;
+        var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+        for (var i = 0; i < hashes.length; i++) {
+            hash = hashes[i].split('=');
+            vars.push(hash[0]);
+            vars[hash[0]] = hash[1];
+        }
+        return vars;
+    }
+</script>
+
+@*<input type="hidden" id="scrollPosition" name="scrollPosition" class="scrollPosition" value="@ViewBag.Position" />*@
+ 
+<fieldset id="EditProject" class="mdl-shadow--6dp">
+
+<legend>CC Case File</legend>
+
+<div class="mdl-grid mdl-grid--no-spacing viewEdit">
+
+    <div class="mdl-cell mdl-cell--2-col viewEdit" >
+        <a href="RequestInfo?requestID=@Model.request.reuqestID.ToString()&position=EditProject">Edit Case File</a>
+    </div>
+
+</div>
+
+<div class="mdl-grid ">
+    <div class="mdl-cell mdl-cell--3-col" >
+        <p><span class="ViewHeader"><b>Completed?</b></span><br /> @Model.request.completed.ToString()</p>
+    </div> 
+
+    @{
+        var projectAssignment = Model.assignments.Where(a => a.requestID == Model.request.reuqestID);
+        string assignedTo = "";
+        foreach (var staff in projectAssignment)
+        {
+            assignedTo += staff.staffID + ", ";
+        }
+    }
+
+    <div class="mdl-cell mdl-cell--3-col" >
+    <p><span class="ViewHeader"><b>CC Agents:</b></span><br /> @assignedTo </p>
+    </div>
+</div>
+      
+
+<div class="mdl-grid">
+    
+    <div class="mdl-cell mdl-cell--3-col" >
+    <p><span class="ViewHeader"><b>Case Name:</b></span><br /> @Model.request.projectName</p>
+    </div>
+
+    <div class="mdl-cell mdl-cell--3-col" >
+    <p><span class="ViewHeader"><b>Due Date:</b></span><br /> @Model.request.dueDate </p>
+    </div>
+
+    <div class="mdl-cell mdl-cell--3-col" >
+    <p><span class="ViewHeader"><b>Date Submitted:</b></span><br /> @Model.request.dateRequested </p>
+    </div>
+
+    <div class="mdl-cell mdl-cell--3-col" >
+    <p><span class="ViewHeader"><b>CC ID:</b></span><br /> @Model.request.customID</p>
+    </div>
+
+
+    <div class="mdl-cell mdl-cell--3-col" >
+    <p><span class="ViewHeader"><b>Requester Name:</b></span><br /> @Model.request.name </p>
+    </div>
+
+    <div class="mdl-cell mdl-cell--3-col" >
+    <p><span class="ViewHeader"><b>Email Address:</b></span><br /> @Model.request.email</p>
+    </div>
+
+    <div class="mdl-cell mdl-cell--3-col" >
+    <p><span class="ViewHeader"><b>Contact Info:</b></span><br /> @Model.request.contactInfo</p>
+    </div>
+
+    <div class="mdl-cell mdl-cell--3-col" >
+    <p><span class="ViewHeader"><b>Approved By:</b></span><br /> @Model.request.doaName</p>
+    </div>
+
+
+     <div class="mdl-cell mdl-cell--3-col" >
+    <p><span class="ViewHeader"><b>Category:</b></span><br /> @Model.request.categoryID </p>
+    </div>
+
+    <div class="mdl-cell mdl-cell--3-col" >
+    <p><span class="ViewHeader"><b>Location:</b></span><br /> @Model.request.location </p>
+    </div>
+
+    <div class="mdl-cell mdl-cell--3-col" >
+    <p><span class="ViewHeader"><b>Cost:</b></span><br /> @Model.request.cost.ToString() </p>
+    </div>
+
+    <div class="mdl-cell mdl-cell--3-col" >
+    <p><span class="ViewHeader"><b>CT#</b></span><br /> @Model.request.currentTrackID</p>
+    </div>
+
+
+    @{
+        int poCount = 0;   
+
+        foreach(var po in Model.poNum)
+        {
+            poCount++;
+            
+            <div class="mdl-cell mdl-cell--3-col" >
+            <p><span class="ViewHeader"><b>PO# @poCount:</b></span><br /> @po.PONum1 </p>
+            </div>
+        }
+    }
+
+    <div class="mdl-cell mdl-cell--6-col" >
+        <p><span class="ViewHeader"><b>Details:</b></span><br /> @Model.request.detail</p>
+    </div>
+    
+    <div class="mdl-cell mdl-cell--6-col" >
+    <p><span class="ViewHeader"><b>Comments:</b></span><br /> @Model.request.comment</p>   
+    </div>
+
+
+    @foreach (var request in Model.answerList)
+    {
+        <div class="mdl-cell mdl-cell--6-col" >
+    
+        <p><span class="ViewHeader"><b>@request.question</b></span><br /> @Html.Raw(Html.Encode(request.answer.AnswerText).Replace(Environment.NewLine, "<br />"))</p> 
+        
+        </div>
+    }
+
+   <div class="mdl-cell mdl-cell--6-col" >
+        
+   <p><span class="ViewHeader"><b>Additional Info</b></span><br /> @Html.Raw(Html.Encode(Model.request.additionalInfo).Replace(Environment.NewLine, "<br />"))</p>  
+       
+   </div>
+
+</div>  
+
+</fieldset>
+<br /><br />
+
+
+
+<fieldset id="EditTask" class="mdl-shadow--6dp">
+
+<legend>CC Task File</legend>
+
+<div class="mdl-grid mdl-grid--no-spacing">
+    <div class="mdl-cell mdl-cell--2-col" >
+    <a href="RequestInfo?requestID=@Model.request.reuqestID.ToString()&position=EditTask">Edit Case File</a> 
+    </div>
+</div>
+
+<div class='datagrid'>
+<table>
+<thead><tr><th class="mdl-cell--hide-phone mdl-layout--large-screen-only">Order</th><th>Task</th><th class="mdl-cell--hide-phone mdl-layout--large-screen-only">Status</th><th class="mdl-cell--hide-phone mdl-layout--large-screen-only">Due Date</th><th class="mdl-cell--hide-phone mdl-layout--large-screen-only">Assigned To</th></tr></thead>
+<tbody>
+
+@{
+    string rowColor = "alt";
+}
+
+@foreach (var task in Model.taskList)
+{
+    if (rowColor == "noAlt")
+    {
+        rowColor = "alt";
+    }
+    else
+    {
+        rowColor = "noAlt";
+    }
+
+    string assignments = "";
+
+    try
+    {
+        var currentAssignments = Model.taskAssignments.Where(t => t.taskID == task.taskID);
+
+        foreach (var assigned in currentAssignments)
+        {
+            assignments += assigned.staffID + ", ";
+        }
+    }
+    catch { }
+    
+    <tr class="@rowColor" @if (task.priority == true) {<text> style="outline: thin solid red"</text>}>
+        <td class="mdl-cell--hide-phone mdl-layout--large-screen-only">@task.orderNum</td>
+        <td>@task.Task</td>
+        <td class="mdl-cell--hide-phone mdl-layout--large-screen-only">@task.Status</td>
+        <td class="mdl-cell--hide-phone mdl-layout--large-screen-only">@task.DueDate</td>
+        <td class="mdl-cell--hide-phone mdl-layout--large-screen-only">@assignments</td>
+    </tr>
+}
+
+</tbody>
+
+</table>
+
+</div>
+
+</fieldset>
+<br /><br />
+
+
+
+<fieldset id="EditAttachments" class="mdl-shadow--6dp">
+
+<legend>CC Attachments</legend>
+
+<div class="mdl-grid mdl-grid--no-spacing ">
+    <div class="mdl-cell mdl-cell--2-col " >
+    <a href="RequestInfo?requestID=@Model.request.reuqestID.ToString()&position=EditAttachments">Edit Case File</a> 
+    </div>
+</div>
+
+
+<div class='datagrid'>
+<table>
+
+    <thead>
+    <tr>
+    <th>File Path</th>
+
+    @if (Model.request.categoryID == "cool")
+    {
+        <th>Caption</th>
+    }
+
+    </tr>
+    </thead>
+
+    <tr class="noAlt">
+        @if (@Model.request.doaAttachment != "Submitted by DOA" && @Model.request.doaAttachment != "Approval not needed")
+        {
+            <td><a href="~/Attachments/@Model.request.doaAttachment">@Model.request.doaAttachment (Approval File)</a></td>
+        }
+        else
+        {
+            <td>@Model.request.doaAttachment</td>
+        }
+
+@{ rowColor = "noAlt"; }
+
+@foreach (var attachment in Model.attachment)
+{
+
+    if (rowColor == "noAlt")
+    {
+        rowColor = "alt";
+    }
+    else
+    {
+        rowColor = "noAlt";
+    }
+    <tr class="@rowColor">
+    <td><a href="~/Attachments/@attachment.filePath">@attachment.filePath</a></td>
+    @if (Model.request.categoryID == "cool")
+    {
+        <td>@attachment.caption</td>
+    }
+    </tr>
+}
+
+
+</table>
+</div>
+
+</fieldset>
+<br /><br />
+
+
+
+<fieldset class="mdl-shadow--6dp">
+
+<legend>High Performance Functionality</legend>
+
+    <p><input type="button" value="Add Time to Report" onclick="DisplayReport()" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent button" /></p>
+
+    @using (Html.BeginForm("CloseRequest", "Request", new { requestID = Convert.ToInt16(Request.QueryString["requestID"]) }, FormMethod.Post, new { enctype = "multipart/form-data", name = "ReuqestForm", id = "RequestForm" }))
+    {
+        <p><input type="submit" value="Case Closed" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent button" /></p>
+    }
+
+    <p><input type="button" value="I don't believe in this case!" onclick="DisplayScully()" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent button" /></p>
+
+</fieldset>
+<br /><br />
+
+
+@* Hiddent Divs *@
+<div id="addTime" title="File Report" class="white-popup mfp-hide">
+<br />
+
+    <div class='datagrid' id="reportForm">
+    <table>
+    <thead><tr><th>Case ID</th><th>Description</th><th>Hours</th></tr></thead>
+    <tbody>
+
+        <tr>
+            <td><md-input-container><input type="text" name="Request" id="Request" class="order" value="@Model.request.reuqestID" /></md-input-container></td>
+            <td><md-input-container><textarea cols="150" rows="5" name="Chore" id="Chore" class="task"></textarea></md-input-container></td>
+            <td><md-input-container><input type="text" name="TimeSpent" id="TimeSpent" class="timeSpent" /></md-input-container></td>
+        </tr>
+
+    </tbody>
+
+    </table>
+    <br />
+        <input type="button" value="Add Time to Report" onclick="AddTime()" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent button" />
+
+    </div>
+
+    <p id="reportResponse"></p>
+</div>
+
+<div id="Scully" title="Scully" class="white-popup mfp-hide">
+<br />
+
+    <img src="~/images/Scully.jpg" alt="Scully" width="80%" />
+
+</div>
+
+<script src="~/js/jquery.magnific-popup.js"></script>
+    
+
+

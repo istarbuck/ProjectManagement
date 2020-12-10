@@ -1,0 +1,16 @@
+﻿@model ProjectRequest.Models.RequestListCategory
+@using ProjectRequest.HTMLHelpers;
+
+@{
+    ViewBag.Title = "All CC Cases";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    <link rel="stylesheet" href="~/css/print.css"> 
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+    });
+</script>
+
+@Html.Partial("~/Views/Shared/ProjectList.cshtml", Model)

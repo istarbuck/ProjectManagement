@@ -1,0 +1,9 @@
+﻿@model ProjectRequest.Models.RequestListCategory
+
+@{
+    ViewBag.Title = "My CC Cases";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    <link rel="stylesheet" href="~/css/print.css"> 
+}
+
+@Html.Partial("~/Views/Shared/ProjectList.cshtml", Model);

@@ -1,0 +1,345 @@
+﻿@model ProjectRequest.Models.TimeSheetInfo
+
+@{
+    ViewBag.Title = "File CC Investigational Report";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    <link rel="stylesheet" href="~/css/magnific-popup.css"> 
+    
+    <style type="text/css">
+
+        .white-popup {
+  position: relative;
+  background: #FFF;
+  padding: 20px;
+  width: auto;
+  max-width: 700px;
+  margin: 20px auto;
+}
+
+    </style>
+}
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var TotalTime = 0.00;
+        var choreID;
+
+        $('#dateStart').datepicker();
+        $('#dateEnd').datepicker();
+        $('textarea').trigger('autoresize');
+
+        $('.timeSpent').each(function () {
+            if ($.isNumeric($(this).val())) {
+                TotalTime = TotalTime + parseFloat($(this).val());
+            }
+        });
+
+        $("#totalTime").text(TotalTime);
+
+        $(".timeSpent").change(function () {
+
+            TotalTime = 0.00;
+
+            $('.timeSpent').each(function () {
+                if ($.isNumeric($(this).val())) {
+                    TotalTime = TotalTime + parseFloat($(this).val());
+                }
+            });
+
+            $("#totalTime").text(TotalTime);
+
+        });
+
+
+        $('.open-popup-link').magnificPopup({
+            type: 'inline'
+        }).click(function()
+        {
+            choreID = $(this).attr('id');
+        });
+
+
+        $("#projectList div").hide();
+
+        $("#projectList a").click(function (e) {
+            var location = $(this).attr('href');
+            $(location).toggle();
+            e.preventDefault();
+        });
+
+        $(".setID").click(function (e) {
+            var projectID = $(this).attr('href');
+            var projectName = $(this).attr('title');
+
+            if (choreID == "0") {
+                $("#Request").val(projectID);
+                $("#name").text(projectName);
+            }
+            else {
+                $("#Request_" + choreID).val(projectID);
+                $("#name_" + choreID).text(projectName);
+            }
+
+            $.magnificPopup.close();
+        });
+    });
+</script>
+
+@using (Html.BeginForm("EditTimeSheet", "TimeSheet", new { sheetID = Convert.ToInt32(Request.QueryString["sheetID"]) }))
+{
+    
+    <fieldset class="CaseFilter z-depth-1">
+
+    <legend>Filter Reports</legend>
+
+    <div class="row">
+    
+        <div class="input-field col s12 m6 l3" >
+            @if(Model.startDate != null)
+            {
+                <input type="text" name="startDate" id="dateStart" value="@Model.startDate" />
+            }
+            else
+            {
+                <input type="text" ng-model="sheet.startDate" name="startDate" id="dateStart"  />
+            }
+            <label for="dateStart">Date Start:</label>
+        </div>
+
+        <div class="input-field col s12 m6 l3" >
+            @if(Model.endDate != null)
+            {
+                <input type="text" name="endDate" id="dateEnd" value="@Model.endDate" />
+            }
+            else
+            {
+                <input type="text" ng-model="sheet.endDate" name="endDate" id="dateEnd" />
+            }
+            <label for="dateEnd">Date End:</label>
+        </div>
+        
+        <div class="input-field col s12 m6 l3" >
+            <select name="assignedProjects" id="assignedProjects">
+                <option value="00">Please Select:</option>
+                    @if (Model.assignedProjects == "false")
+                    {
+                        <option value="true">Yes</option>
+                        <option value="false" selected="selected">No</option>
+                    }
+
+                    else
+                    {
+                        <option value="true" selected="selected">Yes</option>
+                        <option value="false">No</option>
+                    }
+        
+            </select>
+            <label for="assignedProjects">My Cases Only:</label>
+        </div>
+        
+        <div class="input-field col s12 m6 l3" >
+            <select name="completed" id="completed">
+                <option value="00">Please Select:</option>
+
+                    @if (Model.completedProjects == "false")
+                    {
+                        <option value="true">Yes</option>
+                        <option value="false" selected="selected">No</option>
+                    }
+
+                    else
+                    {
+                        <option value="true" selected="selected">Yes</option>
+                        <option value="false">No</option>
+                    }
+         
+            </select>
+            <label for="completed">Show Completed Cases:</label>
+        </div>
+    
+    </div>
+    
+    <button class="btn waves-effect waves-light button" type="submit" name="action">Filter Case Files
+        <i class="material-icons right">search</i>
+    </button>
+
+</fieldset>    
+ <br /><br />
+    
+
+<fieldset class="z-depth-1">
+    <legend>CC Report</legend>
+
+    <p id="reportTime"><b>Total Time: <span id="totalTime"></span></b></p>
+
+    <div class='datagrid z-depth-1'>
+        <table>
+            <thead><tr><th>Select Case</th><th class="hide-on-med-and-down">ID</th><th>Name</th><th>Description</th><th>Hours</th><th class="hide-on-med-and-down">Delete</th></tr></thead>
+            <tbody>
+
+                @{
+                    string rowColor = "alt";
+                }
+
+                @foreach (var chore in Model.chores)
+                {
+                    //var project = Model.requests.FirstOrDefault(r => r.reuqestID == chore.requestID);
+                    //string name = "";
+
+
+                    //if (project != null)
+                    //{
+                    //    name = project.projectName;
+                    //}
+
+                    if (rowColor == "noAlt")
+                    {
+                        rowColor = "alt";
+                    }
+                    else
+                    {
+                        rowColor = "noAlt";
+                    }
+
+                    <tr class="@rowColor">
+                        <td><a href="#projectList" class="open-popup-link" id="@chore.choreID">Show Projects</a></td>
+                        <td class="hide-on-med-and-down">
+                            <div class="input-field">
+                                <input type="text" name="Request_@chore.choreID" id="Request_@chore.choreID" value="@chore.requestID" class="order" />
+                            </div>
+                        </td>
+                        <td ><span id="name_@chore.choreID">@chore.name</span></td>
+                        <td>
+                            <div class="input-field">
+                                <textarea class="materialize-textarea" cols="175" name="Chore_@chore.choreID" id="Chore_@chore.choreID" class="task">@chore.chore1</textarea>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-field">
+                                <input type="text" name="TimeSpent_@chore.choreID" id="TimeSpent_@chore.choreID" value="@chore.timeSpent" class="timeSpent" />
+                            </div>
+                        </td>
+                        <td class="hide-on-med-and-down">
+                            <div class="switch">
+                            <label>
+                                <input type="checkbox" id="Delete_@chore.choreID" name="Delete_@chore.choreID"  />
+                                <span class="lever"></span>
+                            </label>
+                            </div>
+                        </td>
+                    </tr>
+                }
+                @if (rowColor == "noAlt")
+                {
+                    rowColor = "alt";
+                }
+                else
+                {
+                    rowColor = "noAlt";
+                }
+                <tr class="@rowColor">
+                    <td>
+                        <a href="#projectList" class="open-popup-link" id="0">Show Projects</a>
+                    </td>
+                    <td class="hide-on-med-and-down"> 
+                        <div class="input-field">
+                        <input type="text" name="Request" id="Request" class="order" />
+                        </div>
+                    </td>
+                    <td >
+                        <span id="name"></span>
+                    </td>
+                    <td>
+                        <div class="input-field">
+                        <textarea class="materialize-textarea" cols="175" name="Chore" id="Chore"></textarea>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="input-field">
+                            <input type="text" name="TimeSpent" id="TimeSpent"  />
+                        </div>
+                    </td>
+                    <td></td>
+                </tr>
+
+            </tbody>
+
+        </table>
+    </div>
+    <br />
+
+    <div id="saveReport">
+        @if (Model.timeSheet.completed == false)
+        {
+            <div class="switch">
+                <label>
+                    <input type="checkbox" name="complete" id="complete">
+                    <span class="lever"></span>
+                    Complete Report
+                </label>
+            </div>
+        }
+        else
+        {
+            <div class="switch">
+                <label>
+                    <input type="checkbox" checked name="complete" id="complete">
+                    <span class="lever"></span>
+                    Report is Complete
+                </label>
+            </div>
+        }
+
+        <br />
+
+        <button class="btn waves-effect waves-light button" type="submit" name="action">Save Report
+            <i class="material-icons right">library_books</i>
+        </button>
+    </div>
+    </fieldset>                
+
+
+    <div id="projectList" class="white-popup mfp-hide">
+        @foreach (var location in Model.locations)
+        {
+            <p class="ViewHeader"><a href="#@location.locationID">@location.name</a></p>
+            <div class='datagrid z-depth-1' id="@location.locationID">
+                <table>
+                    <thead><tr><th>Select Case</th><th>Case Name</th><th class="hide-on-med-and-down">Date Requested</th><th class="hide-on-med-and-down">Requester</th></tr></thead>
+                    <tbody>
+
+                        @{
+            rowColor = "alt";
+
+            var projects = Model.requests.Where(p => p.location == location.name).OrderBy(p => p.projectName);
+                        }
+
+                        @foreach (var project in projects)
+                        {
+                            if (rowColor == "noAlt")
+                            {
+                                rowColor = "alt";
+                            }
+                            else
+                            {
+                                rowColor = "noAlt";
+                            }
+
+                            <tr class="@rowColor">
+                                <td><a href="@project.reuqestID" title="@project.projectName" class="setID">Select</a></td>
+                                <td>@project.projectName</td>
+                                <td class="hide-on-med-and-down">@project.dateRequested</td>
+                                <td class="hide-on-med-and-down">@project.name</td>
+                            </tr>
+
+                        }
+
+                    </tbody>
+
+                </table>
+            </div>
+        }
+    </div>
+    <script src="~/js/jquery.magnific-popup.js"></script>
+                            }

@@ -1,0 +1,54 @@
+﻿@model IEnumerable<ProjectRequest.Models.Location>
+
+@{
+    ViewBag.Title = "New School Event";
+    Layout = "~/Views/Shared/_LayoutCopy2017.cshtml";
+}
+
+<fieldset class="sectionGroup">
+<legend>Add / Edit Event</legend>
+
+    @*Track if editing an event, or adding a new one*@
+    <input type="hidden" name="id" id="id" value="0" />
+    
+    <div class="row">
+
+        <div class="input-field col s12" >
+            <input type="text" name="title" id="title" />
+            <label class="addContent">Description:</label>
+        </div>
+    
+    </div>
+
+    <div class="row">
+
+        <div class="input-field col s12 m6 l6" >
+            <input type="text" name="startDate" id="startDate" class="datepicker" />
+            <label class="addContent">Start Date:</label>
+        </div>
+
+        <div class="input-field col s12 m6 l6" >
+            <input type="text" name="endDate" id="endDate" class="datepicker" />
+            <label class="addContent">End Date:</label>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="input-field col s12 m6 l6" >
+            <select name="location" id="location">
+                <option value="00">Please Select:</option>
+                    @foreach (var location in Model)
+                    {
+                        <option value="@location.name">@location.name</option>
+                    }
+            </select>
+            <label >Location:</label>
+        </div>
+
+    </div>
+
+    <br />
+
+</fieldset>
+

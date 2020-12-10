@@ -1,0 +1,661 @@
+﻿@model ProjectRequest.Models.RequestInfoViewModel
+
+@{
+    ViewBag.Title = "CC Case File";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    
+    <link rel="stylesheet" href="~/css/magnific-popup.css"> 
+    
+   <style type="text/css">
+
+        .white-popup {
+          position: relative;
+          background: #FFF;
+          padding: 20px;
+          width: auto;
+          max-width: 800px;
+          margin: 30px auto;
+        }
+
+       .externalEmail
+       {
+           width: 350px;
+       }
+
+    </style>
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.date').datepicker();
+        $('.dueDate').datepicker();
+        $('#staffList').hide();
+        $('#emailList').hide();
+
+        if(getUrlVars()["position"] != null)
+        {
+            var position = $("#" + getUrlVars()["position"]).position();
+
+            $(window).scrollTop(parseInt(position.top) - 75);
+        }
+        else
+        {
+            var position = $('.scrollPosition').val();
+
+            $(window).scrollTop(parseInt(position));
+        }
+
+        $(document).click(function (e)
+        {
+            $('#staffList').hide();
+            $('#emailList').hide();
+        });
+
+        $('.assignment, #TO').click(function (e)
+        {
+            e.stopPropagation();
+            var textBoxPostion = $(this).position();
+            $('#staffList').css({top: textBoxPostion.top + 30, left: textBoxPostion.left});
+            $('#staffList').show();
+
+            var previousBox = $('#current');
+            previousBox.removeAttr('id');
+
+            $(this).attr('id', 'current');
+        });
+
+        $('#staffList a').click(function (e)
+        {
+            var staffID = $(this).attr('href');
+            var assignments = $('#current').val();
+
+            assignments = assignments + staffID + ",";
+
+            $('#current').val(assignments);
+
+            $('#staffList').hide();
+
+            e.preventDefault();
+        });
+
+        $('#externalEmail').click(function (e)
+        {
+            e.stopPropagation();
+            var textBoxPostion = $(this).position();
+            $('#emailList').css({top: textBoxPostion.top - 150, left: textBoxPostion.left});
+            $('#emailList').show();
+        });
+
+        $('#emailList a').click(function (e)
+        {
+            var staffID = $(this).attr('href');
+            var assignments = $('#externalEmail').val();
+
+            assignments = assignments + staffID + ",";
+
+            $('#externalEmail').val(assignments);
+
+            $('#emailList').hide();
+
+            e.preventDefault();
+        });
+
+        $("#addPO").change(function() {
+            AddPOFields();
+        });
+
+    });
+
+    function ResetPosition()
+    {
+        $('.scrollPosition').val(0);
+        CheckWorking();
+    }
+
+    function SaveTaskList(requestID) {
+
+        CheckWorking();
+
+        $('.scrollPosition').val($(window).scrollTop());
+
+        document.ReuqestForm.action = "/ProjectRequest/ProjectRequest/Request/EditRequest?requestID=" + requestID;
+
+        document.ReuqestForm.submit();
+
+    }
+
+    function DisplayReport()
+    {
+        $.magnificPopup.open({
+            items: {
+                src: '#addTime'
+            },
+            type: 'inline',
+            callbacks: {
+                close: function () {
+                    $("#Chore").val('');
+                    $("#TimeSpent").val('');
+                    $("#reportResponse").html('');
+                }
+            }
+        });
+    }
+
+    function AddTime()
+    {
+        var currentDate = $.datepicker.formatDate('mm/dd/yy', new Date());
+
+        $.ajax({
+            type: "POST",
+            url: "/ProjectRequest/ProjectRequest/TimeSheet/AddTime",
+            data: '{"id":"' + $("#Request").val() + '", "description":"' + $("#Chore").val() + '", "time":"' + $("#TimeSpent").val() + '"}',
+            contentType: "application/json; charset=utf-8",
+            success: function(response) {
+                $("#reportResponse").html(response);
+            },
+            failure: function(response) {
+                $("#reportResponse").html(response);
+            }
+        });
+    }
+
+    //function DisplayEmailField()
+    //{
+    //    $.magnificPopup.open({
+    //        items: {
+    //            src: '#addTime'
+    //        },
+    //        type: 'inline',
+    //        callbacks: {
+    //            close: function () {
+    //                $("#Chore").val('');
+    //                $("#TimeSpent").val('');
+    //                $("#reportResponse").html('');
+    //            }
+    //        }
+    //    });
+    //}
+
+    function SendExternalEmail(requestID)
+    {
+        var currentDate = $.datepicker.formatDate('mm/dd/yy', new Date());
+
+        $.ajax({
+            type: "POST",
+            url: "/ProjectRequest/ProjectRequest/Request/SendExternalEmail",
+            data: '{"requestID":"' + parseInt(requestID) + '", "sendTo":"' + $("#externalEmail").val() + '"}',
+            contentType: "application/json; charset=utf-8",
+            success: function(response) {
+                $("#reportResponse").html(response);
+            },
+            failure: function(response) {
+                alert(response);
+            }
+        });
+    }
+
+    function CheckWorking()
+    {
+        var numItems = $('.status').length
+
+        if(numItems > 0)
+        {
+            var working = false;
+            $('.status').each(function () {
+                
+                if($(this).val() == "Working")
+                {
+                    working = true;
+                }
+                
+            });
+
+            if(working == false)
+                alert("You have not marked any task as working");
+        }
+    }
+
+    function AddPOFields()
+    {
+        var count = $("#addPO").val();
+
+        var html = "";
+
+        for(i = 1; i <= count; i++)
+        {
+            html += "<label for='poNumber'>New P0# " + i + ":</label>"
+                + "<input type='text' name='poNumber_" + i + "'/>"
+                + "<br />";
+        }
+
+        $("#additonalPO").html(html);
+
+    }
+
+    function getUrlVars() {
+        var vars = [], hash;
+        var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+        for (var i = 0; i < hashes.length; i++) {
+            hash = hashes[i].split('=');
+            vars.push(hash[0]);
+            vars[hash[0]] = hash[1];
+        }
+        return vars;
+    }
+
+</script>
+<h3 id="EditProject">CC Case File</h3> <a href="ViewRequest?requestID=@Model.request.reuqestID.ToString()&position=EditProject">View Case File</a> 
+@using (Html.BeginForm("EditRequest", "Request", new { requestID = Convert.ToInt16(Request.QueryString["requestID"]) }, FormMethod.Post, new { enctype = "multipart/form-data", name = "ReuqestForm", id = "RequestForm" }))
+{
+    
+<input type="hidden" id="scrollPosition" name="scrollPosition" class="scrollPosition" value="@ViewBag.Position" />
+    
+<label for="completed">Completed?</label>
+<select name="completed">
+@if (Model.request.completed == true)
+{
+    <option value="Yes" selected="selected">Yes</option>
+    <option value="No">No</option>
+}
+else
+{
+    <option value="Yes" >Yes</option>
+    <option value="No" selected="selected">No</option>
+}
+</select>
+<br />
+    
+<label for="CT#">CT#</label>
+<input type="text"name="CT#" id="CT#" value="@Model.request.currentTrackID" />
+<br />
+    
+<label for="ID">CC ID</label>
+<textarea cols="100" rows="1" name="CCID" id="CCID">@Model.request.customID</textarea>
+<br />
+    
+<label for="date">Date Submitted:</label>
+<input type="text" name="date" class="date" value="@Model.request.dateRequested" />
+<br />
+
+<label for="dueDate">Due Date:</label>
+<input type="text" name="dueDate" class="date" value="@Model.request.dueDate" />
+<br />
+    
+<label for="name">Requester Name:</label>
+<textarea cols="100" rows="1" name="name" id="name">@Model.request.name</textarea>
+<br />
+    
+<label for="email">Email Address:</label>
+<textarea cols="100" rows="1" name="email" id="email">@Model.request.email</textarea>
+<br />
+    
+<label for="doaName">Approved By:</label>
+<textarea cols="100" rows="1" name="doaName" id="doaName" >@Model.request.doaName</textarea>
+<br />
+
+<label for="projectName">Project Name:</label>
+<textarea cols="100" rows="1" name="projectName" id="projectName">@Model.request.projectName</textarea>
+<br />
+    
+<label for="contactInfo">Contact Info:</label>
+<textarea cols="100" rows="1" name="contactInfo" id="contactInfo">@Model.request.contactInfo</textarea>
+<br />
+    
+<label for="location">Location:</label>
+<select name="location" id="location">
+    <option value="00">Please Select:</option>
+    @foreach (var location in Model.location)
+    {
+        if (location.name == Model.request.location)
+        {
+            <option value="@location.name" selected="selected">@location.name</option>      
+        }
+        else
+        {
+            <option value="@location.name" >@location.name</option>
+        }
+    }
+</select>
+<br />
+    
+<label for="category">Category:</label>
+<select name="category" id="category">
+    @foreach (var category in Model.cateogires)
+    {
+        if (category.categoryID == Model.request.categoryID)
+        {
+            <option value="@category.categoryID" selected="selected">@category.categoryName</option>
+        }
+
+        else
+        {
+            <option value="@category.categoryID">@category.categoryName</option>
+        }
+    }
+</select>
+<br />
+ 
+
+    int poCount = 0;
+
+    foreach (var po in Model.poNum)
+    {
+        poCount++;
+        
+    <label for="poNumber">PO# @poCount:</label>
+    <input type="text" name="poNumber_@po.poID" class="poNumber" value="@po.PONum1" />
+    <br />
+    }
+    
+    
+    <label for="poNumber">Add additional PO Numbers:</label>
+    <select id="addPO" name="addPO">
+        <option value="0">None</option>
+        <option value="1">One</option>
+        <option value="2">Two</option>
+        <option value="3">Three</option>
+        <option value="4">Four</option>
+        <option value="5">Five</option>
+        <option value="6">Six</option>
+        <option value="7">Seven</option>
+        <option value="8">Eight</option>
+    </select>
+    <br />
+    
+    <div id="additonalPO">
+    </div>
+    
+    <label for="cost">Cost:</label>
+<input type="text" name="cost" id="cost" value="@Model.request.cost" />
+<br />
+    
+    <label for="details">Details:</label>
+<textarea cols="100" rows="1" name="details" id="details">@Model.request.detail</textarea>
+<br />
+    
+<label for="comments">Comments:</label>
+<textarea cols="100" rows="1" id="comments" name="comments">@Model.request.comment</textarea>   
+<br />
+   
+    //Load in individual Questions
+    foreach (var request in Model.answerList)
+    {
+<label for="@request.answer.AnswerID">@request.question</label>
+<textarea cols="100" rows="1" id="@request.answer.AnswerID" name="@request.answer.AnswerID">@request.answer.AnswerText</textarea>   
+<br />
+    }
+    
+<label for="additionalInfo">Additional Info</label>
+<textarea cols="100" rows="1" id="additionalInfo" name="additionalInfo">@Model.request.additionalInfo</textarea>   
+<br />
+    
+<h3 id="EditTask">CC Task File</h3>
+<a href="ViewRequest?requestID=@Model.request.reuqestID.ToString()&position=EditTask">View Case File</a>     
+     
+<div class='datagrid'>
+<table>
+<thead><tr><th>Order</th><th>Task</th><th>Status</th><th>Due Date</th><th>Assigned To</th><th>CC Priority</th><th>Delete</th></tr></thead>
+<tbody>
+
+@{
+    string rowColor = "alt";
+}
+
+@foreach (var task in Model.taskList)
+{
+    if (rowColor == "noAlt")
+    {
+        rowColor = "alt";
+    }
+    else
+    {
+        rowColor = "noAlt";
+    }
+
+    string assignments = "";
+
+    try
+    {
+        var currentAssignments = Model.taskAssignments.Where(t => t.taskID == task.taskID);
+
+        foreach (var assigned in currentAssignments)
+        {
+            assignments += assigned.staffID + ", ";
+        }
+    }
+    catch { }
+    
+    <tr class="@rowColor">
+        <td><input type="text" name="Order_@task.taskID" id="Order_@task.taskID" value="@task.orderNum" class="order" /></td>
+        <td><textarea rows="1" name="Task_@task.taskID" id="Task_@task.taskID" class="task">@task.Task</textarea></td>
+        <td>
+            <select name="Status_@task.taskID" id="Status_@task.taskID" class="status">
+            <option value="00">Please Select:</option>
+            @foreach (var status in Model.taskStatus)
+            {
+                if (status.status == task.Status)
+                {
+                    <option value="@status.status" selected="selected">@status.status</option>      
+                }
+                else
+                {
+                    <option value="@status.status">@status.status</option>
+                }
+            }
+        </select>
+        </td>
+        <td><input type="text" name="DueDate_@task.taskID" id="DueDate_@task.taskID" value="@task.DueDate" class="dueDate" /></td>
+        <td><input type="text" name="Assignment_@task.taskID" value="@assignments"  class="assignment" /></td>
+        @if (task.priority == true)
+        {
+            <td><input type="checkbox" id="Prioritize_@task.taskID" name="Prioritize_@task.taskID" checked="checked" class="delete"  /></td>
+        }
+        else
+        {
+            <td><input type="checkbox" id="Prioritize_@task.taskID" name="Prioritize_@task.taskID" class="delete"  /></td>
+        }
+
+        <td><input type="checkbox" id="Delete_@task.taskID" name="Delete_@task.taskID" class="delete"  /></td>
+    </tr>
+}
+    @if (rowColor == "noAlt")
+    {
+        rowColor = "alt";
+    }
+    else
+    {
+        rowColor = "noAlt";
+    }
+    <tr class="@rowColor">
+        <td><input type="text" name="Order" id="Order" class="order" /></td>
+        <td><textarea cols="100" rows="1" type="text" name="Task" id="Task" class="task"></textarea></td>
+        <td>    
+        <select name="Status" id="Status" >
+            <option value="00">Please Select:</option>
+            @foreach (var status in Model.taskStatus)
+            {
+                <option value="@status.status">@status.status</option>      
+            }
+        </select>
+        </td>
+        <td><input type="text" name="DateDue" id="DueDate" class="dueDate" /></td>
+        <td><input type="text" name="Assignment" class="assignment" /></td>
+        <td><input type="checkbox" id="Prioritize" name="Prioritize" class="delete"  /></td>
+        <td></td>
+    </tr>
+
+</tbody>
+
+</table>
+
+</div>
+<br />
+        <label for="template">Add Guidelines:</label>
+    <select name="template" id="template">
+        <option value="00">Please Select:</option>
+        @foreach (var template in Model.templateList)
+        {
+            <option value="@template.templateID" >@template.templateName</option>
+        }
+    </select>
+    <br />
+
+    <input type="submit" name="saveTaskList" id="saveTaskList" value="Save Task File" onclick="SaveTaskList(@Request.QueryString["requestID"].ToString())" />
+
+<h3 id="EditAttachments">Attachments</h3>
+ <a href="ViewRequest?requestID=@Model.request.reuqestID.ToString()&position=EditAttachments">View Case File</a>   
+
+    <div class='datagrid'>
+<table>
+
+    <thead>
+    <tr>
+    <th>File Path</th><th>Date Uploaded</th><th>Delete</th>
+
+    @if (Model.request.categoryID == "cool")
+    {
+        <th>Caption</th>
+    }
+
+    </tr>
+    </thead>
+
+    <tr class="noAlt">
+        @if (@Model.request.doaAttachment != "Submitted by DOA" && @Model.request.doaAttachment != "Approval not needed")
+        {
+            <td><a href="~/Attachments/@Model.request.doaAttachment">@Model.request.doaAttachment (Approval File)</a></td>
+        }
+        else
+        {
+            <td>@Model.request.doaAttachment</td>
+        }
+
+@{ rowColor = "noAlt"; }
+
+@foreach (var attachment in Model.attachment)
+{
+
+    if (rowColor == "noAlt")
+    {
+        rowColor = "alt";
+    }
+    else
+    {
+        rowColor = "noAlt";
+    }
+    <tr class="@rowColor">
+    <td><a href="~/Attachments/@attachment.filePath">@attachment.filePath</a></td>
+            <td>
+        @attachment.dateAdded
+    </td>
+      <td>
+        <input type="checkbox" name="Delete_@attachment.attachmentID" />
+    </td>
+    @if (Model.request.categoryID == "cool")
+    {
+        <td>@attachment.caption</td>
+    }
+
+    </tr>
+}
+
+
+</table>
+</div>
+           
+    <p><b>Upload a file: <input type="file" name="uploadFile" id="uploadFile" /></b></p>
+    <input type="submit" name="saveFile" id="saveFile" value="Save File" onclick="SaveTaskList(@Request.QueryString["requestID"].ToString())" />
+    
+
+    <h3>Send Email</h3>
+    
+    <label><b>To:</b></label>
+    <input type="text" name="TO" id="TO" />
+    <br />
+    
+    <label>Email Body:</label>
+    <textarea cols="100" rows="1" name="emailBody"></textarea>
+    <br />
+    
+    <h3 id="EditAssignments">Assign CC Agents</h3>
+     <a href="ViewRequest?requestID=@Model.request.reuqestID.ToString()&position=EditAssignments">View Case File</a>  
+var assignmentList = Model.assignments.Select(a => a.staffID).ToList();
+foreach (var staff in Model.staff)
+{
+    if (assignmentList.Contains(staff.staffID))
+    {
+                    
+        <p style='margin: 0px;'><input type="checkbox" id="CB_@staff.staffID" name="CB_@staff.staffID" value="@staff.staffID" checked="checked" /> @staff.firstName @staff.lastName</p>   
+    }
+    else
+    {
+        <p style='margin: 0px;'><input type="checkbox" id="CB_@staff.staffID" name="CB_@staff.staffID" value="@staff.staffID" /> @staff.firstName @staff.lastName</p> 
+    }
+}
+    <br />
+    <input type="submit" name="assign" value="Save Changes to Case File" onclick="ResetPosition()" />
+    <br />
+    
+    
+}
+
+
+<h3>Additonal CC Functions</h3>
+
+<input type="button" value="Add Time to Report" onclick="DisplayReport()" />
+
+<div id="staffList">
+    <ul>
+    @foreach (var staff in Model.staff)
+    {
+        <li><a href="@staff.staffID">@staff.firstName @staff.lastName</a></li>
+    }
+    </ul>
+</div>
+
+<div id="emailList">
+    <ul>
+        <li><a href="amanda@idealogy.biz">Amanda Kaiser</a></li>
+        <li><a href="allen@idealogy.biz">Allen Howie</a></li>
+        <li><a href="jeff@creativepop.com">Jeff Windhorst</a></li>
+        <li><a href="ash862@me.com">Aaron Hutchings</a></li>
+        <li><a href="aaron@tmjeff.com">Aaron Hutchings 9631776</a></li>
+        <li><a href="s_crady@yahoo.com">Steven Crady</a></li>
+    </ul>
+
+</div>
+
+<div id="addTime" title="File Report" class="white-popup mfp-hide">
+<br />
+
+    <div class='datagrid' id="reportForm">
+    <table>
+    <thead><tr><th>Case ID</th><th>Description</th><th>Hours</th></tr></thead>
+    <tbody>
+
+        <tr>
+            <td><input type="text" name="Request" id="Request" class="order" value="@Model.request.reuqestID" /></td>
+            <td><textarea rows="1" name="Chore" id="Chore" class="task"></textarea></td>
+            <td><input type="text" name="TimeSpent" id="TimeSpent" class="timeSpent" /></td>
+        </tr>
+
+    </tbody>
+
+    </table>
+    <br />
+        <input type="button" value="Add Time to Report" onclick="AddTime()" />
+
+    </div>
+
+    <p id="reportResponse"></p>
+</div>
+<br /><br />
+
+
+    <label>Send External Email</label>
+    <input type="text" name="externalEmail" id="externalEmail" class="externalEmail" />
+    <br />
+
+    <input type="button" value="Send External Email" onclick="SendExternalEmail(@Model.request.reuqestID)"  />
+
+<script src="~/js/jquery.magnific-popup.js"></script>

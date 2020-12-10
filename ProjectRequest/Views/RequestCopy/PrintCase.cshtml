@@ -1,0 +1,42 @@
+﻿@model ProjectRequest.Models.Request
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Print Case</title>
+</head>
+<body>
+    <div>
+        
+        <p><b>CC ID:</b> @Model.reuqestID</p>
+
+        <p><b>Case Name:</b> @Model.projectName</p>
+
+        <p><b>Location:</b> @Model.location</p>
+
+        <p><b>Date Requested:</b> @Model.dateRequested</p>
+
+        <p><b>Vendor:</b> @Model.vendor</p>
+
+        <p><b>Ship To:</b> @Model.shipTo</p>
+
+        <p><b>Subtotal:</b> @Model.subtotal</p>
+
+        <p><b>Tax:</b> @Model.tax</p>
+
+        <p><b>Total:</b> @Model.total</p>
+
+        <p><b>Quantity:</b> @Model.Quantity</p>
+
+        <p><b>Printer Specifications:</b> @Model.printerSpecifications</p>
+
+
+    </div>
+</body>
+</html>

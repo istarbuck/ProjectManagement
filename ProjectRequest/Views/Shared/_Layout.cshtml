@@ -1,0 +1,791 @@
+﻿<!DOCTYPE html>
+
+@{
+    string name = Convert.ToString(User.Identity.Name);
+
+    name = name.Remove(0, 8).ToLower();
+    
+}
+
+<html @*ng-app="CCFiles"*@ @*ng-controller="CCFileController"*@>
+<head>
+
+    <title>@ViewBag.Title</title>
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <link rel="stylesheet" href="~/css/print2.css" /> 
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css">
+    <link href="https://Secure.sullivan.edu/forms/css/jquery-ui-1.10.1.custom.css" rel="stylesheet" />
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+@*    <link href='https://fonts.googleapis.com/css?family=Iceberg' rel='stylesheet' type='text/css'>*@
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Patua+One' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Roboto+Condensed' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+
+    <style type="text/css">
+        
+        /*Styling for tables http://tablestyler.com/ */
+        .datagrid table { border-collapse: collapse; text-align: left; width: 100%; } 
+        .datagrid {font: normal 12px/150% Arial, Helvetica, sans-serif; background: #fff; border: 1px solid #397373;  }
+        .datagrid table td, .datagrid table th { padding: 3px 10px; }
+        .datagrid table thead {background:#2F5E5E;background-color:#2F5E5E; color:#FFFFFF; font-size: 15px; font-weight: bold;  } 
+        .datagrid table thead th:first-child { border: none; }
+        .datagrid table tbody td { /*color: black; border-left: 1px solid #E1EEF4;font-size: 13px;font-weight: normal;*/ }
+        .datagrid .alt { background: #e3e7e9; /*color: black;*/ }
+        .datagrid table tbody td:first-child { border-left: none; }
+        .datagrid table tbody tr:last-child td { border-bottom: none; }
+        .datagrid table tfoot td div { border-top: 1px solid #397373;background: white;} 
+        .datagrid table tfoot td { padding: 0; font-size: 12px } 
+        .datagrid table tfoot td div{ padding: 2px; }
+        .datagrid table tfoot td ul { margin: 0; padding:0; list-style: none; text-align: right; }
+        .datagrid table tfoot  li { display: inline; }
+        .datagrid table tfoot li a { text-decoration: none; display: inline-block;  padding: 2px 8px; margin: 1px;color: #FFFFFF;border: 1px solid #2c7aff; background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #2c7aff), color-stop(1, #2c7aff) );background:-moz-linear-gradient( center top, #2c7aff 5%, #2c7aff 100% );filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#2F5E5E', endColorstr='#2F5E5E');background-color:#448A8A; }
+        .datagrid table tfoot ul.active, .datagrid table tfoot ul a:hover { text-decoration: none;border-color: #336666; color: #FFFFFF; background: none; background-color:#224545;}div.dhtmlx_window_active, div.dhx_modal_cover_dv { position: fixed !important; }
+
+          body {
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+          }
+
+        td, th
+        {
+            border-radius: 0px;
+        }
+
+        fieldset a
+        {
+            color: #2c7aff;
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .viewEdit
+        {
+            margin-left: 15px
+        }
+
+        header
+        {
+            width: 100%;
+
+        }
+
+        nav {
+            background: #2F5E5E;
+            width: 100%;
+        }
+
+        nav a
+        {
+            text-decoration: none;
+            font-weight: 400;
+        }
+
+        nav img
+        {
+            margin: 5px;
+            margin-left: 20px;
+        }
+
+        a
+        {
+            color: #2F5E5E;
+            text-decoration: underline;
+        }
+
+        .main-content
+        {
+            margin: 0px;   
+        }
+
+        .CaseFilter
+        {
+            max-width: 1300px;
+            margin: 0 auto;
+            margin-top: 20px;
+            /*font-size: x-large;*/
+            /*box-shadow: 1px 1px 1px 1px #888888;*/
+        }
+
+        .CaseFilter md-input-container {
+            margin-top: 20px;
+        }
+
+        .page-content
+        {
+            /*margin: 25px;*/
+            margin: 0 auto;
+            max-width: 1300px;
+        }
+
+        .CaseList
+        {
+            margin: 25px;
+            margin-top: 0px;
+        }
+
+
+        .CaseFilter h4, .CalenderEvent h4
+        {
+            margin: 0;
+        }
+
+        .CalenderEvent
+        {
+            max-width: 1000px;
+            margin: 0 auto;
+            margin-top: 20px;
+            color: slategray;
+            /*font-size: x-large;*/
+            margin-bottom: 25px;
+        }
+
+        .footerCopyRight
+        {
+            margin: 0 auto;
+        }
+
+        .btn
+        {
+            margin: 10px;
+            background: #2c7aff;
+        }
+
+        .btn:hover
+        {
+            background: #2F5E5E;
+        }
+
+        .btn:active
+        {
+            background: #2c7aff;
+        }
+
+        #lblComplete
+        {
+            margin-left: 10px;
+        }
+
+        #saveReport
+        {
+            margin-left: 0px;
+        }
+
+        #reportTime
+        {
+            /*margin-left: 25px;*/
+            margin-bottom: 0px;
+            font-size: 17px;
+            font-weight: 600;
+            color: #2c7aff;
+        }
+
+        .notFound
+        {
+            color: #2c7aff;
+            text-align: center;
+
+        }
+
+        .notFound p
+        {
+            font-weight: 600;
+            font-size: 20px;
+        }
+
+        fieldset
+        {
+            padding: 10px;
+            background-color: #f1f3f4;
+            border: none;
+            margin-left: 10px;
+            margin-right: 10px;
+            border-radius: 0.5em;
+        }
+
+        .caseHeader
+        {
+            background-color: #F0F0F0;
+            color: #2F5E5E;
+            margin: 0px;
+        }
+
+        legend
+        {
+            font-weight: bold;
+            background-color: #f1f3f4;
+            color: #2F5E5E;
+            font-size: 25px;
+            padding: 5px;
+            padding-left: 10px;
+            padding-right: 10px;
+            margin-top: 0px;
+            font-family: 'Oswald', sans-serif;
+            /*font-weight: 300;*/
+            border-radius: 0.2em;
+        }
+        
+        .pager a
+        {
+            font-weight: bold;
+            font-size: large;
+            color: #36752D;
+            margin: 2px;
+        }
+
+         .order
+         {
+             max-width: 50px;
+
+         }
+
+         .dueDate
+         {
+             width: 100px;
+             margin-right: 0px;
+         }
+
+        #staffList, #emailList
+        {
+            position: absolute;
+            width: 200px;
+            border: solid 1px;
+            border-color: #336666;
+            z-index: 20;
+            background-color: white;
+            text-align: center;
+        }
+
+        .assignmentStaff
+        {
+            margin: 5px;
+            font-size: 10px;
+            font-weight: 400;
+        }
+
+        td
+        {
+            padding: 0px;
+        }
+
+        .mdl-layout:not(.is-small-screen) .mdl-layout--small-screen-only {
+          display: none;
+        }
+
+        md-input-container
+        {
+            margin: 0px;
+        }
+
+        td md-input-container
+        {
+            margin: 0px;
+            width: 100%;
+        }
+
+        textarea.materialize-textarea
+        {
+            min-height: 1rem;
+            padding-top: 12px;
+            padding-bottom: 13px;
+        }
+
+        table .materialize-textarea
+        {
+
+            padding-top: 12px;
+            padding-bottom: 13px;
+            min-height: 1rem;
+        }
+
+        .nav-wrapper
+        {
+            max-width: 1300px;
+            margin: 0 auto;
+            overflow: hidden;
+            
+        }
+
+        .nav-wrapper a
+        {
+            font-family: 'Roboto Condensed', sans-serif;
+            font-size: 0.9rem;
+            overflow: hidden;
+            font-weight:600;
+        }
+
+        
+        .nav-wrapper li:hover
+        {
+            background: #2c7aff;
+        }
+
+        /*.row 
+        {
+            margin-bottom: 5px;
+        }*/
+
+        footer.page-footer
+        {
+            background-color: #424242;
+            font-weight: 600;
+            font-family: 'PT Sans', sans-serif;
+            font-size: 15px;
+
+            padding: 0px;
+        }
+
+        .footer-copyright
+        {
+            height: 75px;
+        }
+
+        .container p
+        {
+            margin-top: 0px;
+        }
+
+        td .input-field
+        {
+            color: black;
+        }
+
+        /* For Select Labels */
+        .select-wrapper + label
+        {
+            font-size: 1.0rem;
+        }
+
+        /*.select-wrapper ul
+        {
+            overflow: scroll;
+        }*/
+
+
+        .dropdown-content li > span 
+        {
+            color: black;
+            font-family: 'Roboto', sans-serif;
+            font-size: 14px;
+            /*padding-top: 0px;
+            padding-bottom: 0px;
+            margin-top: 0px;
+            margin-bottom: 0px;*/
+            height: 5px;
+        }
+
+        .waves-effect waves-light
+        {
+            background-color: #2c7aff;
+        }
+
+        .picker__frame
+        {
+            font-family: 'PT Sans', sans-serif;
+        }
+
+        .picker__today, .picker__clear, .picker__close, .picker__day.picker__day--today
+        {
+            font-family: 'PT Sans', sans-serif;
+            color: #2F5E5E;
+            font-weight: 600;
+        }
+
+        .picker__nav--prev:hover, .picker__nav--next:hover
+        {
+            background: #d9d9d9;
+        }
+
+        .picker__date-display
+        {
+            background: #2c7aff;
+        }
+
+        .picker__weekday-display
+        {
+            display: none;
+        }
+
+        picker__day--selected, .picker__day--selected:hover, .picker--focused .picker__day--selected
+        {
+            background: #2F5E5E;
+        }
+
+        .button
+        {
+            font-family: 'Roboto Condensed', sans-serif;
+            background-color: #2c7aff;
+        }
+
+        .upload
+        {
+            margin-left: 0px;
+        }
+
+        .file-path-wrapper
+        {
+            margin-top: 5px;
+        }
+
+        .switch label input[type="checkbox"]:checked + .lever
+        {
+            background-color: #92bbff;
+        }
+
+        
+        .switch label input[type="checkbox"]:checked + .lever::after
+        {
+            background-color: #2c7aff;
+        }
+
+        .picker__calendar-container th, .picker__calendar-container thead, .picker__calendar-container tr, .picker__calendar-container tbody, .picker__calendar-container td
+        {
+            background: white;
+            border-left: none;
+        }
+
+        .picker__calendar-container table tbody td
+        {
+            background: white;
+            border: none;
+        }
+
+        .totalCases
+        {
+            margin-top: 0px;
+            color: #2c7aff;
+            font-family: 'PT Sans', sans-serif;
+            font-weight: 600;
+            font-size: 18px;
+        }
+    </style>
+
+
+    @if (name != "ekuhn" && name != "ccole" )
+    {
+        <style>
+
+            .datagrid td, .datagrid a
+            {
+                color: #2F5E5E;
+                font-size: 13px;
+                font-family: 'Roboto', sans-serif;
+            }
+
+            a
+            {
+                color: #2c7aff;
+                text-decoration: underline;
+                font-family: 'PT Sans', sans-serif;
+                font-weight: 600;
+            }
+
+            .datagrid th
+            {
+                font-family: 'PT Sans', sans-serif;
+            }
+
+            label
+            {
+                /*margin-left: 10px;*/
+                color: #2F5E5E;
+                font-weight: 600;
+                font-family: 'PT Sans', sans-serif;
+                font-size: 16px;
+            }
+
+            legend
+            {
+                color: #2c7aff;
+            }
+
+            fieldset p
+            {
+                font-family: 'Roboto', sans-serif;
+                font-size: 14px;
+            }
+
+            .input-field label {
+                color: #2F5E5E;
+                margin-left: 0px;
+                font-family: 'PT Sans', sans-serif;
+            }
+
+            .input-field label.active
+            {
+                color: #2F5E5E;
+                font-size: 1rem;
+                font-family: 'PT Sans', sans-serif;
+            }
+
+           .input-field input[type=text]:focus + label, .input-field textarea.materialize-textarea:focus + label {
+                color: #2c7aff;
+                font-family: 'PT Sans', sans-serif;
+           }
+
+           .input-field input[type=text]:focus, .input-field textarea.materialize-textarea:focus {
+             border-bottom: 1px solid #2c7aff;
+             box-shadow: 0 1px 0 0 #2c7aff;
+           }
+
+           .input-field input[type=text], .input-field textarea {
+                border-color: #2F5E5E;
+                font-family: 'Roboto', sans-serif;
+                color: black;
+                font-size: 14px;
+            }
+
+            .ViewHeader
+            {
+                color: #2F5E5E;
+                text-decoration: underline;
+                font-family: 'PT Sans', sans-serif;
+                font-size: 16px;
+            }
+
+        </style>
+    }
+    else
+    {
+
+        <style>
+
+            .datagrid td, .datagrid a
+            {
+                color: black;
+                font-size: 13px;
+                font-family: 'Roboto', sans-serif;
+            }
+
+            a
+            {
+                color: #2c7aff;
+                text-decoration: underline;
+                font-family: 'PT Sans', sans-serif;
+                font-weight: 600;
+            }
+
+            .datagrid th
+            {
+                font-family: 'PT Sans', sans-serif;
+            }
+
+            label
+            {
+                /*margin-left: 10px;*/
+                color: black;
+                font-weight: 600;
+                font-family: 'PT Sans', sans-serif;
+                font-size: 16px;
+            }
+
+            legend
+            {
+                color: #2c7aff;
+            }
+
+            fieldset p
+            {
+                font-family: 'Roboto', sans-serif;
+                font-size: 14px;
+            }
+
+            .input-field label {
+                color: black;
+                margin-left: 0px;
+                font-family: 'PT Sans', sans-serif;
+            }
+
+            .input-field label.active
+            {
+                color: black;
+                font-size: 1rem;
+                font-family: 'PT Sans', sans-serif;
+            }
+
+           .input-field input[type=text]:focus + label, .input-field textarea.materialize-textarea:focus + label {
+                color: #2c7aff;
+                font-family: 'PT Sans', sans-serif;
+           }
+
+           .input-field input[type=text]:focus, .input-field textarea.materialize-textarea:focus {
+             border-bottom: 1px solid #2c7aff;
+             box-shadow: 0 1px 0 0 #2c7aff;
+           }
+
+           .input-field input[type=text], .input-field textarea {
+                border-color: black;
+                font-family: 'Roboto', sans-serif;
+                color: black;
+                font-size: 14px;
+            }
+
+            .ViewHeader
+            {
+                color: black;
+                text-decoration: underline;
+                font-family: 'PT Sans', sans-serif;
+                font-size: 16px;
+            }
+
+        </style>
+    }
+    
+     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="https://Secure.sullivan.edu/forms/js/jquery-ui-1.10.1.custom.min.js" type="text/javascript"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+
+    <script src="~/js/jquery-ui.min.js" type="text/javascript"></script>
+    <script src="~/js/jquery.magnific-popup.min.js" type="text/javascript"></script>
+
+</head>
+<body ng-app="CCApp" ng-controller="caseCtrl">
+    <!-- Uses a header that scrolls with the text, rather than staying
+  locked at the top -->
+<!-- Always shows a header, even in smaller screens. -->
+
+@{
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    string actionName = ViewContext.RouteData.Values["action"].ToString();
+}
+
+  <nav>
+    <div class="nav-wrapper">
+      <a href="~/Default/Index" class="navbar-brand"><img src="~/images/CCFilesLogo.png" alt="Tracker Logo" /></a>
+      <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+      <ul class="right hide-on-med-and-down">
+
+        <li><a class="mdl-navigation__link" href="~/RequestForm.aspx" target="_blank">New Case</a></li>
+        <li @if(controllerName == "Request" && actionName == "Index"){<text> class="active"</text>}><a href="~/Request/Index">All Cases</a></li>
+        <li @if(controllerName == "Request" && actionName == "MyProjects"){<text> class="active"</text>}><a href="~/Request/MyProjects">My Cases</a></li>
+        <li @if (controllerName == "Request" && actionName == "TaskList" && (string)Request.QueryString["assignedTo"] != name){<text> class="active"</text>}><a href="~/Request/TaskList">Tasks</a></li>
+        <li @if (controllerName == "Request" && actionName == "TaskList" && (string)Request.QueryString["assignedTo"] == name){<text> class="active"</text>}><a href="~/Request/TaskList?assignedTo=@name">My Tasks</a></li>
+        @*<li @if(controllerName == "TimeSheet"){<text> class="active"</text>}><a href="~/TimeSheet/Index">Reports</a></li>*@
+        <li @if(controllerName == "Template"){<text> class="active"</text>}><a href="~/Template/Index">Templates</a></li>
+        <li @if(controllerName == "Calendar"){<text> class="active"</text>}><a href="~/Calendar/Index">Calendar</a></li>
+        <li><a class="mdl-navigation__link" href="~/Request/PrintMyProjects" target="_blank">Print My Cases</a></li>
+        <li><a class="mdl-navigation__link" href="~/Request/PrintMyTaskList" target="_blank">Print My Tasks</a></li>
+      </ul>
+      <ul class="side-nav" id="mobile-demo">
+        <li><a class="mdl-navigation__link" href="~/RequestForm.aspx" target="_blank">New Case</a></li>
+        <li><a class="mdl-navigation__link" href="~/Request/Index">All Cases</a></li>
+        <li><a class="mdl-navigation__link" href="~/Request/MyProjects">My Cases</a></li>
+        <li><a class="mdl-navigation__link" href="~/Request/TaskList">Tasks</a></li>
+        <li><a class="mdl-navigation__link" href="~/Request/TaskList?assignedTo=@name">My Tasks</a></li>
+        @*<li><a class="mdl-navigation__link" href="~/TimeSheet/Index">Reports</a></li>*@
+        <li><a class="mdl-navigation__link" href="~/Template/Index">Templates</a></li>
+        <li><a class="mdl-navigation__link" href="~/Calendar/Index">Calendar</a></li>
+      </ul>
+    </div>
+  </nav>
+      <main class="mdl-layout__content" style="flex: 1 0 auto;">
+        <div class="page-content">
+
+            @RenderBody()
+
+        </div>
+      </main>
+        <br /><br />
+        <footer class="page-footer" >
+            <div class="footer-copyright">
+                <div class="container">
+                    <p class="center-align">Copyright © 2015 Sullivan University System | Creative Communications</p>
+                </div>
+            </div>
+        </footer>
+
+        <script>
+            $(document).ready(function () {
+                $(".button-collapse").sideNav();
+                $('select').material_select();
+                $('.btn').click(function () {
+                    $('.btn').css("background", "#2c7aff");
+                });
+
+                $('.datepicker').pickadate({
+                    format: 'mm/dd/yyyy',
+                    header: 'picker__header',
+                    selectMonths: true, // Creates a dropdown to control month
+                    selectYears: 15,
+                    autoclose: true,// Creates a dropdown of 15 years to control year
+                    onClose: function () {
+                        $(':focus').blur();
+                    },
+                    onSet: function (arg) {
+                        if ('select' in arg) { //prevent closing on selecting month/year
+                            this.close();
+                        }
+                    }
+                });
+            });
+
+
+            var myApp = angular.module('CCApp', []);
+
+            myApp.controller('caseCtrl', function ($scope, $anchorScroll, $timeout, $location) {
+                $scope.name = 'World';
+
+                //var param =  $window.location.search.position;
+
+                //if(param == "EditTask")
+                //{
+                //    $location.hash(param);
+
+                //    // call $anchorScroll()
+                //    $anchorScroll();
+                //}
+
+                $timeout(function ($routeProvider) {
+
+                    if (getUrlVars()["position"] != null) {
+                        var position = getUrlVars()["position"];
+
+                        $location.hash(position);
+
+                        // call $anchorScroll()
+                        $anchorScroll();
+
+                    }
+
+
+                });
+            });
+
+
+
+            function getUrlVars() {
+                var vars = [], hash;
+                var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+                for (var i = 0; i < hashes.length; i++) {
+                    hash = hashes[i].split('=');
+                    vars.push(hash[0]);
+                    vars[hash[0]] = hash[1];
+                }
+                return vars;
+            }
+    </script>
+
+    <script type="text/javascript">
+        var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+        document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+        var pageTracker = _gat._getTracker("UA-1162758-4");
+        pageTracker._initData();
+        pageTracker._trackPageview();
+    </script>
+
+
+</body>
+</html>

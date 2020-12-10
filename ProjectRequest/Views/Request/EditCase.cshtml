@@ -1,0 +1,865 @@
+﻿@model ProjectRequest.Models.RequestInfoViewModel
+
+@{
+    ViewBag.Title = Model.request.reuqestID + " - " + Model.request.projectName;
+    Layout = "~/Views/Shared/_LayoutCopy2017.cshtml";
+
+    <link rel="stylesheet" href="~/css/magnific-popup.css">
+
+    <style type="text/css">
+        .whitePopup {
+            position: relative;
+            background-color: white;
+            padding: 20px;
+            width: auto;
+            max-width: 800px;
+            margin: 30px auto;
+            z-index: 100;
+        }
+
+        .externalEmail {
+            width: 350px;
+        }
+    </style>
+}
+<br />
+
+
+@using (Html.BeginForm("EditRequest", "Request", new { requestID = Convert.ToInt16(Request.QueryString["requestID"]) }, FormMethod.Post, new { enctype = "multipart/form-data", name = "ReuqestForm", id = "RequestForm" }))
+{
+<div class="row">
+
+    <fieldset class="ViewCase">
+        <legend>Case Info</legend>
+
+        @if (ViewBag.Role == "Agent")
+        {
+            <div class="row row--no-spacing">
+                <div class="col s6">
+                    <a href="ViewCase?requestID=@Model.request.reuqestID.ToString()">View Case File</a>
+                </div>
+            </div>
+        }
+
+        <div class="row">
+
+            <div class="input-field col s12 m6 l3">
+                <textarea class="materialize-textarea" name="projectName" id="projectName">@Model.request.projectName</textarea>
+                <label for="projectName" aria-labelledby="projectName">Case Name:</label>
+            </div>
+
+            <div class="input-field col s12 m6 l3">
+                <input type="text" name="CaseID" value="@Model.request.reuqestID" />
+                @*<textarea class="materialize-textarea" name="CaseID" >@Model.request.customID</textarea>*@
+                <label for="CaseID">Case ID:</label>
+            </div>
+
+            <div class="input-field col s12 m6 l3">
+                <select name="completed">
+                    @if (Model.request.completed == true)
+                    {
+                        <option value="Yes" selected="selected">Yes</option>
+                        <option value="No">No</option>
+                    }
+                    else
+                    {
+                        <option value="Yes">Yes</option>
+                        <option value="No" selected="selected">No</option>
+                    }
+                </select>
+                <label for="completed">Completed?</label>
+            </div>
+
+            <div class="input-field col s12 m6 l3">
+                <select name="projectStatus" id="projectStatus">
+                    @foreach (var status in Model.projectStatus)
+                    {
+                        if (status.status == Model.request.status)
+                        {
+                            <option value="@status.status" selected="selected">@status.status</option>
+                        }
+
+                        else
+                        {
+                            <option value="@status.status">@status.status</option>
+                        }
+                    }
+                </select>
+                <label for="category">Status:</label>
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="input-field col s12 m6 l3">
+                <input type="text" name="date" class="datepicker" value="@Model.request.dateRequested" />
+                <label class="active" for="date">Date Submitted:</label>
+            </div>
+
+            <div class="input-field col s12 m6 l3">
+                <input type="text" name="dueDate" class="datepicker" value="@Model.request.dueDate" />
+                <label class="active" for="dueDate">Due Date:</label>
+            </div>
+
+            <div class="input-field col s12 m6 l3">
+                <select name="category" id="category">
+                    @foreach (var category in Model.cateogires)
+                    {
+                        if (category.categoryID == Model.request.categoryID)
+                        {
+                            <option value="@category.categoryID" selected="selected">@category.categoryName</option>
+                        }
+
+                        else
+                        {
+                            <option value="@category.categoryID">@category.categoryName</option>
+                        }
+                    }
+                </select>
+                <label for="category">Category:</label>
+            </div>
+
+            <div class="input-field col s12 m6 l3">
+                <select name="location" id="location">
+                    <option value="00">Please Select:</option>
+                    @foreach (var location in Model.location)
+                    {
+                        if (location.name == Model.request.location)
+                        {
+                            <option value="@location.name" selected="selected">@location.name</option>
+                        }
+                        else
+                        {
+                            <option value="@location.name">@location.name</option>
+                        }
+                    }
+                </select>
+                <label for="location">Location:</label>
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="input-field col s12 m6 l3">
+                <input type="text" name="department" id="department" value="@Model.request.department" />
+                <label class="active" for="department">Department:</label>
+            </div>
+
+            <div class="input-field col s12 m6 l3">
+                <input type="text" name="name" id="name" value="@Model.request.name" />
+                <label class="active" for="name">Requester Name:</label>
+            </div>
+
+            <div class="input-field col s12 m6 l3">
+                <input type="text" name="email" id="email" value="@Model.request.email" />
+                <label class="active" for="email">Email Address:</label>
+            </div>
+            <div class="input-field col s12 m6 l3">
+                <input type="text" name="contactInfo" id="contactInfo" value="@Model.request.contactInfo" />
+                <label class="active" for="contactInfo">Phone Number:</label>
+            </div>
+
+
+        </div>
+
+        <div class="row">
+            <div class="input-field col s12 m16 l3">
+                @if (Model.vendorList != null || Model.request.vendor == null || Model.request.vendor.Length == 0)
+                {
+                    <select name="vendor" id="vendor">
+                        <option value="00">Please Select:</option>
+                        @foreach (var vendor in Model.vendorList)
+                        {
+                            if (vendor.vendorID == Model.request.vendor)
+                            {
+                                <option value="@vendor.vendorID" selected="selected">@vendor.publication</option>
+                            }
+                            else
+                            {
+                                <option value="@vendor.vendorID">@vendor.publication</option>
+                            }
+                        }
+                    </select>
+                    <label for="vendor">Vendor:</label>
+                }
+                else
+                {
+                    <input type="text" name="vendor" id="vendor" value="@Model.request.vendor" />
+                    <label class="active" for="vendor">Vendor:</label>
+                }
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="input-field col s12 m12 l12">
+                <textarea class="materialize-textarea" id="additionalInfo" name="additionalInfo">@Model.request.additionalInfo</textarea>
+                <label for="additionalInfo">Additional Info</label>
+            </div>
+        </div>
+
+</fieldset> <!-- End CASE Info-->
+</div> <!-- End FIRST Row -->
+
+<div class="row">
+    <fieldset>
+        <legend>Assign To</legend>
+
+        @{
+            var assignmentList = Model.assignments.Select(a => a.staffID).ToList();
+        }
+
+        <div class="row ">
+            @foreach (var staff in Model.staff)
+            {
+                <div class="input-field col s6 m4 l3">
+                    @if (assignmentList.Contains(staff.staffID))
+                    {
+                        <div class="switch">
+                            <label>
+                                <input type="checkbox" name="CB_@staff.staffID" id="CB_@staff.staffID" class="mdl-switch__input" checked>
+                                <span class="lever"></span>
+                                @staff.firstName @staff.lastName
+                            </label>
+                        </div>
+                        <br />
+                    }
+                    else
+                    {
+                        <div class="switch">
+                            <label>
+                                <input type="checkbox" name="CB_@staff.staffID" id="CB_@staff.staffID" class="mdl-switch__input">
+                                <span class="lever"></span>
+                                @staff.firstName @staff.lastName
+                            </label>
+                        </div>
+                        <br />
+                    }
+                </div>
+            }
+        </div> <!-- End Row -->
+
+    </fieldset> <!-- End Assigned To-->
+</div><!-- End ASSIGNMENT Row -->
+
+    <div class="right-align">
+        <button class="btn waves-effect waves-light button" type="submit" name="action">
+            Save Case Info
+            <i class="material-icons right">folder_shared</i>
+        </button>
+    </div>
+
+
+foreach (var subRequest in Model.subRequests)
+{
+    <div class="row">
+
+        <fieldset class="ViewCase">
+            <legend>@subRequest.categoryName</legend>
+
+            @*<div class="row">
+                    <div class="col s6">
+                        <a href="ViewRequestNew?requestID=@Model.request.reuqestID.ToString()&position=EditTask">View Case File</a>
+                    </div>
+                </div>*@
+
+            @for (var i = 0; i < subRequest.answerList.Count(); i += 2)
+            {
+
+                <div class="row">
+
+                    @foreach (var request in subRequest.answerList.Skip(i).Take(2))
+                    {
+                        <div class="input-field col s12 m12 l6">
+                            <textarea class="materialize-textarea" id="@request.answer.AnswerID" name="@request.answer.AnswerID">@request.answer.AnswerText</textarea>
+                            <label for="@request.answer.AnswerID">@request.question</label>
+                        </div>
+                    }
+
+                </div>
+            }
+        </fieldset> <!-- END CATEGORY SPECIFIC QUESTIONS -->
+
+    </div>
+
+    foreach (var task in subRequest.taskList)
+    {
+        string assignments = "";
+
+        if (subRequest.taskAssignments != null)
+        {
+            var currentAssignments = subRequest.taskAssignments.Where(t => t.taskID == task.taskID);
+
+            foreach (var assigned in currentAssignments)
+            {
+                assignments += assigned.staffID + ", ";
+            }
+        }
+
+        <div class="row">
+
+            <fieldset class="ViewCase">
+                <br />
+                <div class="row">
+
+                    <div class="input-field col s2">
+                        <input type="text" name="Order_@task.taskID" id="Order_@task.taskID" value="@task.orderNum" />
+                        <label>Order</label>
+                    </div>
+
+                    <div class="input-field col s2">
+                        <input type="text" name="DueDate_@task.taskID" id="DueDate_@task.taskID" value="@task.DueDate" class="datepicker" />
+                        <label>Due Date</label>
+                    </div>
+
+                    <div class="input-field col s2">
+                        <select name="Status_@task.taskID" id="Status_@task.taskID" class="status">
+                            <option value="00">Please Select:</option>
+                            @foreach (var status in Model.taskStatus)
+                        {
+                            if (status.status == task.Status)
+                            {
+                        <option value="@status.status" selected="selected">@status.status</option>
+                            }
+                            else
+                            {
+                        <option value="@status.status">@status.status</option>
+                            }
+                        }
+                        </select>
+                        <label>Status</label>
+                    </div>
+
+                    <div class="input-field col s4">
+                        <textarea class="materialize-textarea assignment" name="Assignment_@task.taskID">@assignments</textarea>
+                        <label class="lblAssignment">Assigned To</label>
+                    </div>
+
+                    <div class="col s2">
+
+                        <div class="switch">
+                            <label>
+                                <input type="checkbox" id="Delete_@task.taskID" name="Delete_@task.taskID" class="mdl-switch__input delete" />
+                                <span class="lever"></span>
+                            </label>
+                            <span class="switchText">Delete</span>
+                        </div>
+
+                    </div>
+
+                </div> <!-- END TASK ROW FIRST ROW -->
+
+                <div class="row">
+
+                    <div class="input-field col s6">
+                        <textarea class="materialize-textarea" name="Task_@task.taskID" id="Task_@task.taskID">@task.Task</textarea>
+                        <label>Task</label>
+                    </div>
+
+                    <div class="input-field col s6">
+                        <textarea class="materialize-textarea" name="Comments_@task.taskID" id="Comments_@task.taskID">@task.Comments</textarea>
+                        <label>Comments</label>
+                    </div>
+
+                </div> <!-- END TASK ROW SECOND ROW -->
+
+            </fieldset> <!-- END TASK FIELDSET -->
+
+        </div> <!-- END TASK LIST MAIN ROW -->
+    }
+
+    <!-- ADD NEW TASK -->
+    <div class="row">
+
+        <fieldset class="ViewCase">
+
+            <legend>New Task</legend>
+
+            <div class="row">
+
+                <div class="input-field col s2">
+                    <input type="text" name="Order_@subRequest.subRequest.subRequestID" class="order" />
+                    <label>Order</label>
+                </div>
+
+                <div class="input-field col s2">
+                    <input type="text" name="DateDue_@subRequest.subRequest.subRequestID" class="datepicker" />
+                    <label>Due Date</label>
+                </div>
+
+                <div class="input-field col s2">
+                    <select name="Status_@subRequest.subRequest.subRequestID">
+                        <option value="00">Please Select:</option>
+                        @foreach (var status in Model.taskStatus)
+                {
+                        <option value="@status.status">@status.status</option>
+                    }
+                    </select>
+                    <label>Status</label>
+                </div>
+
+                <div class="input-field col s6">
+                    <textarea class="materialize-textarea assignment resizeMe" name="Assignment_@subRequest.subRequest.subRequestID"></textarea>
+                    <label class="lblAssignment">Assigned To</label>
+                </div>
+
+            </div> <!-- END NEW TASK FIRST ROW-->
+
+            <div class="row">
+                <div class="input-field col s6">
+                    <textarea class="materialize-textarea" name="Task_@subRequest.subRequest.subRequestID"></textarea>
+                    <label>Task</label>
+                </div>
+
+                <div class="input-field col s6">
+                    <textarea class="materialize-textarea" name="TaskComments_@subRequest.subRequest.subRequestID"></textarea>
+                    <label>Comments</label>
+                </div>
+
+            </div> <!-- END NEW TASK SECOND ROW-->
+
+        </fieldset> <!-- END NEW TASK FIELDSET -->
+
+    </div>
+
+    <div class="right-align">
+        <button class="btn waves-effect waves-light button" type="submit" name="action" onclick="SaveTaskList(@Request.QueryString["requestID"].ToString())">
+            Save Task File
+            <i class="material-icons right">folder_shared</i>
+        </button>
+    </div>
+
+ } <!-- End SubRequest Loop-->
+
+
+<fieldset id="EditAttachments">
+
+        <legend>Attachments</legend>
+
+        <div class="row">
+            <div class="col s6">
+                <a href="ViewCase?requestID=@Model.request.reuqestID.ToString()&position=EditAttachments">View Case File</a>
+            </div>
+        </div>
+
+        <table class='infoTable bordered striped responsive-table centered'>
+            <thead>
+                <tr>
+                    <th>File Path</th>
+                    <th class="hide-on-med-and-down">Date Uploaded</th>
+                    <th class="hide-on-med-and-down">Delete</th>
+
+                    @if (Model.request.categoryID == "cool")
+                    {
+                        <th class="hide-on-med-and-down">Caption</th>
+                    }
+
+                </tr>
+            </thead>
+
+            <tr class="noAlt">
+                @if (@Model.request.doaAttachment != "Submitted by DOA" && @Model.request.doaAttachment != "Submitted by DOA or Staff" && @Model.request.doaAttachment != "Approval not needed" && @Model.request.doaAttachment != null)
+                {
+                    <td><a href="~/Attachments/@Model.request.doaAttachment" target="_blank">@Model.request.doaAttachment (Approval File)</a></td>
+                }
+
+
+
+                @foreach (var attachment in Model.attachment)
+                {
+                <tr>
+                    <td><a href="~/Attachments/@attachment.filePath" target="_blank">@attachment.filePath</a></td>
+                    <td class="hide-on-med-and-down">
+                        @attachment.dateAdded
+                    </td>
+
+                    <td class="hide-on-med-and-down">
+                        <div class="switch">
+                            <label>
+                                <input type="checkbox" name="Delete_@attachment.attachmentID" />
+                                <span class="lever"></span>
+                            </label>
+                        </div>
+                    </td>
+                    @if (Model.request.categoryID == "cool")
+                    {
+                        <td class="hide-on-med-and-down">@attachment.caption</td>
+                    }
+
+                </tr>
+                }
+
+
+            </table>
+            <br />
+
+            <div class="row">
+                <div class="file-field input-field col s12 m6 l6">
+                    <div class="btn upload">
+                        <span>Select File <i class="material-icons right">file_upload</i></span> <input type="file" name="uploadFile" id="uploadFile" />
+                    </div>
+                    <div class="file-path-wrapper">
+                        <input class="file-path" type="text">
+                    </div>
+                </div>
+            </div>
+
+        </fieldset> @* End attachments section *@
+
+<div class="right-align">
+    <button class="btn waves-effect waves-light button" type="submit" name="action">
+        Attach File
+        <i class="material-icons right">attach_file</i>
+    </button>
+</div>
+
+
+<fieldset>
+    <legend>Send Email</legend>
+
+    <div class="row">
+        <div class="input-field col s12 m12 l6">
+            <input type="text" name="TO" id="TO" />
+            <label id="lblTO">To:</label>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="input-field col s12 m12 l12">
+            <textarea class="materialize-textarea" name="emailBody"></textarea>
+            <label>Email Body:</label>
+        </div>
+    </div>
+
+
+</fieldset>
+
+<div class="right-align">
+    <button class="btn waves-effect waves-light button" type="submit" name="action">
+        Send Email
+        <i class="material-icons right">mail</i>
+    </button>
+</div>
+
+} @* CLose Out Form *@
+
+
+<fieldset>
+    <legend>Additonal CC Functions</legend>
+
+    <div class="row">
+        <div class="input-field col s12 m12 l6">
+
+            <input type="text" name="externalEmail" id="externalEmail" class="externalEmail" />
+            <label id="lblExternalEmail">Send External Email</label>
+
+        </div>
+    </div>
+
+    <button class="btn waves-effect waves-light button" onclick="SendExternalEmail(@Model.request.reuqestID)" name="action">
+        Send External Email
+        <i class="material-icons right">mail</i>
+    </button>
+
+    <button class="btn waves-effect waves-light button" onclick="PrintCase(@Model.request.reuqestID)" name="action">
+        Print Case
+        <i class="material-icons right">print</i>
+    </button>
+
+    <button class="btn waves-effect waves-light button" type="submit" name="duplicate" onclick="DuplicateRequest(@Request.QueryString["requestID"].ToString())">
+        Duplicate Case
+        <i class="material-icons right">shop_two</i>
+    </button>
+
+</fieldset>
+
+@* Hiddent Divs *@
+<div id="staffList" class="whitePopup">
+    <ul>
+        @foreach (var staff in Model.staff)
+        {
+            <li><a href="@staff.staffID">@staff.firstName @staff.lastName</a></li>
+        }
+    </ul>
+</div>
+
+<div id="emailList">
+    <ul>
+        <li><a href="amanda@idealogy.biz">Amanda Kaiser</a></li>
+        <li><a href="allen@idealogy.biz">Allen Howie</a></li>
+        <li><a href="jeff@creativepop.com">Jeff Windhorst</a></li>
+        <li><a href="ash862@me.com">Aaron Hutchings</a></li>
+        <li><a href="aaron@tmjeff.com">Aaron Hutchings 9631776</a></li>
+        <li><a href="s_crady@yahoo.com">Steven Crady</a></li>
+        <li><a href="jessie@kriechphoto.com">Jessie Kriech-Higdon Photography</a></li>
+    </ul>
+
+</div>
+
+<script type="text/javascript">
+
+    //var app = angular.module('CCApp', ['ngMaterial']);
+
+    //app.controller('caseCtrl', function ($scope, $anchorScroll, $timeout, $location) {
+    //    $scope.name = 'World';
+
+    //    $timeout(function () {
+    //        $anchorScroll('EditTask');
+    //    });
+    //});
+
+    $(document).ready(function () {
+        $('#staffList').hide();
+        $('#emailList').hide();
+        $('.resizeMe').trigger('autoresize');
+
+
+        //$(location).attr('href', '#EditTask');
+        // from a jQuery collection
+        //autosize($('textarea'));
+
+        //if (getUrlVars()["position"] != null) {
+
+        //    var position = $("#" + getUrlVars()["position"]).position();
+
+        //    $(window).scrollTop(parseInt(position.top));
+        //}
+
+
+        $(document).click(function (e)
+        {
+            $('#staffList').hide();
+            $('#emailList').hide();
+        });
+
+        $('.assignment, #TO').click(function (e)
+        {
+            e.stopPropagation();
+
+            var textBoxPostion = $(this).offset();
+
+            var previousBox = $('#current');
+            previousBox.removeAttr('id');
+
+            $(this).attr('id', 'current');
+
+            $('#staffList').show();
+            $('#staffList').offset({top: textBoxPostion.top + 50, left: textBoxPostion.left});
+            $('#staffList').offset({top: textBoxPostion.top + 50, left: textBoxPostion.left});
+
+
+        });
+
+        $('#staffList a').click(function (e)
+        {
+            var staffID = $(this).attr('href');
+            var assignments = $('#current').val();
+
+            assignments = assignments + staffID + ",";
+
+            $('#current').val(assignments);
+
+            $('#staffList').hide();
+
+
+            $('.lblAssignment').addClass('active');
+
+            $('#current').trigger('autoresize');
+
+            e.preventDefault();
+        });
+
+        $('#externalEmail').click(function (e)
+        {
+            e.stopPropagation();
+            var textBoxPostion = $(this).offset();
+
+            $('#emailList').show();
+
+            $('#emailList').offset({top: textBoxPostion.top + 50, left: textBoxPostion.left});
+            $('#emailList').offset({top: textBoxPostion.top + 50, left: textBoxPostion.left});
+
+        });
+
+        $('#emailList a').click(function (e)
+        {
+            var staffID = $(this).attr('href');
+            var assignments = $('#externalEmail').val();
+
+            assignments = assignments + staffID + ",";
+
+            $('#externalEmail').val(assignments);
+
+            $('#emailList').hide();
+
+            $('#lblExternalEmail').addClass('active');
+
+            e.preventDefault();
+        });
+
+        $("#addPO").change(function() {
+            AddPOFields();
+        });
+
+    });
+
+    function ResetPosition()
+    {
+        $('.scrollPosition').val(0);
+        CheckWorking();
+    }
+
+    function SaveTaskList(requestID) {
+
+        //CheckWorking();
+
+        //var position = $('#EditTask').position();
+
+        //$('.scrollPosition').val('EditTask');
+
+        document.ReuqestForm.action = "/ProjectRequest/ProjectRequest/Request/EditRequest?requestID=" + requestID + "&position=EditTask";
+
+        document.ReuqestForm.submit();
+
+    }
+
+    function PrintCase(requestID) {
+
+        document.ReuqestForm.action = "/ProjectRequest/ProjectRequest/Request/PrintCase?requestID=" + requestID;
+
+        document.ReuqestForm.submit();
+
+    }
+
+    function DuplicateRequest(requestID) {
+
+        document.ReuqestForm.action = "/ProjectRequest/ProjectRequest/Request/DeplicateRequest?requestID=" + requestID;
+
+        document.ReuqestForm.submit();
+
+    }
+
+    function DisplayReport()
+    {
+        $.magnificPopup.open({
+            items: {
+                src: '#addTime'
+            },
+            type: 'inline',
+            callbacks: {
+                close: function () {
+                    $("#Chore").val('');
+                    $("#TimeSpent").val('');
+                    $("#reportResponse").html('');
+                    $(".btn").css("background", "rgb(68,138,255)");
+                }
+            }
+        });
+    }
+
+    //function AddTime()
+    //{
+    //    var currentDate = $.datepicker.formatDate('mm/dd/yy', new Date());
+
+    //    $.ajax({
+    //        type: "POST",
+    //        url: "/ProjectRequest/ProjectRequest/TimeSheet/AddTime",
+    //        data: '{"id":"' + $("#Request").val() + '", "description":"' + $("#Chore").val() + '", "time":"' + $("#TimeSpent").val() + '"}',
+    //        contentType: "application/json; charset=utf-8",
+    //        success: function(response) {
+    //            $("#reportResponse").html(response);
+    //        },
+    //        failure: function(response) {
+    //            $("#reportResponse").html(response);
+    //        }
+    //    });
+    //}
+
+    //function DisplayEmailField()
+    //{
+    //    $.magnificPopup.open({
+    //        items: {
+    //            src: '#addTime'
+    //        },
+    //        type: 'inline',
+    //        callbacks: {
+    //            close: function () {
+    //                $("#Chore").val('');
+    //                $("#TimeSpent").val('');
+    //                $("#reportResponse").html('');
+    //            }
+    //        }
+    //    });
+    //}
+
+    function SendExternalEmail(requestID)
+    {
+        var currentDate = $.datepicker.formatDate('mm/dd/yy', new Date());
+
+        $.ajax({
+            type: "POST",
+            url: "/ProjectRequest/ProjectRequest/Request/SendExternalEmail",
+            data: '{"requestID":"' + parseInt(requestID) + '", "sendTo":"' + $("#externalEmail").val() + '"}',
+            contentType: "application/json; charset=utf-8",
+            success: function(response) {
+                $("#reportResponse").html(response);
+            },
+            failure: function(response) {
+                alert(response);
+            }
+        });
+    }
+
+    function CheckWorking()
+    {
+        var numItems = $('.status').length
+
+        if(numItems > 0)
+        {
+            var working = false;
+            $('.status').each(function () {
+
+                if($(this).val() == "Working")
+                {
+                    working = true;
+                }
+
+            });
+
+            if(working == false)
+                alert("You have not marked any task as working");
+        }
+    }
+
+    function AddPOFields()
+    {
+        var count = $("#addPO").val();
+
+        var html = "";
+
+        for(i = 1; i <= count; i++)
+        {
+            html += "<div class='input-field col s12 m12 l6'>"
+                + "<input type='text' name='poNumber_" + i + "'/>"
+                + "<label for='poNumber'>New P0# " + i + ":</label><br />"
+                + "</div>";
+        }
+
+        $("#additonalPO").html(html);
+
+    }
+
+    function getUrlVars() {
+        var vars = [], hash;
+        var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+        for (var i = 0; i < hashes.length; i++) {
+            hash = hashes[i].split('=');
+            vars.push(hash[0]);
+            vars[hash[0]] = hash[1];
+        }
+        return vars;
+    }
+
+</script>
+<script src="~/js/jquery.magnific-popup.js"></script>

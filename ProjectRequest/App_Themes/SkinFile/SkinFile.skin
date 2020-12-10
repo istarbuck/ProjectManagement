@@ -1,0 +1,5 @@
+﻿<asp:CustomValidator runat="server" ForeColor="Red" />
+<asp:RequiredFieldValidator runat="server" ForeColor="Red" />
+<asp:CompareValidator runat="server" ForeColor="Red" />
+<asp:RangeValidator runat="server" ForeColor="Red" />
+<asp:RegularExpressionValidator runat="server" ForeColor="Red" />

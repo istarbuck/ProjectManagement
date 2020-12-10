@@ -1,0 +1,688 @@
+/* 
+Karma Template 
+http://www.templatemo.com/preview/templatemo_403_karma 
+*/
+
+/*-----------------------------------------------------------------------------------*/
+/*	GENERAL
+/*-----------------------------------------------------------------------------------*/
+html { font-size: 1em; }
+
+body { font-family: 'Comfortaa', Arial, sans-serif; overflow-x: hidden; } /*carasmo's comment to hide horizontal scroll bar https://github.com/twbs/bootstrap/issues/10711*/
+
+h1, h2, p { font-family: 'Comfortaa', Arial, sans-serif; }
+
+h1 { font-weight: 700; }
+
+h2 { font-size: 1.5em; }
+
+ul { margin: 0; }
+
+section { padding-top: 85px; margin-top: -85px; }
+section .outer_container { margin-bottom: 50px; background-color: #eeeeee;  }
+section .row { margin-left: 0; margin-right: 0; overflow: hidden; }
+section h1 { text-transform: uppercase; color: white; margin-top: 0px; margin-bottom: 0px; line-height: 280px; text-align: center; }
+
+.templatemo_ceo img { margin-bottom: 10px; }
+.templatemo_ceo p { text-align: center; }
+
+.container { margin: 0 auto; }
+
+/*http://css-tricks.com/vertically-center-multi-lined-text/*/
+.center-row { display: table; }
+.center-row .center { display: table-cell; vertical-align: middle; }
+
+/*------------------------------------------------------
+	NAVIGATION 
+--------------------------------------------------------*/
+nav { font-size: 1.2em; font-weight: lighter; }
+nav .fa { display: block; text-align: center; margin-bottom: 13px; }
+
+.navbar {
+	background: #336666;
+	min-height: 85px;	
+	border-radius: 0px; 
+	border: none; 
+	margin-bottom: 0px; 
+	-webkit-box-shadow: 0 2px 4px rgba(1, 1, 1, 0.15);
+	-moz-box-shadow: 0 2px 4px rgba(1, 1, 1, 0.15);
+	box-shadow: 0 2px 4px rgba(1, 1, 1, 0.15);
+	-webkit-transition: all 0.4s ease-in-out;
+	-moz-transition: all 0.4s ease-in-out;
+	-ms-transition: all 0.4s ease-in-out;
+	-o-transition: all 0.4s ease-in-out;
+	transition: all 0.4s ease-in-out;
+}
+
+.navbar-default .navbar-nav>li>a {
+	padding-bottom: 20px;
+	color: white;
+	text-transform: uppercase;
+	-moz-transition: background-color .5s ease;
+	-o-transition: background-color .5s ease;
+	-webkit-transition: background-color .5s ease;
+	transition: background-color .5s ease;
+    text-decoration: none;
+}
+
+.navbar-default .navbar-nav>li>a:hover, .navbar-default .navbar-nav>li>a:focus, .menu ul li a.current {
+	color: white;
+	background-color: #4FE8FF;
+}
+
+.navbar>.container .navbar-brand { margin-left: 0; }
+.navbar-collapse .navbar-nav.navbar-right:last-child { margin-right: 0; }
+.navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus { background-color: #ef7277; }
+
+/*------------------------------------------------------
+	FLEXSLIDER OVERRIDING 
+--------------------------------------------------------*/
+.flexslider { padding-top: 85px; }
+.flexslider a:hover, .flexslider a:focus { text-decoration: none; }
+.flexslider { border: none;	-webkit-border-radius: 0; border-radius: 0; }
+.flexslider .slides li { position: relative; }
+.flex-caption {
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:0;
+    color: white;
+    background:rgba(95,93,91,.8);   
+    z-index:1;
+    padding: 20px;
+    margin: 0;
+}
+
+/*------------------------------------------------------
+	About Us Styles 
+--------------------------------------------------------*/
+#about h1 { background-color: #702d53; }
+#about img { padding: 0; }
+#about_content { height: 280px; }
+
+/*------------------------------------------------------
+	Our Team Styles
+--------------------------------------------------------*/
+#team .col-md-4 { padding: 5px; }
+#team img { margin: 0 auto; margin-bottom: 15px; }
+#team h1 { background-color: #498fc0; }
+#team p { text-align: center; }
+#team_content { height: 280px; }
+
+/*------------------------------------------------------
+	Services Styles 
+--------------------------------------------------------*/
+.services_buttons .icon-button:last-of-type { margin-bottom: 0; }
+.services_buttons .icon-button {
+	font-size: 400%;
+	color: white;
+	background-color: #702d53;
+	cursor: pointer;
+	display: inline-block;
+	margin-bottom: 5px;
+	position: relative;
+	text-align: center;
+	-webkit-user-select: none;
+	   -moz-user-select: none;
+	    -ms-user-select: none;
+	        user-select: none;
+	width: 100%;
+	height: 100%;
+	max-width: 90px;
+	max-height: 90px;
+	line-height: 90px;
+}
+
+.services_buttons  .icon-button:hover, .services_buttons  .icon-button.active {	background-color: #4FE8FF; }
+
+#services h1 { background-color: #5f5d5b; }
+#services .col-md-2 { padding-right: 0; }
+#services .fa { line-height: 90px; }
+#services_content { height: 280px; }
+#services_content .tab-pane {  padding: 15px; }
+#services_content a { color: #FFFFFF; }
+
+/*http://cssarrowplease.com/*/
+.arrow-box { position: relative; color: white; background-color: #5f5d5b; border-radius: 4px; margin-left: 30px; height: 100%;}
+.arrow-left { display: block; width: 30px; height: 58px; background: url(../images/left_arrow.png) no-repeat 0 0; position: absolute; left: 1px; margin-top: 20px; }
+
+/*------------------------------------------------------
+	Skills Styles 
+--------------------------------------------------------*/
+.progress { background-color: black; border-radius: 0px; }
+.progress.vertical:last-of-type { margin-right: 0; }
+.progress-bar {	position:absolute; bottom:0; left:0; } /*http://stackoverflow.com/questions/2015032/align-divs-to-bottom-or-baseline*/
+.progress-label { position:absolute; width: 100%; bottom:0; }
+
+/*http://stackoverflow.com/questions/16318375/how-to-align-vertically-a-progress-bar-in-twitter-bootstrap*/
+.progress.vertical {
+    position: relative;
+    width: 19%;
+	margin-right: 1.2%; 
+    min-height: 240px;
+    float: left;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    border: none;
+}
+
+#skills h1, .progress-bar { background-color: #5f5d5b; }
+.portfolio1-items,
+.portfolio1-filter {
+  list-style: none;
+  padding: 0;
+  margin: 0 -20px 20px 0;
+}
+.portfolio1-filter > li {
+  display: inline-block;
+}
+.portfolio1-items > li {
+  float: left;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.portfolio1-items.col-2 > li {
+  width: 50%;
+}
+.portfolio1-items.col-3 > li {
+  width: 33%;
+}
+.portfolio1-items.col-4 > li {
+  width: 25%;
+}
+.portfolio1-items.col-5 > li {
+  width: 20%;
+}
+.portfolio1-items.col-6 > li {
+  width: 16%;
+}
+.portfolio1-item {
+  padding: 0;
+  margin: 0;
+}
+.portfolio1-item .item-inner {
+  background: #fff;
+  border: 1px solid #eee;
+  padding: 10px 10px 0;
+  margin: 0 20px 20px 0;
+  position: relative;
+}
+.portfolio1-item img {
+  width: 100%;
+}
+.portfolio1-item h5 {
+  background: #fff;
+  margin: 0;
+  padding: 10px 0;
+  font-weight: 700;
+  font-size: 14px;
+  color: #2c3e50;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.portfolio1-item .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  background: rgba(255, 255, 255, 0.9);
+  text-align: center;
+  vertical-align: middle;
+  -webkit-transition: opacity 300ms;
+  -moz-transition: opacity 300ms;
+  -o-transition: opacity 300ms;
+  transition: opacity 300ms;
+}
+.portfolio1-item .overlay .preview {
+  position: relative;
+  top: 50%;
+  display: inline-block;
+  margin-top: -20px;
+}
+.portfolio1-item:hover .overlay {
+  opacity: 1;
+}
+ul.faq {
+  list-style: none;
+  margin: 0;
+}
+ul.faq li {
+  margin-top: 30px;
+}
+ul.faq li:first-child {
+  margin-top: 0;
+}
+ul.faq li span.number {
+  display: block;
+  float: left;
+  width: 50px;
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+  background: #5f5d5b;
+  color: #fff;
+  font-size: 24px;
+}
+ul.faq li > div {
+  margin-left: 70px;
+}
+ul.faq li > div h3 {
+  margin-top: 0;
+}
+Modules - reusable parts of our design
+
+-------------------------------- */
+.img-replace {
+  /* replace text with an image */
+  display: inline-block;
+  overflow: hidden;
+  text-indent: 100%;
+  color: transparent;
+  white-space: nowrap;
+}
+
+/* -------------------------------- 
+
+Main components 
+
+-------------------------------- */
+header {
+  height: 200px;
+  line-height: 200px;
+  text-align: center;
+  background-color: #5e6e8d;
+  color: #FFF;
+}
+header h1 {
+  font-size: 20px;
+  font-size: 1.25rem;
+}
+
+
+@media only screen and (min-width: 1170px) {
+  .cd-popup-trigger {
+    margin: 6em auto;
+  }
+}
+@media only screen and (min-width: 1170px) {
+  .cd-popup-trigger1 {
+    margin: 6em auto;
+  }
+}
+
+/* -------------------------------- 
+
+xpopup 
+
+-------------------------------- */
+.cd-popup {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(94, 110, 141, 0.9);
+  opacity: 0;
+  visibility: hidden;
+  -webkit-transition: opacity 0.3s 0s, visibility 0s 0.3s;
+  -moz-transition: opacity 0.3s 0s, visibility 0s 0.3s;
+  transition: opacity 0.3s 0s, visibility 0s 0.3s;
+  z-index:1001
+}
+.cd-popup.is-visible {
+  opacity: 1;
+  visibility: visible;
+  -webkit-transition: opacity 0.3s 0s, visibility 0s 0s;
+  -moz-transition: opacity 0.3s 0s, visibility 0s 0s;
+  transition: opacity 0.3s 0s, visibility 0s 0s;
+}
+
+.cd-popup-container {
+  position: relative;
+  width: 90%;
+  max-width: 400px;
+  margin: 4em auto;
+  background: #FFF;
+  border-radius: .25em .25em .4em .4em;
+  text-align: left;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  -webkit-transform: translateY(-40px);
+  -moz-transform: translateY(-40px);
+  -ms-transform: translateY(-40px);
+  -o-transform: translateY(-40px);
+  transform: translateY(-40px);
+  /* Force Hardware Acceleration in WebKit */
+  -webkit-backface-visibility: hidden;
+  -webkit-transition-property: -webkit-transform;
+  -moz-transition-property: -moz-transform;
+  transition-property: transform;
+  -webkit-transition-duration: 0.3s;
+  -moz-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+}
+.cd-popup-container p {
+  padding: 3em 1em;
+}
+.cd-popup-container .cd-buttons:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.cd-popup-container .cd-buttons li {
+  float: left;
+  width: 50%;
+}
+.cd-popup-container .cd-buttons a {
+  display: block;
+  height: 60px;
+  line-height: 60px;
+  text-transform: uppercase;
+  color: #FFF;
+  -webkit-transition: background-color 0.2s;
+  -moz-transition: background-color 0.2s;
+  transition: background-color 0.2s;
+}
+.cd-popup-container .cd-buttons li:first-child a {
+  background: #fc7169;
+  border-radius: 0 0 0 .25em;
+}
+.no-touch .cd-popup-container .cd-buttons li:first-child a:hover {
+  background-color: #fc8982;
+}
+.cd-popup-container .cd-buttons li:last-child a {
+  background: #b6bece;
+  border-radius: 0 0 .25em 0;
+}
+.no-touch .cd-popup-container .cd-buttons li:last-child a:hover {
+  background-color: #c5ccd8;
+}
+.cd-popup-container .cd-popup-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 30px;
+  height: 30px;
+}
+.cd-popup-container .cd-popup-close::before, .cd-popup-container .cd-popup-close::after {
+  content: '';
+  position: absolute;
+  top: 12px;
+  width: 14px;
+  height: 3px;
+  background-color: #8f9cb5;
+}
+.cd-popup-container .cd-popup-close::before {
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  transform: rotate(45deg);
+  left: 8px;
+}
+.cd-popup-container .cd-popup-close::after {
+  -webkit-transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
+  -ms-transform: rotate(-45deg);
+  -o-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+  right: 8px;
+}
+.is-visible .cd-popup-container {
+  -webkit-transform: translateY(0);
+  -moz-transform: translateY(0);
+  -ms-transform: translateY(0);
+  -o-transform: translateY(0);
+  transform: translateY(0);
+}
+@media only screen and (min-width: 1170px) {
+  .cd-popup-container {
+    margin: 8em auto;
+  }
+}
+
+
+/*------------------------------------------------------
+	Portfolio Styles 
+--------------------------------------------------------*/
+.portfolio-item:hover .overlay-p { transition: all 0.3s ease-in-out 0s; visibility: visible; opacity: 1; }
+.portfolio-thumb .overlay-p {
+ 	background-color: rgba(95, 93, 91, 0.9);
+ 	position: absolute; 
+ 	visibility: hidden; 
+ 	top: 0; 
+ 	left: 0; 
+ 	width: 100%; 
+ 	height: 100%;  	
+ 	opacity: 0;
+ }
+.portfolio-thumb .overlay-p a { position: absolute; color: white; text-decoration: none; }
+
+#portfolio .col-md-4 { max-width: 206px; }
+#portfolio .row { margin: 0; }
+#portfolio h1 { background-color: #5f5d5b; }
+#portfolio h2 { color: white; padding: 8% 4% 4% 4%; margin: 0; }
+#portfolio p { color: white; padding: 0 4% 4% 4%; margin: 0; font-size: .9em; }
+#portfolio_content .col-md-4 { padding: 0; }
+
+/*------------------------------------------------------
+	Blog Styles 
+--------------------------------------------------------*/
+.blog_post { position: relative; float: left; width: 50%; }
+.blog_posts_container { max-width: 620px; }
+.blog_post h2 { position: absolute; background: #702d53; color: white; top: 0; right: 0; padding: 10px 20px; margin: 0; text-align: center; }
+
+#blog .col-md-7 { padding-right: 46px; overflow: hidden; }
+#blog h1 { background-color: #702d53; }
+
+/*------------------------------------------------------
+	Contact Styles 
+--------------------------------------------------------*/
+.form-group { margin-bottom: 20px; }
+.form-control {	border-radius: 0px; }
+.form-control:focus {
+	border-color: rgb( 226, 90, 148 );
+	outline: 0;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 8px rgba(226, 90, 148,0.6);
+	box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 8px rgba(226, 90, 148,0.6);
+}
+
+#contact h1 { background-color: #5f5d5b; }
+#contact_content { height: 280px; }
+
+/*------------------------------------------------------
+	Map Styles 
+--------------------------------------------------------*/
+#map h1 { background-color: #702d53; }
+
+#google_map { width: 100%; height: 280px; outline: 0; border: 0; }
+
+/*------------------------------------------------------
+	FOOTER 
+--------------------------------------------------------*/
+footer { background: #5f5d5b; min-height: 141px; color: white; margin-top: 20px; }
+footer img { padding-top: 30px; }
+footer a { text-decoration: none; color: white; }
+footer a:hover { color: #cbcbcb; text-decoration: none; }
+footer .row { height: 100%; }
+
+.back_to_top { background-color: #702d53; text-align: center; height: 41px; line-height: 41px; } /*http://stackoverflow.com/questions/2939914/vertically-align-text-in-a-div*/
+
+.social_buttons a {	text-decoration: none; }
+
+#templatemo_copyright { font-size: .9em; }
+
+/*------------------------------------------------------
+	BOOTSTRAP OVERRIDING 
+--------------------------------------------------------*/
+.col-md-4, .col-md-5, .col-md-7, .col-md-8 { padding: 0; }
+
+.btn-primary {
+	font-size: 2em;
+	padding-bottom: 10px;
+  	background-color: rgb( 95, 93, 91 );
+  	box-shadow: 0px 3px 0px 0px rgb( 180, 52, 107 );
+  	width: 160px;
+  	height: 55px;
+  	border: none; border-radius: 0px;
+  	-moz-transition: background-color .5s ease;
+  	-o-transition: background-color .5s ease;
+  	-webkit-transition: background-color .5s ease;
+  	transition: background-color .5s ease;
+}
+
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active {
+	background-color: #4FE8FF;
+	box-shadow: 0px 3px 0px 0px rgb( 226, 90, 148 );
+}
+
+/*------------------------------------------------------
+	MEDIA QUERIES 
+--------------------------------------------------------*/
+@media only screen and (min-width: 1200px){
+	h1 { font-size: 4.5em; }
+	.services_buttons { text-align: right; }
+	.navbar-default .navbar-nav>li>a:hover, .navbar-default .navbar-nav>li>a:focus, .menu ul li a.current {
+		height: 85px;
+	}
+	#about .col-md-7 { padding-left: 50px; }
+	#about .col-md-8 { padding-left: 20px; }
+	#team .col-md-7 { padding-right: 50px; }
+	#skills .col-md-7 { padding-right: 90px; }
+	#portfolio .col-md-7 { padding-left: 46px; }
+	#contact .col-md-7 { padding-left: 50px; }	
+}
+
+@media only screen and (min-width: 992px) and (max-width: 1199px) {
+	h1 { font-size: 3.5em; }
+	.services_buttons { text-align: right; }
+	.navbar-default .navbar-nav>li>a:hover, .navbar-default .navbar-nav>li>a:focus, .menu ul li a.current {
+		height: 85px;
+	}
+	#about .col-md-7 { padding-left: 30px; }
+	#about .col-md-8 { padding-left: 20px; }
+	#team .col-md-7 { padding-right: 30px; }
+	#skills .col-md-7 { padding-right: 30px; }
+	#portfolio .col-md-7 { padding-left: 30px; }
+	#contact .col-md-7 { padding-left: 30px; }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+	h1 { font-size: 2.5em; }
+	nav { font-size: 1em; }
+	.btn-primary { font-size: 1.6em; }
+	.services_buttons { text-align: left; }
+	.navbar-default .navbar-nav>li>a:hover, .navbar-default .navbar-nav>li>a:focus, .menu ul li a.current {
+		height: 85px;
+	}
+	#about .col-md-8 { padding-left: 0; padding-bottom: 20px; }
+	#about img { padding: 0; margin-top: 20px; margin-bottom: 20px;	}
+	#services .col-md-2, #services_content { padding-left: 0; padding-top: 20px; height: 300px; }
+	#portfolio p { padding: 7.3% 4%; }
+	#portfolio .col-md-7, #blog .col-md-7, #contact .col-md-7  { padding-left: 0; padding-top: 20px; }	
+	#blog .col-md-7 { padding-right: 0; }
+}
+
+@media only screen and (max-width: 767px) and (min-width: 481px) {
+	h1 { font-size: 2.5em; }
+	nav .fa { display: inline; text-align: left; margin-bottom: 0; margin-right: 10px; }
+	.navbar-default .navbar-nav>li>a { padding-top: 15px; padding-bottom: 15px; }
+	.navbar-default .navbar-nav>li>a:hover, .navbar-default .navbar-nav>li>a:focus {
+		height: 100%;
+	}
+	.btn-primary { font-size: 1.5em; }
+	.services_buttons { text-align: left; }
+	.services_buttons .icon-button { font-size: 210%; }
+	.blog_post img { max-width: 100%; }
+	#about .col-md-8 { padding-left: 0; padding-bottom: 20px; }	
+	#about img { padding: 0; margin-top: 20px; margin-bottom: 20px; }
+	#team_content { width: 100%; }
+	#services .col-md-2, #services_content { padding-left: 0; padding-top: 20px; height: 300px; }
+	#services_tabs { padding-left: 10px; }
+	#portfolio .col-md-7, #blog .col-md-7, #contact .col-md-7 { padding-top: 20px; padding-left: 0; }	
+}
+
+@media only screen and (max-width: 480px) {	
+	section h1 {	font-size: 1.6em; line-height: 50px; }
+	nav .fa { display: inline; text-align: left; margin-bottom: 0; margin-right: 10px; }
+	.col-xxs { display:block; float:none; width: 100% }
+    .social_buttons { margin-top: 30px; }
+    .pull-right { float: left !important; } /*do not pull-right in mobile view*/
+    .navbar-default .navbar-nav>li>a:hover, .navbar-default .navbar-nav>li>a:focus {
+		height: 100%;
+	}
+	.navbar-default .navbar-nav>li>a { padding-top: 15px; padding-bottom: 15px; }	
+	.btn-primary { font-size: 1.2em; }	
+	.services_buttons { text-align: left; }
+	.services_buttons .icon-button { font-size: 190%; }
+	.blog_post { width: 50%;}
+    .blog_post img { max-width: 100%; }    
+	#about .col-md-8 { padding-left: 0; padding-bottom: 20px; }
+	#about img { padding: 0; margin-top: 20px; margin-bottom: 20px; }
+	#team_content { width: 100%; }
+	#services .col-md-2, #services_content { padding-left: 0; padding-top: 20px; height: 300px; }	
+	#services_tabs { padding-left: 0; }
+	#portfolio .col-md-7, #blog .col-md-7, #contact .col-md-7 { padding-top: 10px; padding-left: 0; }	
+}
+
+@media only screen and (max-width: 430px) {
+	body { font-size: 10px; }
+	.btn-primary { font-size: 1.1em; }	
+	.blog_post h2 { font-size: 1.1em; padding: 5px 5px; }
+	.services_buttons .icon-button { font-size: 180%; }
+	.navbar-default .navbar-nav>li>a {
+		padding-top: 15px;
+		padding-bottom: 15px;
+	}
+
+	.navbar-default .navbar-nav>li>a:hover, .navbar-default .navbar-nav>li>a:focus {
+		height: 100%;
+	}
+	#services_tabs { padding-left: 0; }
+}
+
+/* http://codepen.io/minimalmonkey/pen/Ecpla */
+
+/* Wrapper */
+.social_buttons .icon-button {
+	background-color: #747270;
+	cursor: pointer;
+	display: inline-block;
+	font-size: 2.0rem;
+	line-height: 100px;
+	margin: 0;
+	position: relative;
+	text-align: center;
+	-webkit-user-select: none;
+	   -moz-user-select: none;
+	    -ms-user-select: none;
+	        user-select: none;
+	width: 60px;
+	height: 100px;
+}
+
+/* Icons */
+.icon-button i {
+	background: none;
+	color: white;
+	line-height: 3.6rem;
+	-webkit-transition: all 0.3s;
+	   -moz-transition: all 0.3s;
+	     -o-transition: all 0.3s;
+	        transition: all 0.3s;
+	width: 3.6rem;
+	z-index: 10;
+}
+
+.icon-button:hover .fa-twitter,
+.icon-button:hover .fa-facebook,
+.icon-button:hover .fa-youtube {
+	color: #702d53;
+}
+
+/* End minimalmonkey */

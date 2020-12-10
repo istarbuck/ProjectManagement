@@ -1,0 +1,226 @@
+﻿@{
+    ViewBag.Title = "Project Calender";
+    Layout = "~/Views/Shared/_LayoutCopy2017.cshtml";
+
+    <link href='~/css/fullcalendar.css' rel='stylesheet' />
+    <link href='~/css/fullcalendar.print.css' rel='stylesheet' media='print' />
+
+    <script src="https://secure.sullivan.edu/ProjectRequest/ProjectRequest/js/moment.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://secure.sullivan.edu/ProjectRequest/ProjectRequest/js/fullcalendar.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://secure.sullivan.edu/ProjectRequest/ProjectRequest/js/date.js" type="text/javascript" charset="utf-8"></script>
+
+    <link rel="stylesheet" href="~/css/magnific-popup.css">
+
+    <style type="text/css">
+        .white-popup {
+            position: relative;
+            background: #FFF;
+            padding: 20px;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            width: auto;
+            max-width: 1100px;
+            margin: 20px auto;
+            font-size: 18px;
+            font-family: 'Roboto Condensed', sans-serif;
+        }
+
+        #eventInfo {
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            font-size: 14px;
+        }
+
+        #calendar {
+            max-width: 1100px;
+            margin: 0 auto;
+            border-radius: 0.2em;
+            background: white;
+            box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.16);
+            margin-top: 25px;
+            padding: 10px;
+        }
+
+        h2 {
+            font-size: 25px;
+            font-family: 'Oswald', sans-serif;
+            color: #2c7aff;
+        }
+
+        .fc-toolbar {
+            padding-top: 25px;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        .fc-event {
+            border: none;
+            background: #2c7aff;
+            padding: 2px;
+            padding-left: 3px;
+        }
+
+        .fc-title, .fc-time {
+            color: white;
+            font-size: 13px;
+            font-family: 'Roboto', sans-serif;
+            font-weight: 600;
+        }
+
+        .fc-day-grid-event .fc-time {
+            font-weight: 600;
+        }
+
+        .eventHeader {
+            font-family: 'Oswald', sans-serif;
+            font-size: 22px;
+            color: #2F5E5E;
+            font-weight: 500;
+            width: 100%;
+            /*margin-left: 15px;
+        margin-right: 15px;*/
+            border-bottom: solid 1px #708090;
+            /*box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);*/
+            background: white;
+            padding: 10px;
+            padding-bottom: 5px;
+            padding-left: 0px;
+            margin-bottom: 15px;
+        }
+
+            .eventHeader h5 {
+                margin: 0px;
+                color: #2c7aff;
+            }
+
+        thead {
+            border-bottom: none;
+        }
+
+        .noTopSpace {
+            padding-top: 0px;
+            margin-top: 0px;
+        }
+
+        .videoEvent,
+        .videoEvent div,
+        .videoEvent span {
+            background-color: #2F5E5E; /* background color */
+        }
+
+        .fc-today.fc-state-highlight {
+            background-color: #F1F3F4;
+        }
+
+        .fc-day-grid-event > .fc-content {
+            white-space: normal;
+        }
+
+    </style>
+}
+<script>
+	$(document).ready(function() {
+	    $('.time').hide();
+	    $('#clearEvent').hide();
+	    $('.deleteContainer').hide();
+
+
+	    $('#allDay').change(function () {
+	        if ($('#allDay').val() == 'true') {
+	            $('.time').hide();
+	        }
+	        else {
+	            $('.time').show();
+	        }
+	    });
+
+		$('#calendar').fullCalendar({
+			header: {
+				left: 'prev,next today',
+				center: 'title',
+				right: 'month,basicWeek,basicDay'
+			},
+			eventRender: function (event, element) {
+			    element.attr('href', 'javascript:void(0);');
+			    element.click(function() {
+
+			        if (event.category == "multi") {
+			            window.open("https://secure.sullivan.edu/ProjectRequest/ProjectRequest/Request/ViewCase?requestID=" + event.requestID);
+			        }
+			        else {
+			            window.open("https://secure.sullivan.edu/ProjectRequest/ProjectRequest/Request/ViewRequest?requestID=" + event.requestID);
+			        }
+
+			        return false;
+
+			        //$("#eventInfo").html(event.title);
+
+			        //$("#assignedTo").html(event.assignedTo);
+
+			        //var AdditionalInfo = "";
+
+			        //for (var info in event.answerList)
+			        //{
+			        //    AdditionalInfo += "<p><span class='ViewHeader'><b>" + String(info.question) + "</p>";
+			        //}
+
+			        //$("#additionalInfo").html(AdditionalInfo);
+
+			        //$.magnificPopup.open({
+			        //    items: {
+			        //        src: '#eventContent'
+			        //    },
+			        //    type: 'inline'
+			        //});
+
+			    });
+			},
+			editable: false,
+			eventLimit: true, // allow "more" link when too many events
+			events: {
+			    url: "/ProjectRequest/ProjectRequest/Calendar/GetProjectEvents",
+			    data: {
+		            agentAssigned: getUrlParameter("agentAssigned")
+		        },
+			},
+			displayEventTime: false,
+			timezone: 'local',
+			defaultView: 'basicWeek'
+		});
+
+	});
+
+	function getUrlParameter(sParam) {
+	    var sPageURL = window.location.search.substring(1);
+	    var sURLVariables = sPageURL.split('&');
+	    for (var i = 0; i < sURLVariables.length; i++) {
+	        var sParameterName = sURLVariables[i].split('=');
+	        if (sParameterName[0] == sParam) {
+	            return sParameterName[1];
+	        }
+	    }
+	}
+
+</script>
+
+<div id="eventContent" title="Event Details" class="white-popup mfp-hide">
+    <div class="eventHeader">
+        <h5>CC Project Calender</h5>
+    </div>
+    <p id="eventInfo"></p>
+    <p id="assignedTo"></p>
+    <div id="additionalInfo">
+    </div>
+</div>
+<div class="row">
+    <div class="col s12">
+        <div id='calendar'></div>
+    </div>
+</div>
+
+
+<script src="~/js/jquery.magnific-popup.js"></script>

@@ -1,0 +1,56 @@
+﻿@media print
+{
+    h3, form, tfoot, .noPrint, header.custom-header
+    {
+        display: none;
+    }
+
+    a[href]:after { display:none; }
+
+    @page
+    {
+        margin-top: 10px;
+    }
+
+    .datagrid 
+    {
+        border: none;
+    }
+
+    .datagrid table thead th
+    {
+        border: none;
+    }
+
+    .datagrid table tbody td
+    {
+        border: none;
+    }
+
+    body, head, table, html, section
+    {
+        margin: 0px;
+        padding: 0px;
+    }
+
+
+}
+
+@media (max-device-width: 600px)
+{
+    .page-content
+    {
+        margin: 0px;
+    }
+}
+
+
+
+@media screen and (min-width:0\0) {
+// Seems to fix flexbox type layout issues in IE10
+span[flex], md-card-content, md-dialog-content {
+display: block;
+}
+}
+
+

@@ -1,0 +1,46 @@
+﻿@model IEnumerable<ProjectRequest.Models.Template>
+
+@{
+    ViewBag.Title = "Create/Edit CC Guidelines";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#Template').submit(function (e) {
+
+            e.preventDefault();
+
+            if ($("#template").val() != "00") {
+                document.Template.action = "/ProjectRequest/ProjectRequest/Template/DisplayTemplate?template=" + $("#template").val();
+
+                document.Template.submit();
+            }
+            else {
+                alert("Please select a guideline to view");
+            }
+        });
+    });
+
+
+</script>
+
+@using (Html.BeginForm("DisplayTemplate", "Template", FormMethod.Post, new { name = "Template", id = "Template" }))
+{
+    <h3>Create/Edit CC Investigational Guidelines</h3>
+    
+        <label for="template">Select Guidline:</label>
+    <select name="template" id="template">
+        <option value="00">Please Select:</option>
+        <option value="0">Create New Guideline</option>
+        @foreach (var template in Model)
+        {
+            <option value="@template.templateID" >@template.templateName</option>
+        }
+    </select>
+    <br />
+    
+    <input type="submit" value="Go To Investigational Guidelines" />
+    
+}
+

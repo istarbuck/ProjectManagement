@@ -1,0 +1,81 @@
+﻿@model IEnumerable<ProjectRequest.Models.TimeSheet>
+
+@{
+    ViewBag.Title = "CC Investigational Reports";
+    Layout = "~/Views/Shared/_LayoutCopy22017.cshtml";
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#TimeSheet').submit(function (e) {
+
+            e.preventDefault();
+
+            if ($("#timeSheet").val() != "00") {
+                document.TimeSheet.action = "/ProjectRequest/ProjectRequest/TimeSheet/CreateTimeSheet?sheetID=" + $("#timeSheet").val();
+
+                document.TimeSheet.submit();
+            }
+            else {
+                alert("Please select a report to view");
+            }
+        });
+    });
+</script>
+
+@using (Html.BeginForm("CreateTimeSheet", "TimeSheet", FormMethod.Post, new { name = "TimeSheet", id = "TimeSheet" }))
+{
+    <fieldset class="CaseFilter z-depth-1">
+    <legend>CC Reports</legend>
+
+
+    <div class="row">
+    <div class="input-field col s12 m6 l4" >
+    <select id="timeSheet" name="timeSheet">
+        <option value="00">Please Select:</option>
+        @foreach(var sheet in Model)
+        {
+            DateTime date = sheet.sheetDate.GetValueOrDefault();
+            <option value="@sheet.sheetID">@date.DayOfWeek.ToString() (@date.ToShortDateString())</option>
+        }
+    </select>
+    <label>Select Report</label>
+    </div>
+    </div>
+
+    
+    <button class="btn waves-effect waves-light button" type="submit" name="action">File Report
+        <i class="material-icons right">library_books</i>
+    </button>
+
+    </fieldset>
+}
+<br />
+
+@using (Html.BeginForm("LookUpSheet", "TimeSheet", FormMethod.Post, new { name = "OldTimeSheet", id = "OldTimeSheet" }))
+{
+    
+    <fieldset class="CaseFilter z-depth-1">
+    <legend>Look Up CC Report</legend>
+
+
+    @if(Request.QueryString["sheet"] == "Fail") 
+    {
+        <p><b>Could not find report with this date.</b></p>
+    }
+    
+    <div class="row">
+    <div class="input-field col s12 m6 l4" >
+    <label>Look up by date:</label>
+    <input type="text" name="sheetDate" class="datepicker" id="sheetDate" />
+    </div>
+    </div>
+
+    
+    <button class="btn waves-effect waves-light button" type="submit" name="action">Look Up Report
+        <i class="material-icons right">event</i>
+    </button>
+
+    </fieldset>
+}
+

@@ -1,0 +1,205 @@
+﻿@model ProjectRequest.Models.TaskListInfo
+@using ProjectRequest.HTMLHelpers;
+@{
+    ViewBag.Title = "Task Files";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    <link rel="stylesheet" href="~/css/print.css"> 
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#dateStart').datepicker();
+        $('#dateEnd').datepicker();
+    });
+</script>
+
+<fieldset class="CaseFilter mdl-shadow--6dp">
+<legend>Filter CC Task Files</legend>
+<br />
+
+@using (Html.BeginForm((string)ViewBag.Method, "Request"))
+{
+    <div class="mdl-grid mdl-grid--no-spacing">
+
+        <div class="mdl-cell mdl-cell--4-col" >
+            <label for="assignedTo">Assigned To:</label>
+            <br />
+            <select name="assignedTo" id="assignedTo">
+                <option value="00">Please Select:</option>
+                @foreach (var staff in Model.staffList)
+                {
+                    if (staff.staffID == Model.PagingInfo.assignedTo)
+                    {
+                        <option value="@staff.staffID" selected="selected">@staff.firstName @staff.lastName</option>
+                    }
+
+                    else
+                    {
+                        <option value="@staff.staffID">@staff.firstName @staff.lastName</option>
+                    }
+                }
+            </select>
+        </div>
+
+        <div class="mdl-cell mdl-cell--4-col" >
+            <label for="completed">Show Completed Tasks:</label>
+            <br />
+            <select name="completed" id="completed">
+                <option value="00">Please Select:</option>
+
+                    @if (Model.PagingInfo.completed == "false")
+                    {
+                        <option value="true">Yes</option>
+                        <option value="false" selected="selected">No</option>
+                    }
+
+                    else
+                    {
+                        <option value="true" selected="selected">Yes</option>
+                        <option value="false">No</option>
+                    }
+         
+            </select>
+        </div>
+
+        <div class="mdl-cell mdl-cell--4-col" >
+            <md-input-container>
+            <label for="dateStart">Due Date Start:</label>
+            @if(Model.PagingInfo.dateStart != null)
+            {
+                <input type="text" name="dateStart" id="dateStart" value="@Model.PagingInfo.dateStart" />
+            }
+            else
+            {
+                <input ng-model="taskFilter.dateStart" type="text" name="dateStart" id="dateStart"  />
+            }
+            </md-input-container>
+        </div>
+
+    </div>
+    
+    <div class="mdl-grid mdl-grid--no-spacing">
+
+        <div class="mdl-cell mdl-cell--4-col" >
+            <label for="priority">CC priority tasks only:</label>
+            <br />
+            <select name="priority" id="priority">
+                <option value="00">Please Select:</option>
+
+                    @if (Model.PagingInfo.priority == "false")
+                    {
+                        <option value="true">Yes</option>
+                        <option value="false" selected="selected">No</option>
+                    }
+
+                    else
+                    {
+                        <option value="true" selected="selected">Yes</option>
+                        <option value="false">No</option>
+                    }
+         
+            </select>
+        </div>
+
+        <div class="mdl-cell mdl-cell--4-col" >
+            <label for="status">Status:</label>
+            <br />
+            <select name="status" id="status">
+                <option value="00">Please Select:</option>
+                @foreach (var status in Model.status)
+                {
+                    if (status.status == Model.PagingInfo.status)
+                    {
+                        <option value="@status.status" selected="selected">@status.status</option>      
+                    }
+                    else
+                    {
+                        <option value="@status.status" >@status.status</option>
+                    }
+                }
+            </select>
+        </div>
+
+        <div class="mdl-cell mdl-cell--4-col" >
+            <md-input-container>
+            <label for="dateEnd">Due Date End:</label>
+             @if (Model.PagingInfo.dateEnd != null)
+            {
+                <input type="text" name="dateEnd" id="dateEnd" value="@Model.PagingInfo.dateEnd" />
+            }
+            else
+            {
+                <input ng-model="taskFilter.dateEnd" type="text" name="dateEnd" id="dateEnd" />                
+            }
+            </md-input-container>
+        </div>
+
+    </div>
+    <input type="submit" name="search" value="Filter Results" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent button" />
+}
+</fieldset>
+<br /><br />
+
+
+<fieldset class="mdl-shadow--6dp">
+<legend>CC Task Files</legend>
+<br />
+
+<div class='datagrid'>
+<table>
+<thead><tr><th class="mdl-cell--hide-phone mdl-layout--large-screen-only">Due Date</th><th>Case Name</th><th>Task</th><th class="mdl-cell--hide-phone mdl-layout--large-screen-only">Assigned To</th><th class="mdl-cell--hide-phone mdl-layout--large-screen-only">Status</th><th class="noPrint mdl-cell--hide-phone mdl-layout--large-screen-only">Details</th></thead>
+<tbody>
+
+@{
+    string rowColor = "alt";
+}
+
+@foreach (var task in Model.taskView)
+{
+    string assignments = "";
+
+    foreach (var staff in task.staffList)
+    {
+        assignments += staff + ", ";
+    }
+
+    if (rowColor == "noAlt")
+    {
+        rowColor = "alt";
+    }
+    else
+    {
+        rowColor = "noAlt";
+    }
+    
+    <tr class="@rowColor" @if (task.taskList.priority == true)
+                          {<text> style="outline: thin solid red"</text>}>
+    <td class="mdl-cell--hide-phone mdl-layout--large-screen-only">@task.taskList.DueDate</td>
+    @if(task.request.projectName != null)
+    {
+        <td >@Html.ActionLink(task.request.projectName, "ViewRequest", new { requestID = @task.request.reuqestID }, new { target = "_blank" }) </td>
+    }
+    else
+    {
+        <td >@Html.ActionLink("This case does not have a name", "ViewRequest", new { requestID = @task.request.reuqestID }, new { target = "_blank" }) </td>
+    }
+    <td>@task.taskList.Task</td>
+    <td class="mdl-cell--hide-phone mdl-layout--large-screen-only">@assignments</td>
+    <td class="mdl-cell--hide-phone mdl-layout--large-screen-only">@task.taskList.Status</td>
+    <td class="noPrint mdl-cell--hide-phone mdl-layout--large-screen-only">@Html.ActionLink("Edit Case", "RequestInfo", new { requestID = @task.request.reuqestID }, new { target = "_blank" }) </td>
+    </tr>
+}
+
+</tbody>
+
+<tfoot>
+<tr><td colspan="9">
+<div class="paging">
+<ul>
+@Html.PageLinks(Model.PagingInfo, x => Url.Action((string)ViewBag.Method, new { page = x }))
+</ul>
+</div>
+</td></tr>
+</tfoot>
+</table>
+</div>
+</fieldset>

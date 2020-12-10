@@ -1,0 +1,242 @@
+﻿@model ProjectRequest.Models.RequestListCategory
+@using ProjectRequest.HTMLHelpers
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#dateStart').datepicker();
+        $('#dateEnd').datepicker({
+            onSelect: function (date) {
+                $('#dateEnd').parent.addClass('md-input-has-value');
+            }
+        });
+
+        //$('#dateEnd').change(function () {
+        //    $('#dateEnd').parent.addClass('md-input-has-value');
+        //}, 150);
+    });
+</script>
+
+
+<fieldset class="CaseFilter mdl-shadow--6dp">
+<legend>Filter CC Case Files</legend>
+<br />
+
+@using (Html.BeginForm((string)ViewBag.Method, "Request"))
+{
+
+    //Start MDL Row
+    <div class="mdl-grid mdl-grid--no-spacing">
+
+        <div class="mdl-cell mdl-cell--3-col">
+            <md-input-container>
+            <label for="dateStart">Date Start:</label>
+            @if(Model.PagingInfo.dateStart != null)
+            {
+                <input type="text" name="dateStart" id="dateStart" value="@Model.PagingInfo.dateStart" />
+            }
+            else
+            {
+                <input ng-model="caseFilter.dateStart" type="text" name="dateStart" id="dateStart"  />
+            }
+            </md-input-container>
+        </div>
+    
+        <div class="mdl-cell mdl-cell--3-col">
+            <md-input-container>
+            <label for="dateEnd">Date End:</label>
+             @if (Model.PagingInfo.dateEnd != null)
+            {
+                <input type="text" name="dateEnd" id="dateEnd" value="@Model.PagingInfo.dateEnd" />
+            }
+            else
+            {
+                <input ng-model="caseFilter.dateEnd" type="text" name="dateEnd" id="dateEnd" />                
+            }
+            </md-input-container>
+        </div>
+
+        <div class="mdl-cell mdl-cell--3-col">
+            <md-input-container>
+            <label for="search">Search:</label>
+            <input type="text" name="search" class="search" value="@Model.PagingInfo.search" />
+            </md-input-container>
+        </div>
+
+        <div class="mdl-cell mdl-cell--3-col">
+            <md-input-container>
+            <label for="searchPO">Search PO:</label>
+            <input type="text" name="searchPO" class="searchPO" value="@Model.PagingInfo.searchPO" />
+            </md-input-container>
+        </div>
+
+    @*End MDL Row*@
+    </div>
+    <br />
+    
+    //Start MDL Row
+    <div class="mdl-grid mdl-grid--no-spacing">
+        <br />
+
+        <div class="mdl-cell mdl-cell--3-col" >
+            <label for="completed">Completion Status:</label>
+            <br />
+            <select name="completed" id="completed">
+                <option value="00">Please Select:</option>
+                @foreach (var status in Model.PagingInfo.completionStatus)
+                {
+                    if (status.Key == Model.PagingInfo.completed)
+                    {
+                        <option value="@status.Key" selected="selected">@status.Value</option>
+                    }
+
+                    else
+                    {
+                        <option value="@status.Key">@status.Value</option>
+                    }
+                }   
+            </select>
+            <br />
+        </div>
+
+        <div class="mdl-cell mdl-cell--3-col">
+
+            <label for="location">Location:</label>
+            <br />
+            <select name="location" id="location">
+                <option value="00">Please Select:</option>
+                @foreach (var location in Model.location)
+                {
+                    if (location.name == Model.PagingInfo.location)
+                    {
+                        <option value="@location.name" selected="selected">@location.name</option>      
+                    }
+                    else
+                    {
+                        <option value="@location.name" >@location.name</option>
+                    }
+                }
+            </select>
+
+            <br />
+        </div>
+
+        <div class="mdl-cell mdl-cell--3-col">
+            <label for="category">Category:</label>
+            <br />
+            <select name="category" id="category">
+                <option value="00">Please Select:</option>
+                @foreach (var category in Model.cateogires)
+                {
+                    if (category.categoryID == Model.PagingInfo.category)
+                    {
+                        <option value="@category.categoryID" selected="selected">@category.categoryName</option>
+                    }
+
+                    else
+                    {
+                        <option value="@category.categoryID">@category.categoryName</option>
+                    }
+                }
+            </select>
+            <br />
+        </div>
+
+        <div class="mdl-cell mdl-cell--3-col">
+            <label for="excludeCategory">Exclude Category:</label>
+            <br />
+            <select name="excludeCategory" id="excludeCategory">
+                <option value="00">Please Select:</option>
+                @foreach (var category in Model.cateogires)
+                {
+                    if (category.categoryID == Model.PagingInfo.excludeCategory)
+                    {
+                        <option value="@category.categoryID" selected="selected">@category.categoryName</option>
+                    }
+
+                    else
+                    {
+                        <option value="@category.categoryID">@category.categoryName</option>
+                    }
+                }
+            </select>
+            <br />
+        </div>
+        
+
+
+
+    
+    @*End MDL Row*@
+    </div>
+    
+    <input type="submit" name="search" value="Filter Results" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent button" />
+}
+
+</fieldset>
+<br /><br />
+
+<fieldset class="mdl-shadow--6dp">
+<legend>CC Case Files</legend>
+<br />
+
+<div >
+
+@*<p><a href="https://secure.sullivan.edu/ProjectRequest/ProjectRequest/RequestForm.aspx" target="_blank">Open New Case</a></p>*@
+
+<div class='datagrid'>
+<table>
+<thead><tr><th class="noPrint mdl-cell--hide-phone mdl-layout--large-screen-only">CT#</th><th class="mdl-cell--hide-phone mdl-layout--large-screen-only">CC ID</th><th class="mdl-cell--hide-phone mdl-layout--large-screen-only">Date Submitted</th><th class="mdl-cell--hide-phone mdl-layout--large-screen-only">Requester Name</th><th class="mdl-cell--hide-phone mdl-layout--large-screen-only">Due Date</th><th>Case Name:</th><th class="noPrint mdl-cell--hide-phone mdl-layout--large-screen-only">Details</th><th class="mdl-cell--hide-phone mdl-layout--large-screen-only">Location</th><th class="mdl-cell--hide-phone mdl-layout--large-screen-only">Category</th><th class="noPrint mdl-cell--hide-phone mdl-layout--large-screen-only">Attachments</th></tr></thead>
+<tbody>
+
+@{
+    string rowColor = "alt";
+}
+
+@foreach (var request in Model.requestList)
+{
+    var myAttachments = Model.attachments.Where(a => a.requestID == request.Request.reuqestID);
+
+    if (rowColor == "noAlt")
+    {
+        rowColor = "alt";
+    }
+    else
+    {
+        rowColor = "noAlt";
+    }
+    
+    <tr class="@rowColor">
+    <td class="noPrint mdl-cell--hide-phone mdl-layout--large-screen-only">@request.Request.currentTrackID</td>
+    <td class="mdl-cell--hide-phone mdl-layout--large-screen-only">@request.Request.customID</td>
+    <td class="mdl-cell--hide-phone mdl-layout--large-screen-only">@request.Request.dateRequested.ToShortDateString()</td>
+    <td class="mdl-cell--hide-phone mdl-layout--large-screen-only">@request.Request.name</td>
+    <td class="mdl-cell--hide-phone mdl-layout--large-screen-only">@request.Request.dueDate</td>
+    <td>@Html.ActionLink(request.Request.projectName, "ViewRequest", new { requestID = @request.Request.reuqestID }, new { target = "_blank" })</td>
+    <td class="noPrint mdl-cell--hide-phone mdl-layout--large-screen-only">@Html.ActionLink("Edit Case", "RequestInfo", new { requestID = @request.Request.reuqestID }, new { target = "_blank" }) </td>
+    <td class="mdl-cell--hide-phone mdl-layout--large-screen-only">@request.Request.location</td>
+    <td class="mdl-cell--hide-phone mdl-layout--large-screen-only">@request.Category.categoryName</td>
+    <td class="noPrint mdl-cell--hide-phone mdl-layout--large-screen-only">
+    @foreach (var attachment in myAttachments)
+    {
+        <a href="~/Attachments/@attachment.filePath" target="_blank">@attachment.filePath<br /></a>
+    }    
+    </td>
+    </tr>
+}
+
+</tbody>
+
+<tfoot>
+<tr><td colspan="10">
+<div class="paging">
+<ul>
+@Html.PageLinks(Model.PagingInfo, x => Url.Action((string)ViewBag.Method, new { page = x }))
+</ul>
+</div>
+</td></tr>
+</tfoot>
+</table>
+
+</div>
+</div>
+</fieldset>

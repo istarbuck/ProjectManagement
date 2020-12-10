@@ -1,0 +1,57 @@
+﻿@model IEnumerable<ProjectRequest.Models.Template>
+
+@{
+    ViewBag.Title = "Create/Edit CC Templates";
+    Layout = "~/Views/Shared/_LayoutCopy2017.cshtml";
+}
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#Template').submit(function (e) {
+
+            e.preventDefault();
+
+            if ($("#template").val() != "00") {
+                document.Template.action = "/ProjectRequest/ProjectRequest/Template/DisplayTemplate?template=" + $("#template").val();
+
+                document.Template.submit();
+            }
+            else {
+                alert("Please select a Template to view");
+            }
+        });
+    });
+
+
+</script>
+
+@using (Html.BeginForm("DisplayTemplate", "Template", FormMethod.Post, new { name = "Template", id = "Template" }))
+{
+    
+    <fieldset class="CaseFilter">
+    <legend>Create/Edit CC Templates</legend>
+
+    <div class="row">
+    <div class="input-field col s12 m6 l4" >
+    <select name="template" id="template">
+        <option value="00">Please Select:</option>
+        <option value="0">Create New Template</option>
+        @foreach (var template in Model)
+        {
+            <option value="@template.templateID" >@template.templateName</option>
+        }
+    </select>
+    <label for="template">Select Template:</label>
+    </div>
+    </div>
+
+    </fieldset>
+    
+    <div class="right-align">
+        <button class="btn waves-effect waves-light button" type="submit" name="action">Create/Edit Template
+            <i class="material-icons right">description</i>
+        </button>
+    </div>
+    
+}
+

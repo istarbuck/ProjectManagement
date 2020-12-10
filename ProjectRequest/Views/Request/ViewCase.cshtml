@@ -1,0 +1,603 @@
+﻿@model ProjectRequest.Models.RequestInfoViewModel
+
+@{
+    ViewBag.Title = Model.request.reuqestID + " - " + Model.request.projectName;
+    Layout = "~/Views/Shared/_LayoutCopy2017.cshtml";
+
+    <link rel="stylesheet" href="~/css/magnific-popup.css">
+    <link rel="stylesheet" href="~/css/printCase.css">
+
+    <style type="text/css">
+        .white-popup {
+            position: relative;
+            background: #FFF;
+            padding: 20px;
+            width: auto;
+            max-width: 800px;
+            margin: 30px auto;
+        }
+
+        #projectTracking {
+            background-color: white;
+        }
+    </style>
+
+    <script src="https://api.trello.com/1/client.js?key=18a0487d95aaf89f9ff8ff894fcf4972"></script>
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $.validate({
+            lang: 'en'
+        });
+
+        //if(getUrlVars()["position"] != null)
+        //{
+        //    var position = $("#" + getUrlVars()["position"]).position();
+
+        //    $(window).scrollTop(parseInt(position.top));
+        //}
+
+
+    });
+
+
+
+    function DisplayReport() {
+        $.magnificPopup.open({
+            items: {
+                src: '#addTime'
+            },
+            type: 'inline',
+            callbacks: {
+                close: function () {
+                    $("#Chore").val('');
+                    $("#TimeSpent").val('');
+                    $("#reportResponse").html('');
+                }
+            }
+        });
+    }
+
+    function DisplayScully() {
+        $.magnificPopup.open({
+            items: {
+                src: '#Scully'
+            },
+            type: 'inline'
+        });
+    }
+
+    function AddTime() {
+        var currentDate = $.datepicker.formatDate('mm/dd/yy', new Date());
+
+        $.ajax({
+            type: "POST",
+            url: "/ProjectRequest/ProjectRequest/TimeSheet/AddTime",
+            data: '{"id":"' + $("#Request").val() + '", "description":"' + $("#Chore").val() + '", "time":"' + $("#TimeSpent").val() + '"}',
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+                $("#reportResponse").html(response);
+            },
+            failure: function (response) {
+                $("#reportResponse").html(response);
+            }
+        });
+    }
+
+    function TrelloUpload() {
+        var authenticationSuccess = function () {
+            console.log('Successful authentication');
+        };
+        var authenticationFailure = function () { console.log('Failed authentication'); };
+
+        Trello.authorize({
+            type: 'popup',
+            name: 'Getting Started Application',
+            scope: {
+                read: 'true',
+                write: 'true'
+            },
+            expiration: 'never',
+            success: authenticationSuccess,
+            error: authenticationFailure,
+            interactive: true
+        });
+
+        $.ajax({
+            type: "GET",
+            url: "/ProjectRequest/ProjectRequest/Request/GetTrelloInfo",
+            data: { id: getUrlParameter('requestID') },
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+
+                var data = $.parseJSON(response);
+
+                var myList = '58ebcc9d36e943f39afee321';
+                var creationSuccess = function (trelloData) {
+
+                    console.log('Card created successfully. Data returned:' + JSON.stringify(trelloData));
+
+                    var cardData = $.parseJSON(JSON.stringify(trelloData));
+
+                    var files = data.attachment;
+
+                    for (var file in files) {
+                        var formData = new FormData();
+
+                        formData.append('token', Trello.token());
+                        formData.append('key', '18a0487d95aaf89f9ff8ff894fcf4972');
+                        formData.append('name', files[file]);
+
+                        // HTML file input, chosen by user
+                        formData.append('url', 'https://secure.sullivan.edu/ProjectRequest/ProjectRequest/Attachments/' + files[file]);
+
+                        var request = new XMLHttpRequest();
+                        request.open("POST", 'https://api.trello.com/1/cards/' + cardData.id + '/attachments');
+                        request.send(formData);
+                        console.log(request.responseText);
+
+                        //?token=' + Trello.token + '&key=18a0487d95aaf89f9ff8ff894fcf4972&file=https://secure.sullivan.edu/ProjectRequest/ProjectRequest/Attachments/' + file);
+                    }
+
+                };
+                var newCard = {
+                    name: data.cardTitle,
+                    desc: data.description,
+                    due: data.dueDate,
+                    // Place this card at the top of our list
+                    idList: myList,
+                    pos: 'top'
+                };
+                Trello.post('/cards/', newCard, creationSuccess);
+
+            },
+            failure: function (response) {
+                console.log(response);
+            }
+        });
+
+
+    }
+
+    function getUrlParameter(sParam) {
+        var sPageURL = window.location.search.substring(1);
+        var sURLVariables = sPageURL.split('&');
+        for (var i = 0; i < sURLVariables.length; i++) {
+            var sParameterName = sURLVariables[i].split('=');
+            if (sParameterName[0] == sParam) {
+                return sParameterName[1];
+            }
+        }
+    }
+</script>
+
+@*<input type="hidden" id="scrollPosition" name="scrollPosition" class="scrollPosition" value="@ViewBag.Position" />*@
+
+<br />
+
+<!-- Hook to ScrollSpy Side Nav -->
+<fieldset class="ViewCase section scrollspy" id="caseInfo">
+    <legend>Case Tracking</legend>
+
+    <div class="row">
+        <div class="col s12">
+            <div class="checkout-wrap">
+                <ul class="checkout-bar">
+
+                    @if (Model.request.status == "Pending")
+                    {
+                        <li class="active">Approval Pending</li>
+                        <li class="">Approved</li>
+                        <li class="">Working</li>
+                        <li class="">Waiting for Feedback</li>
+                        <li class="">Complete</li>
+                    }
+                    else if (Model.request.status == "Denied")
+                    {
+                        <li class="visited">Approval Pending</li>
+                        <li class="active">Denied</li>
+                        @*<li class="">Working</li>
+                            <li class="">Waiting for Feedback</li>
+                            <li class="">Complete</li>*@
+                    }
+                    else if (Model.request.status == "Approved")
+                    {
+                        <li class="visited">Approval Pending</li>
+                        <li class="active">Approved</li>
+                        <li class="">Working</li>
+                        <li class="">Waiting for Feedback</li>
+                        <li class="">Complete</li>
+                    }
+                    else if (Model.request.status == "Assigned" || Model.request.status == "Working")
+                    {
+                        <li class="visited">Approval Pending</li>
+                        <li class="visited">Approved</li>
+                        <li class="active">Working</li>
+                        <li class="">Waiting for Feedback</li>
+                        <li class="">Complete</li>
+                    }
+                    else if (Model.request.status == "Waiting For Feedback" || Model.request.status == "On Hold")
+                    {
+                        <li class="visited">Approval Pending</li>
+                        <li class="visited">Approved</li>
+                        <li class="visited">Working</li>
+                        <li class="active">@Model.request.status</li>
+                        <li class="">Complete</li>
+                    }
+                    else if (Model.request.status == "Completed")
+                    {
+                        <li class="visited">Approval Pending</li>
+                        <li class="visited">Approved</li>
+                        <li class="visited">Working</li>
+                        <li class="visited">Waiting for Feedback</li>
+                        <li class="previous visited">Complete</li>
+                    }
+
+
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="hide-on-small-only">
+        <br /><br /><br /><br />
+    </div>
+
+</fieldset>
+
+
+<div class="row">
+
+    <!-- Hook to ScrollSpy Side Nav -->
+    <fieldset class="ViewCase section scrollspy" id="caseInfo">
+        <legend>Case Info</legend>
+
+        @if (ViewBag.Role == "Agent")
+        {
+            <div class="row row--no-spacing">
+                <div class="col s6">
+                    <a href="EditCase?requestID=@Model.request.reuqestID.ToString()">Edit Case File</a>
+                </div>
+            </div>
+        }
+
+        <div class="row">
+
+            <div class="col s12 m16 l3">
+                <p><span class="ViewHeader"><b>Case Name:</b></span><br /> @Model.request.projectName</p>
+            </div>
+
+            <div class="col s12 m16 l3">
+                <p><span class="ViewHeader"><b>Case ID:</b></span><br /> @Model.request.reuqestID</p>
+            </div>
+
+            <div class="col s12 m16 l3">
+                <p><span class="ViewHeader"><b>Status</b></span><br /> @Model.request.status </p>
+            </div>
+
+            <!-- Assign Agents -->
+            @{
+                var projectAssignment = Model.assignments.Where(a => a.requestID == Model.request.reuqestID);
+                string assignedTo = "";
+                foreach (var staff in projectAssignment)
+                {
+                    assignedTo += staff.staffID + "; ";
+                }
+            }
+
+            <div class="col s12 m6 l3">
+                <p><span class="ViewHeader"><b>Assigned To:</b></span><br /> @assignedTo </p>
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col s12 m16 l3">
+                <p><span class="ViewHeader"><b>Date Submitted:</b></span><br /> @Model.request.dateRequested </p>
+            </div>
+
+            <div class="col s12 m16 l3">
+                <p><span class="ViewHeader"><b>Due Date:</b></span><br /> @Model.request.dueDate </p>
+            </div>
+
+            <div class="col s12 m16 l3">
+                <p><span class="ViewHeader"><b>Location:</b></span><br /> @Model.request.location </p>
+            </div>
+
+            <div class="col s12 m16 l3">
+                <p><span class="ViewHeader"><b>Approved/Denied By:</b></span><br /> @Model.request.approvedBy </p>
+            </div>
+
+
+        </div>
+
+        <div class="row">
+
+            <div class="col s12 m16 l3">
+                <p><span class="ViewHeader"><b>Department:</b></span><br /> @Model.request.department</p>
+            </div>
+
+            <div class="col s12 m16 l3">
+                <p><span class="ViewHeader"><b>Requester Name:</b></span><br /> @Model.request.name </p>
+            </div>
+
+            <div class="col s12 m16 l3">
+                <p><span class="ViewHeader"><b>Email Address:</b></span><br /><a href="mailTo:@Model.request.email?subject=@Model.request.projectName">@Model.request.email</a></p>
+            </div>
+
+            <div class="col s12 m16 l3">
+                <p><span class="ViewHeader"><b>Phone Number</b></span><br /> @Model.request.contactInfo</p>
+            </div>
+
+        </div>
+
+        @if (Model.request.vendor != "00")
+        {
+            <div class="row">
+
+                <div class="col s12 m16 l3">
+                    <p>
+                        <span class="ViewHeader"><b>Vendor:</b></span><br />
+                        @if (Model.vendor != null)
+                        {
+                            Model.vendor.publication.ToString();
+                        }
+                        else
+                        {
+                            @Model.request.vendor
+                        }
+                    </p>
+                </div>
+
+                @if (Model.vendor != null)
+                {
+
+                    <div class="col s12 m16 l3">
+                        <p><span class="ViewHeader"><b>Brand:</b></span><br /> @Model.vendor.brand</p>
+                    </div>
+
+                    if (Model.vendorContacts != null)
+                    {
+                        foreach (var vendor in Model.vendorContacts)
+                        {
+                            <div class="col s12 m16 l3">
+                                <p><span class="ViewHeader"><b>Contact:</b></span><br />@vendor.contact</p>
+                            </div>
+
+                            <div class="col s12 m16 l3">
+                                <p><span class="ViewHeader"><b>Phone:</b></span><br />@vendor.phone</p>
+                            </div>
+
+                            <div class="col s12 m16 l3">
+                                <p><span class="ViewHeader"><b>Email:</b></span><br />@vendor.email</p>
+                            </div>
+                        }
+
+                    }
+
+                }
+            </div>
+        }
+
+        <div class="row">
+            <div class="col s12 m12 l6">
+                <p><span class="ViewHeader"><b>Additional Info</b></span><br /> @Html.Raw(Html.Encode(Model.request.additionalInfo).Replace(Environment.NewLine, "<br />"))</p>
+            </div>
+
+            <div class="col s12 m12 l6">
+                <p><span class="ViewHeader"><b>Denial/Approval Comments</b></span><br /> @Html.Raw(Html.Encode(Model.request.denialReason).Replace(Environment.NewLine, "<br />"))</p>
+            </div>
+
+        </div>
+
+    </fieldset> <!-- END FIELDSET -->
+
+</div> <!-- End First Row -->
+@*//FOR EACH LOOP FOR SUBREQUESTS*@
+@foreach (var subRequest in Model.subRequests)
+{
+    <div class="row">
+        <!-- Hook to ScrollSpy Side Nav -->
+        <fieldset class="ViewCase section scrollspy" id="@subRequest.subRequest.categoryID">
+            <legend>@subRequest.categoryName</legend>
+
+            @*@if (ViewBag.Role == "Agent")
+                {
+                    <div class="row row--no-spacing">
+                        <div class="col s6">
+                            <a href="EditCase?requestID=@Model.request.reuqestID.ToString()">Edit Case File</a>
+                        </div>
+                    </div>
+                }*@
+
+            @for (var i = 0; i < subRequest.answerList.Count(); i += 2)
+            {
+                <div class="row">
+
+                    @foreach (var request in subRequest.answerList.Skip(i).Take(2))
+                    {
+                        <div class="col s12 m12 l6">
+
+                            <p><span class="ViewHeader"><b>@request.question</b></span><br /> @Html.Raw(Html.Encode(request.answer.AnswerText).Replace(Environment.NewLine, "<br />"))</p>
+
+                        </div>
+                    }
+
+                </div>
+            }
+        </fieldset>
+    </div>
+
+    <!-- Avoid Creating Empty Rows -->
+    if (subRequest.taskList.Count() > 0)
+    {
+        <div class="row">
+            <fieldset>
+                @foreach (var task in subRequest.taskList)
+                {
+                    string assignments = "";
+
+                    if (subRequest.taskAssignments != null)
+                    {
+                        var currentAssignments = subRequest.taskAssignments.Where(t => t.taskID == task.taskID);
+
+                        foreach (var assigned in currentAssignments)
+                        {
+                            assignments += assigned.staffID + ", ";
+                        }
+                    }
+
+                    <div class="row">
+                        <div class="col s12 m6 l3">
+                            <p><span class="ViewHeader"><b>Order:</b></span><br /> @task.orderNum.ToString() </p>
+                        </div>
+
+                        <div class="col s12 m6 l3">
+                            <p><span class="ViewHeader"><b>Due Date:</b></span><br /> @task.DueDate.ToString() </p>
+                        </div>
+
+                        <div class="col s12 m6 l3">
+                            <p><span class="ViewHeader"><b>Status:</b></span><br /> @task.Status.ToString() </p>
+                        </div>
+
+                        <div class="col s12 m6 l3">
+                            <p><span class="ViewHeader"><b>Assigned To:</b></span><br /> @assignments.ToString() </p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col s12 m12 l6">
+                            <p><span class="ViewHeader"><b>Task:</b></span><br /> @task.Task.ToString() </p>
+                        </div>
+
+                        <div class="col s12 m12 l6">
+                            <p><span class="ViewHeader"><b>Comments:</b></span><br /> @task.Comments.ToString() </p>
+                        </div>
+
+                    </div>
+
+                }
+            </fieldset>
+        </div> <!-- End Task List Row -->
+    }
+} @*End subRequest Loop*@
+
+<div class="row">
+
+    <!-- Hook to ScrollSpy Side Nav -->
+    <fieldset class="ViewCase section scrollspy" id="attachments">
+        <legend>Attachments</legend>
+
+        <div class="row">
+            <div class="col s12">
+                <p><span class="ViewHeader"><b>Attachments</b></span></p>
+
+                @if (@Model.request.doaAttachment != "Submitted by DOA" && @Model.request.doaAttachment != "Submitted by DOA or Staff" && @Model.request.doaAttachment != "Approval not needed" && @Model.request.doaAttachment != null)
+                {
+                    <p><a href="~/Attachments/@Model.request.doaAttachment" target="_blank">@Model.request.doaAttachment (Approval File)</a></p>
+                }
+
+                @foreach (var attachment in Model.attachment)
+                {
+                    <p><a href="~/Attachments/@attachment.filePath" target="_blank">@attachment.filePath</a></p>
+                }
+
+            </div>
+        </div>
+    </fieldset>
+</div> <!-- End Col -->
+
+@if (Model.request.status == "Pending")
+{
+    if (ViewBag.Role == "Agent" || ViewBag.Role == "Approver")
+    {
+        using (Html.BeginForm("ApproveRequest", "Request", new { requestID = Convert.ToInt16(Request.QueryString["requestID"]) }, FormMethod.Post, new { enctype = "multipart/form-data", name = "ReuqestForm", id = "RequestForm" }))
+        {
+            <fieldset class="ViewCase section scrollspy">
+                <legend>Approval Comments</legend>
+
+                <div class="row">
+                    <div class="input-field col s12 m12 l12">
+                        <textarea class="materialize-textarea" id="approvalReason" name="approvalReason"></textarea>
+                        <label for="additionalInfo">Comments</label>
+                    </div>
+                </div>
+            </fieldset>
+
+            <div class="right-align">
+                <button class="btn waves-effect waves-light button" name="action">
+                    Approve Case
+                    <i class="material-icons right">thumb_up</i>
+                </button>
+                <br />
+            </div>
+
+        }
+
+        using (Html.BeginForm("DenyRequest", "Request", new { requestID = Convert.ToInt16(Request.QueryString["requestID"]) }, FormMethod.Post, new { enctype = "multipart/form-data", name = "ReuqestForm", id = "RequestForm" }))
+        {
+            <fieldset class="ViewCase section scrollspy">
+                <legend>Denial Comments</legend>
+
+                <div class="row">
+                    <div class="input-field col s12 m12 l12">
+                        <textarea data-validation="length" data-validation-length="min10" class="materialize-textarea" id="denialReason" name="denialReason"></textarea>
+                        <label for="additionalInfo">Comments</label>
+                    </div>
+                </div>
+            </fieldset>
+
+            <div class="right-align">
+                <button class="btn waves-effect waves-light button" name="action">
+                    Deny Case
+                    <i class="material-icons right">thumb_down</i>
+                </button>
+                <br />
+            </div>
+        }
+
+
+    }
+}
+else
+{
+    if (ViewBag.Role == "Agent")
+    {
+            <div class="right-align">
+                @using (Html.BeginForm("CloseRequest", "Request", new { requestID = Convert.ToInt16(Request.QueryString["requestID"]) }, FormMethod.Post, new { enctype = "multipart/form-data", name = "ReuqestForm", id = "RequestForm" }))
+                {
+                    <button class="btn waves-effect waves-light button" name="action">
+                        Case Closed
+                        <i class="material-icons right">thumb_up</i>
+                    </button>
+                    <br />
+                }
+            </div>
+
+            <div class="right-align">
+                <button class="btn waves-effect waves-light button" type="submit" name="action" onclick="TrelloUpload()">
+                    Trello Upload
+                    <i class="material-icons right">folder_shared</i>
+                </button>
+            </div>
+
+            <div class="right-align">
+                <button class="btn waves-effect waves-light button" onclick="DisplayScully()" name="action">
+                    I don't believe in this case!
+                    <i class="material-icons right">thumb_down</i>
+                </button>
+            </div>
+
+    } <!-- End Check For Agent Status -->
+
+        <div id="Scully" title="Scully" class="white-popup mfp-hide">
+            <br />
+            <img src="~/images/Scully.jpg" alt="Scully" width="80%" />
+        </div>
+}
+
+

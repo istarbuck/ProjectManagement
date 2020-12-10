@@ -1,0 +1,35 @@
+﻿@media print
+{
+    h3, form, p, tfoot, .noPrint
+    {
+        display: none;
+    }
+
+    @page
+    {
+        margin-top: 10px;
+    }
+
+    .datagrid 
+    {
+        border: none;
+    }
+
+    .datagrid table thead th
+    {
+        border: none;
+    }
+
+    .datagrid table tbody td
+    {
+        border: none;
+    }
+
+    body, head, table, html, section
+    {
+        margin: 0px;
+        padding: 0px;
+    }
+
+
+}

@@ -1,0 +1,241 @@
+﻿@model ProjectRequest.Models.TemplateInfo
+
+@{
+    ViewBag.Title = "Edit CC Templates";
+    Layout = "~/Views/Shared/_LayoutCopy2017.cshtml";
+}
+
+
+
+    <fieldset class="CaseFilter">
+    <legend>Create/Edit CC Templates</legend>
+
+    @using (Html.BeginForm("EditTemplate", "Template"))
+    {
+        if (Model.template != null)
+        {
+            <input type="hidden" id="templateID" name="templateID" value="@Model.template.templateID" />
+
+            <div class="row">
+                <div class="input-field col s12 m6 l6">
+                    <textarea class="materialize-textarea" id="templateName" name="templateName">@Model.template.templateName</textarea>
+                    <label for="templateName">Template Name:</label>
+                </div>
+            </div>
+        }
+        else
+        {
+            <input type="hidden" id="templateID" name="templateID" />
+
+            <div class="row">
+                <div class="input-field col s12 m6 l6">
+                    <textarea class="materialize-textarea" cols="175" id="templateName" name="templateName"></textarea>
+                    <label for="templateName">Template Name:</label>
+                </div>
+            </div>
+        }
+
+        <p class="collegeHeader noTopSpace">Task Info</p>
+
+        <div class="row">
+
+            <div class="input-field col s1">
+                <input type="text" name="Order_@task.taskID" id="Order_@task.taskID" value="@task.orderNum" />
+                <label>Order</label>
+            </div>
+
+            <div class="input-field col s2">
+                <input type="text" name="DueDate_@task.taskID" id="DueDate_@task.taskID" value="@task.DueDate" class="datepicker" />
+                <label>Due Date</label>
+            </div>
+
+            <div class="input-field col s2">
+                <select name="Status_@task.taskID" id="Status_@task.taskID" class="status">
+                    <option value="00">Please Select:</option>
+                    @foreach (var status in Model.taskStatus)
+                    {
+                        if (status.status == task.Status)
+                        {
+                            <option value="@status.status" selected="selected">@status.status</option>
+                        }
+                        else
+                        {
+                            <option value="@status.status">@status.status</option>
+                        }
+                    }
+                </select>
+                <label>Status</label>
+            </div>
+
+            <div class="input-field col s5">
+                <textarea class="materialize-textarea assignment" name="Assignment_@task.taskID">@assignments</textarea>
+                <label>Assigned To</label>
+            </div>
+
+            <div class="col s2">
+
+                @if (task.priority == true)
+                {
+                    <div class="switch">
+                        <label>
+                            <input type="checkbox" id="Prioritize_@task.taskID" name="Prioritize_@task.taskID" checked="checked" />
+                            <span class="lever"></span>
+                        </label>
+                        <span class="switchText">Prioritize</span>
+                    </div>
+                }
+                else
+                {
+
+                    <div class="switch">
+                        <label>
+                            <input type="checkbox" id="Prioritize_@task.taskID" name="Prioritize_@task.taskID" />
+                            <span class="lever"></span>
+                        </label>
+                        <span class="switchText">Prioritize</span>
+                    </div>
+
+                }
+
+                <div class="switch">
+                    <label>
+                        <input type="checkbox" id="Delete_@task.taskID" name="Delete_@task.taskID" class="mdl-switch__input delete" />
+                        <span class="lever"></span>
+                    </label>
+                    <span class="switchText">Delete</span>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="input-field col s6">
+                <textarea class="materialize-textarea" name="Task_@task.taskID" id="Task_@task.taskID">@task.Task</textarea>
+                <label>Task</label>
+            </div>
+
+            <div class="input-field col s6">
+                <textarea class="materialize-textarea" name="Comments_@task.taskID" id="Comments_@task.taskID">@task.Comments</textarea>
+                <label>Comments</label>
+            </div>
+
+        </div>
+    }
+
+    <p class="collegeHeader noTopSpace">New Task</p>
+
+    <div class="row">
+
+        <div class="input-field col s1">
+            <input type="text" name="Order" id="Order" class="order" />
+            <label>Order</label>
+        </div>
+
+        <div class="input-field col s2">
+            <input type="text" name="DateDue" class="datepicker" />
+            <label>Due Date</label>
+        </div>
+
+        <div class="input-field col s2">
+            <select name="Status" id="Status">
+                <option value="00">Please Select:</option>
+                @foreach (var status in Model.taskStatus)
+                {
+                    <option value="@status.status">@status.status</option>
+                }
+            </select>
+            <label>Status</label>
+        </div>
+
+        <div class="input-field col s5">
+            <textarea class="materialize-textarea assignment resizeMe" name="Assignment"></textarea>
+            <label>Assigned To</label>
+        </div>
+
+        <div class="col s2">
+            <div class="switch">
+                <label>
+                    <input type="checkbox" id="Prioritize" name="Prioritize" />
+                    <span class="lever"></span>
+                </label>
+                <span class="switchText">Prioritize</span>
+            </div>
+        </div>
+
+        <div class="input-field col s6">
+            <textarea class="materialize-textarea" name="Task"></textarea>
+            <label>Task</label>
+        </div>
+
+        <div class="input-field col s6">
+            <textarea class="materialize-textarea" name="Comments"></textarea>
+            <label>Comments</label>
+        </div>
+
+    </div>
+
+    }
+
+</fieldset>
+
+<div class="right-align">
+    <button class="btn waves-effect waves-light button" type="submit" name="action">
+        Save Template
+        <i class="material-icons right">description</i>
+    </button>
+</div>
+
+<div id="staffList">
+    <ul>
+    @foreach (var staff in Model.staff)
+    {
+        <li><a href="@staff.staffID">@staff.firstName @staff.lastName</a></li>
+    }
+    </ul>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('#staffList').hide();
+        $('textarea').trigger('autoresize');
+
+
+        $(document).click(function (e) {
+            $('#staffList').hide();
+        });
+
+        $('.assignment, #TO').click(function (e) {
+            e.stopPropagation();
+
+            var textBoxPostion = $(this).offset();
+
+            var previousBox = $('#current');
+            previousBox.removeAttr('id');
+
+            $(this).attr('id', 'current');
+
+            $('#staffList').show();
+            $('#staffList').offset({ top: textBoxPostion.top + 50, left: textBoxPostion.left });
+            $('#staffList').offset({ top: textBoxPostion.top + 50, left: textBoxPostion.left });
+
+
+        });
+
+        $('#staffList a').click(function (e) {
+            var staffID = $(this).attr('href');
+            var assignments = $('#current').val();
+
+            assignments = assignments + staffID + ",";
+
+            $('#current').val(assignments);
+
+            $('#staffList').hide();
+
+            $('textarea').trigger('autoresize');
+
+            e.preventDefault();
+        });
+    });
+</script>

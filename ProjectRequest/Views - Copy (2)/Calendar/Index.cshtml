@@ -1,0 +1,300 @@
+﻿@{
+    ViewBag.Title = "Event Calender";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    
+    <link href='~/css/fullcalendar.css' rel='stylesheet' />
+    <link href='~/css/fullcalendar.print.css' rel='stylesheet' media='print' />
+
+    <script src="https://secure.sullivan.edu/ProjectRequest/ProjectRequest/js/moment.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="https://secure.sullivan.edu/ProjectRequest/ProjectRequest/js/fullcalendar.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://secure.sullivan.edu/ProjectRequest/ProjectRequest/js/date.js" type="text/javascript" charset="utf-8"></script>
+    
+    <link rel="stylesheet" href="~/css/magnific-popup.css"> 
+    
+    <style type="text/css">
+
+        .white-popup {
+          position: relative;
+          background: #FFF;
+          padding: 20px;
+          width: auto;
+          max-width: 700px;
+          margin: 20px auto;
+        }
+
+    </style>
+}
+<script>
+	$(document).ready(function() {
+	    $('.time').hide();
+	    $('#clearEvent').hide();
+
+	    $('#allDay').change(function () {
+	        if ($('#allDay').val() == 'true') {
+	            $('.time').hide();
+	        }
+	        else {
+	            $('.time').show();
+	        }
+	    });
+
+	    $('.eventDate').datepicker();
+
+		$('#calendar').fullCalendar({
+			header: {
+				left: 'prev,next today',
+				center: 'title',
+				right: 'month,basicWeek,basicDay'
+			},
+			eventRender: function (event, element) {
+			    element.attr('href', 'javascript:void(0);');
+			    element.click(function() {
+			        $("#startTime").html(moment(event.start).format('MM/DD/YYYY h:mm A'));
+			        $("#endTime").html(moment(event.end).format('MM/DD/YYYY h:mm A'));
+			        $("#eventInfo").html(event.title);
+			        $.magnificPopup.open({
+			            items: {
+			                src: '#eventContent'
+			            },
+			            type: 'inline'
+			        });
+
+			        $('#id').val(event.id);
+
+			        $('#title').val(event.title);
+			        if (event.allDay) {
+			            $('#allDay').val('true');
+			            $('.time').hide();
+			        }
+			        else {
+			            $('#allDay').val('false');
+			            $('.time').show();
+			        }
+
+			        var startDate = moment(event.start).format('MM/DD/YYYY hh:mm A').split(" ");
+			        var startTime = startDate[1].split(':');
+			        $('#startDate').val(startDate[0]);
+			        $('#startTime1').val(startTime[0]);
+			        $('#startTime2').val(startTime[1]);
+			        $('#startAmPm').val(startDate[2]);
+
+			        var endDate = moment(event.end).format('MM/DD/YYYY hh:mm A').split(" ");
+
+			        if (event.allDay) {
+			            $('#endDate').val(Date.parse(endDate[0]).addDays(-1).toString('M/d/yyyy'));
+			        }
+			        else {
+			            $('#endDate').val(endDate[0]);
+			        }
+
+			        var endTime = endDate[1].split(':');
+			        
+			        $('#endTime1').val(endTime[0]);
+			        $('#endTime2').val(endTime[1]);
+			        $('#endAmPm').val(endDate[2]);
+
+			        $('#clearEvent').show();
+			    });
+			},
+			editable: false,
+			eventLimit: true, // allow "more" link when too many events
+			events: "/ProjectRequest/ProjectRequest/Calendar/GetEvents",
+			displayEventEnd: true,
+            timezone: 'local'
+		});
+		
+
+		$('#clearEvent').click(function () {
+		    $('#id').val('0');
+		    $('#title').val("");
+		    $('#allDay').val('true');
+		    $('.time').hide();
+		    $('#startDate').val("");
+		    $('#startTime1').val("00");
+		    $('#startTime2').val("00");
+		    $('#startAmPm').val("AM");
+		    $('#endDate').val("");
+		    $('#endTime1').val("00");
+		    $('#endTime2').val("00");
+		    $('#endAmPm').val("AM");
+		    $('#clearEvent').hide();
+		});
+	});
+
+</script>
+<style>
+
+	/*body {
+		margin: 40px 10px;
+		padding: 0;
+		font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
+		font-size: 14px;
+	}*/
+
+	#calendar {
+		max-width: 900px;
+		margin: 0 auto;
+        margin-top: 25px;
+	}
+
+</style>
+
+    <div id="eventContent" title="Event Details" class="white-popup mfp-hide">
+        Start: <span id="startTime"></span><br>
+        End: <span id="endTime"></span><br>
+        <p id="eventInfo"></p>
+    </div>
+
+	<div id='calendar'></div>
+
+<fieldset class="CalenderEvent mdl-shadow--2dp">
+<legend>Add Event</legend>
+@using (Html.BeginForm("AddEvent", "Calendar"))
+{
+
+    //Track if editing an event, or adding a new one
+    <input type="hidden" name="id" id="id" value="0" />
+    
+    <div class="mdl-grid mdl-grid--no-spacing">
+        
+        <div class="mdl-cell mdl-cell--9-col" >
+            <label>Title:</label>
+            <br />
+            <textarea rows="1" cols="50" name="title" id="title"></textarea>
+            <br />
+        </div>
+
+        <div class="mdl-cell mdl-cell--3-col" >
+            <label>All Day Event?</label>
+            <br />
+            <select name="allDay" id="allDay">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </select>
+            <br />
+        </div>
+    
+    </div>
+
+    <div class="mdl-grid mdl-grid--no-spacing">
+
+        <div class="mdl-cell mdl-cell--4-col" >
+            <label>Start Date:</label>
+            <br />
+            <input type="text" name="startDate" id="startDate" class="eventDate" />
+            <br />
+        </div>
+    
+        <div class="mdl-cell mdl-cell--4-col" >
+            <div class="time">
+            <label>Start Time:</label>
+            <br />
+            <select name="startTime1" id="startTime1">
+                <option value="00">00</option>
+                <option value="01">01</option>
+                <option value="02">02</option>
+                <option value="03">03</option>
+                <option value="04">04</option>
+                <option value="05">05</option>
+                <option value="06">06</option>
+                <option value="07">07</option>
+                <option value="08">08</option>
+                <option value="09">09</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+            </select>
+            :
+            <select name="startTime2" id="startTime2">
+            @for (int i = 0; i <= 60; i++)
+            {
+                string time;
+                if (i < 10)
+                {
+                    time = "0" + i.ToString();
+                }
+                else
+                {
+                    time = i.ToString();
+                }
+
+                <option value="@time">@time</option>
+
+            } 
+            </select>
+
+           <select name="startAmPm">
+                <option value="AM">AM</option>
+                <option value="PM">PM</option>
+            </select>
+            <br />
+            </div>
+        </div>
+
+    </div> //End grid div
+    
+    <div class="mdl-grid mdl-grid--no-spacing">
+
+         <div class="mdl-cell mdl-cell--4-col" >
+            <label>End Date:</label>
+            <br />
+            <input type="text" name="endDate" id="endDate" class="eventDate" />
+            <br />
+        </div>
+
+        <div class="mdl-cell mdl-cell--4-col" >
+            <div class="time">
+            <label>End Time:</label>
+            <br />
+            <select name="endTime1" id="endTime1">
+                <option value="00">00</option>
+                <option value="01">01</option>
+                <option value="02">02</option>
+                <option value="03">03</option>
+                <option value="04">04</option>
+                <option value="05">05</option>
+                <option value="06">06</option>
+                <option value="07">07</option>
+                <option value="08">08</option>
+                <option value="09">09</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+            </select>
+            :
+            <select name="endTime2" id="endTime2">
+            @for (int i = 0; i <= 60; i++)
+            {
+                string time;
+                if (i < 10)
+                {
+                    time = "0" + i.ToString();
+                }
+                else
+                {
+                    time = i.ToString();
+                }
+
+                <option value="@time">@time</option>
+
+            }   
+            </select>
+            <select name="endAmPm" id="endAmPm">
+                <option value="AM">AM</option>
+                <option value="PM">PM</option>
+            </select>
+            <br />
+            </div>
+        
+        </div> @*End col div*@ 
+    </div>
+           
+
+    <br />
+    <input type="submit" value="Save Event" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent button" /><input type="button" value="Create New Event" id="clearEvent" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent button" />
+
+}
+</fieldset>
+
+
+<script src="~/js/jquery.magnific-popup.js"></script>

@@ -1,0 +1,43 @@
+﻿@{
+    ViewBag.Title = "Page Not Found";
+}
+
+<h2>I want to believe the CC page is out there.</h2>
+<center><img src="~/images/MolderDisapprovingStare.gif" width="50%" /></center>
+@*<table>
+<tr>
+<td>
+<img src="~/images/MolderDisapprovingStare.gif" />
+</td>
+<td>
+<img src="~/images/MolderDisapprovingStare.gif" />
+</td>
+    <td>
+<img src="~/images/MolderDisapprovingStare.gif" />
+</td>
+</tr>
+    <tr>
+<td>
+<img src="~/images/MolderDisapprovingStare.gif" />
+</td>
+<td>
+<img src="~/images/MolderDisapprovingStare.gif" />
+</td>
+    <td>
+<img src="~/images/MolderDisapprovingStare.gif" />
+</td>
+</tr>
+</table>*@
+<br />
+
+<p><b>Could not find the page: @ViewBag.RequestedUrl</b></p>
+@if (ViewBag.ReferrerUrl != null) {
+<p>Go back to the <a href="@ViewBag.ReferrerUrl">previous page</a>.</p>
+}
+<audio controls autoplay style="display: none">
+    <source src="~/Sound/xfilestheme.mp3">
+    <source src="~/Sound/xfilestheme.ogg">
+</audio>
+@* Error page must be longer than 512 bytes for IE and Chrome to show it. 
+   So add padding in case we're short. *@
+@(new string(' ', 512))

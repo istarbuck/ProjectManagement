@@ -1,0 +1,285 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ProjectRequestModel" Alias="Self" xmlns="http://schemas.microsoft.com/ado/2009/11/edm" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+  <EntityContainer Name="ProjectRequestEntities" annotation:LazyLoadingEnabled="true" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+    <EntitySet Name="Answers" EntityType="ProjectRequestModel.Answer" />
+    <EntitySet Name="Categories" EntityType="ProjectRequestModel.Category" />
+    <EntitySet Name="Questions" EntityType="ProjectRequestModel.Question" />
+    <EntitySet Name="RequestAssignments" EntityType="ProjectRequestModel.RequestAssignment" />
+    <EntitySet Name="Staffs" EntityType="ProjectRequestModel.Staff" />
+    <EntitySet Name="Locations" EntityType="ProjectRequestModel.Location" />
+    <EntitySet Name="DOAs" EntityType="ProjectRequestModel.DOA" />
+    <EntitySet Name="Attachments" EntityType="ProjectRequestModel.Attachment" />
+    <EntitySet Name="Templates" EntityType="ProjectRequestModel.Template" />
+    <EntitySet Name="TaskStatus1" EntityType="ProjectRequestModel.TaskStatus" />
+    <EntitySet Name="TaskAssignments" EntityType="ProjectRequestModel.TaskAssignment" />
+    <EntitySet Name="Chores" EntityType="ProjectRequestModel.Chore" />
+    <EntitySet Name="TimeSheets" EntityType="ProjectRequestModel.TimeSheet" />
+    <EntitySet Name="Calenders" EntityType="ProjectRequestModel.Calender" />
+    <EntitySet Name="TaskLists" EntityType="ProjectRequestModel.TaskList" />
+    <EntitySet Name="PONums" EntityType="ProjectRequestModel.PONum" />
+    <EntitySet Name="ProjectStatus1" EntityType="ProjectRequestModel.ProjectStatus" />
+    <EntitySet Name="Requests" EntityType="ProjectRequestModel.Request" />
+    <EntitySet Name="VelocifyStatuses" EntityType="ProjectRequestModel.VelocifyStatus" />
+    <EntitySet Name="Vendors" EntityType="ProjectRequestModel.Vendor" />
+    <EntitySet Name="vendorContacts" EntityType="ProjectRequestModel.vendorContact" />
+    <EntitySet Name="SubRequests" EntityType="ProjectRequestModel.SubRequest" />
+    <EntitySet Name="Departments" EntityType="ProjectRequestModel.Department" />
+    <EntitySet Name="Approvers" EntityType="ProjectRequestModel.Approver" />
+    <EntitySet Name="SelectionItems" EntityType="ProjectRequestModel.SelectionItem" />
+  </EntityContainer>
+  <EntityType Name="Answer">
+    <Key>
+      <PropertyRef Name="AnswerID" />
+    </Key>
+    <Property Name="AnswerID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+    <Property Name="QuestionID" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+    <Property Name="AnswerText" Type="String" Nullable="false" MaxLength="Max" Unicode="false" FixedLength="false" />
+    <Property Name="AnswerValue" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+    <Property Name="requestID" Type="Int32" Nullable="false" />
+    <Property Name="subrequestID" Type="Int32" />
+  </EntityType>
+  <EntityType Name="Category">
+    <Key>
+      <PropertyRef Name="categoryID" />
+    </Key>
+    <Property Name="categoryID" Type="String" Nullable="false" MaxLength="20" Unicode="false" FixedLength="false" />
+    <Property Name="category1" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
+    <Property Type="String" Name="categoryName" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="version" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="Question">
+    <Key>
+      <PropertyRef Name="questionID" />
+    </Key>
+    <Property Name="questionID" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+    <Property Name="categoryID" Type="String" Nullable="false" MaxLength="20" Unicode="false" FixedLength="false" />
+    <Property Name="Question1" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+    <Property Name="selectionName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Class" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="RequestAssignment">
+    <Key>
+      <PropertyRef Name="requestID" />
+      <PropertyRef Name="staffID" />
+    </Key>
+    <Property Type="Int32" Name="requestID" Nullable="false" />
+    <Property Type="String" Name="staffID" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="Staff">
+    <Key>
+      <PropertyRef Name="staffID" />
+    </Key>
+    <Property Type="String" Name="staffID" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
+    <Property Type="String" Name="firstName" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Type="String" Name="lastName" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Type="String" Name="emailAddress" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="Location">
+    <Key>
+      <PropertyRef Name="locationID" />
+    </Key>
+    <Property Type="Int32" Name="locationID" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+    <Property Type="String" Name="name" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="DOA">
+    <Key>
+      <PropertyRef Name="doaID" />
+    </Key>
+    <Property Type="String" Name="doaID" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
+    <Property Type="String" Name="doaName" Nullable="false" MaxLength="75" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="Attachment">
+    <Key>
+      <PropertyRef Name="attachmentID" />
+    </Key>
+    <Property Type="Int32" Name="attachmentID" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+    <Property Type="Int32" Name="requestID" Nullable="false" />
+    <Property Type="String" Name="filePath" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Type="String" Name="caption" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Type="String" Name="staffID" MaxLength="25" FixedLength="false" Unicode="false" />
+    <Property Type="DateTime" Name="dateAdded" Precision="3" />
+  </EntityType>
+  <EntityType Name="Template">
+    <Key>
+      <PropertyRef Name="templateID" />
+    </Key>
+    <Property Type="Int32" Name="templateID" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+    <Property Type="String" Name="templateName" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="TaskStatus">
+    <Key>
+      <PropertyRef Name="statusID" />
+      <PropertyRef Name="status" />
+    </Key>
+    <Property Type="Int32" Name="statusID" Nullable="false" />
+    <Property Type="String" Name="status" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="TaskAssignment">
+    <Key>
+      <PropertyRef Name="taskID" />
+      <PropertyRef Name="staffID" />
+    </Key>
+    <Property Type="Int32" Name="taskID" Nullable="false" />
+    <Property Type="String" Name="staffID" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
+    <Property Type="Int32" Name="templateID" />
+  </EntityType>
+  <EntityType Name="Chore">
+    <Key>
+      <PropertyRef Name="choreID" />
+    </Key>
+    <Property Type="Int32" Name="choreID" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+    <Property Type="Int32" Name="sheetID" Nullable="false" />
+    <Property Type="Int32" Name="requestID" />
+    <Property Type="String" Name="chore1" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Type="Decimal" Name="timeSpent" Precision="4" Scale="2" />
+    <Property Type="String" Name="name" MaxLength="500" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="TimeSheet">
+    <Key>
+      <PropertyRef Name="sheetID" />
+    </Key>
+    <Property Type="Int32" Name="sheetID" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+    <Property Type="String" Name="staffID" MaxLength="15" FixedLength="false" Unicode="false" />
+    <Property Type="DateTime" Name="sheetDate" Precision="3" />
+    <Property Type="Boolean" Name="completed" />
+  </EntityType>
+  <EntityType Name="Calender">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Type="Int32" Name="id" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+    <Property Type="String" Name="title" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Type="DateTime" Name="start" Nullable="false" Precision="3" />
+    <Property Type="DateTime" Name="end" Nullable="false" Precision="3" />
+    <Property Type="Boolean" Name="allDay" />
+    <Property Type="String" Name="className" MaxLength="25" FixedLength="false" Unicode="false" />
+    <Property Name="location" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="eventType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="TaskList">
+    <Key>
+      <PropertyRef Name="taskID" />
+    </Key>
+    <Property Type="Int32" Name="taskID" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+    <Property Type="Int32" Name="requestID" />
+    <Property Type="String" Name="Task" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Type="DateTime" Name="DueDate" Precision="3" />
+    <Property Type="String" Name="Status" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Type="Int32" Name="TemplateID" />
+    <Property Type="Int32" Name="orderNum" />
+    <Property Type="Boolean" Name="priority" />
+    <Property Name="Comments" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="subRequestID" Type="Int32" />
+  </EntityType>
+  <EntityType Name="PONum">
+    <Key>
+      <PropertyRef Name="poID" />
+    </Key>
+    <Property Type="Int32" Name="requestID" Nullable="false" />
+    <Property Type="String" Name="PONum1" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Type="Int32" Name="poID" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+  </EntityType>
+  <EntityType Name="ProjectStatus">
+    <Key>
+      <PropertyRef Name="statusID" />
+    </Key>
+    <Property Type="Int16" Name="statusID" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+    <Property Type="String" Name="status" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="Request">
+    <Key>
+      <PropertyRef Name="reuqestID" />
+    </Key>
+    <Property Type="Int32" Name="reuqestID" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+    <Property Type="String" Name="categoryID" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Type="String" Name="name" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Type="String" Name="location" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Type="String" Name="contactInfo" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Type="DateTime" Name="dateRequested" Nullable="false" Precision="3" />
+    <Property Type="String" Name="currentTrackID" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Type="Boolean" Name="completed" />
+    <Property Type="String" Name="doaName" MaxLength="75" FixedLength="false" Unicode="false" />
+    <Property Type="String" Name="doaAttachment" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Type="String" Name="projectName" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Type="String" Name="email" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Type="Int32" Name="templateID" />
+    <Property Type="String" Name="additionalInfo" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Type="String" Name="comment" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Type="String" Name="poNumber" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Type="String" Name="detail" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Type="Double" Name="cost" />
+    <Property Type="DateTime" Name="dueDate" Precision="3" />
+    <Property Type="String" Name="customID" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Type="String" Name="status" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Type="Int16" Name="subProjects" />
+    <Property Type="String" Name="vendor" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Type="String" Name="shipTo" MaxLength="250" FixedLength="false" Unicode="false" />
+    <Property Type="String" Name="subtotal" MaxLength="15" FixedLength="false" Unicode="false" />
+    <Property Type="String" Name="tax" MaxLength="15" FixedLength="false" Unicode="false" />
+    <Property Type="String" Name="total" MaxLength="15" FixedLength="false" Unicode="false" />
+    <Property Type="String" Name="Quantity" MaxLength="15" FixedLength="false" Unicode="false" />
+    <Property Type="String" Name="printerSpecifications" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="publication" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="denialReason" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="department" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="approvedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="VelocifyStatus">
+    <Key>
+      <PropertyRef Name="statusID" />
+    </Key>
+    <Property Type="Int32" Name="statusID" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+    <Property Type="String" Name="statusName" MaxLength="200" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="Vendor">
+    <Key>
+      <PropertyRef Name="vendorID" />
+    </Key>
+    <Property Name="vendorID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="publication" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="brand" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="vendorContact">
+    <Key>
+      <PropertyRef Name="vendorContactID" />
+    </Key>
+    <Property Name="vendorContactID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+    <Property Name="contact" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="phone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="vendorID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="SubRequest">
+    <Key>
+      <PropertyRef Name="subRequestID" />
+    </Key>
+    <Property Name="subRequestID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+    <Property Name="requestID" Type="Int32" Nullable="false" />
+    <Property Name="categoryID" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="Department">
+    <Key>
+      <PropertyRef Name="department1" />
+    </Key>
+    <Property Name="department1" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="Approver">
+    <Key>
+      <PropertyRef Name="approverID" />
+    </Key>
+    <Property Name="approverID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="department" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="sullivanID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="SelectionItem">
+    <Key>
+      <PropertyRef Name="selectionID" />
+    </Key>
+    <Property Name="selectionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="selectionName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="selectionValue" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="selectionText" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+  </EntityType>
+</Schema>

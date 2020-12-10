@@ -1,0 +1,315 @@
+﻿@model ProjectRequest.Models.RequestListCategory
+@using ProjectRequest.HTMLHelpers
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        //$('#dateEnd').change(function () {
+        //    $('#dateEnd').parent.addClass('md-input-has-value');
+        //}, 150);
+    });
+</script>
+
+
+@using (Html.BeginForm((string)ViewBag.Method, "Request"))
+{
+
+<fieldset class="CaseFilter">
+<legend>Filter CC Case Files</legend>
+
+    <div class="row">
+
+        <div class="input-field col s12 m6 l3">
+            <i class="material-icons prefix">search</i>
+            <input type="text" name="search" class="search" value="@Model.PagingInfo.search" />
+            <label for="search">Search:</label>
+        </div>
+
+        <div class="input-field col s12 m6 l3">
+            <i class="material-icons prefix">event_</i>
+            <input type="text" name="dateStart" class="datepicker" id="dateStart" value="@Model.PagingInfo.dateStart" />
+            <label for="dateStart">Date Start:</label>
+        </div>
+    
+        <div class="input-field col s12 m6 l3">
+            <i class="material-icons prefix">event_busy</i>
+            <input type="text" name="dateEnd" class="datepicker" id="dateEnd" value="@Model.PagingInfo.dateEnd" />
+            <label for="dateEnd">Date End:</label>
+        </div>
+
+
+
+        <div class="input-field selectIcon col s12 m6 l3">
+            <i class="material-icons prefix">thumb_up</i>
+            <select name="completed" >
+                <option value="00">Please Select:</option>
+                @foreach (var status in Model.PagingInfo.completionStatus)
+                {
+                    if (status.Key == Model.PagingInfo.completed)
+                    {
+                        <option value="@status.Key" selected="selected">@status.Value</option>
+                    }
+
+                    else
+                    {
+                        <option value="@status.Key">@status.Value</option>
+                    }
+                }   
+            </select>
+            <label for="completed">Completion Status:</label>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="input-field selectIcon col s12 m6 l3">
+            <i class="material-icons prefix">account_balance</i>
+            <select name="location" >
+                <option value="00">Please Select:</option>
+                @foreach (var location in Model.location)
+                {
+                    if (location.name == Model.PagingInfo.location)
+                    {
+                        <option value="@location.name" selected="selected">@location.name</option>      
+                    }
+                    else
+                    {
+                        <option value="@location.name" >@location.name</option>
+                    }
+                }
+            </select>
+            <label for="location">Location:</label>
+        </div>
+
+        @*<div class="input-field selectIcon col s12 m6 l3">
+            <i class="material-icons prefix">work</i>
+            <select name="category" >
+                <option value="00">Please Select:</option>
+                @foreach (var category in Model.cateogires)
+                {
+                    if (category.categoryID == Model.PagingInfo.category)
+                    {
+                        <option value="@category.categoryID" selected="selected">@category.categoryName</option>
+                    }
+
+                    else
+                    {
+                        <option value="@category.categoryID">@category.categoryName</option>
+                    }
+                }
+            </select>
+            <label for="category">Category:</label>
+        </div>*@
+
+        @*<div class="input-field selectIcon col s12 m6 l3">
+            <i class="material-icons prefix">next_week</i>
+            <select name="excludeCategory" >
+                <option value="00">Please Select:</option>
+                @foreach (var category in Model.cateogires)
+                {
+                    if (category.categoryID == Model.PagingInfo.excludeCategory)
+                    {
+                        <option value="@category.categoryID" selected="selected">@category.categoryName</option>
+                    }
+
+                    else
+                    {
+                        <option value="@category.categoryID">@category.categoryName</option>
+                    }
+                }
+            </select>
+            <label for="excludeCategory">Exclude Category:</label>
+        </div>*@
+
+        <div class="input-field selectIcon col s12 m6 l3">
+            <i class="material-icons prefix">assignment</i>
+            <select name="assignedTo" id="assignedTo">
+                <option value="00">Please Select:</option>
+                @foreach (var staff in Model.staffList)
+                {
+                    if (staff.staffID == Model.PagingInfo.assignedTo)
+                    {
+                        <option value="@staff.staffID" selected="selected">@staff.firstName @staff.lastName</option>
+                    }
+
+                    else
+                    {
+                        <option value="@staff.staffID">@staff.firstName @staff.lastName</option>
+                    }
+                }
+            </select>
+            <label for="assignedTo">Assigned To:</label>
+        </div>
+
+        <div class="input-field selectIcon col s12 m6 l3">
+            <i class="material-icons prefix">assessment</i>
+            <select name="projectStatus" id="projectStatus">
+                <option value="00">Please Select:</option>
+                @foreach (var status in Model.projectStatus)
+                {
+                    if (status.status == Model.PagingInfo.projectStatus)
+                    {
+                        <option value="@status.status" selected="selected">@status.status</option>
+                    }
+
+                    else
+                    {
+                        <option value="@status.status">@status.status</option>
+                    }
+                }
+            </select>
+            <label for="assignedTo">Status:</label>
+        </div>
+
+        <div class="input-field selectIcon col s12 m6 l3">
+            <i class="material-icons prefix">thumb_down</i>
+            <select name="excludeStatus" id="excludeStatus">
+                <option value="00">Please Select:</option>
+                @foreach (var status in Model.projectStatus)
+                {
+                    if (status.status == Model.PagingInfo.excludeStatus)
+                    {
+                        <option value="@status.status" selected="selected">@status.status</option>
+                    }
+
+                    else
+                    {
+                        <option value="@status.status">@status.status</option>
+                    }
+                }
+            </select>
+            <label for="assignedTo">Exclude Status:</label>
+        </div>
+
+    @*End MDL Row*@
+    </div>
+
+    <h4 class="totalCases right-align">
+        Total Cases: @ViewBag.CaseTotal
+    </h4>
+
+
+</fieldset>
+
+<div class="right-align">
+    <button class="btn waves-effect waves-light button" type="submit" name="action">
+        Filter Case Files
+        <i class="material-icons right">search</i>
+    </button>
+</div>
+
+}
+
+
+    <fieldset>
+        <legend>CC Case Files</legend>
+
+
+                <table class='col s12 infoTable bordered striped centered'>
+                    <thead>
+                        <tr>
+                            <th class="hide-on-med-and-down">Case ID</th>
+                            <th>Case Name:</th>
+                            <th class="hide-on-med-and-down">Requester Name</th>
+                            <th class="hide-on-med-and-down">Location</th>
+                            <th class="hide-on-med-and-down">Category</th>
+                            <th class="hide-on-med-and-down">Date Submitted</th>
+                            <th class="hide-on-med-and-down">Due Date</th>
+                            @*<th class="noPrint hide-on-med-and-down">Details</th>*@
+                            <th class="noPrint hide-on-med-and-down">Status</th>
+                            @*<th class="noPrint hide-on-med-and-down">Attachments</th>*@
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @{
+                            string rowColor = "alt";
+                        }
+
+                        @foreach (var request in Model.requestList)
+                        {
+                            var myAttachments = Model.attachments.Where(a => a.requestID == request.Request.reuqestID);
+
+                            if (rowColor == "noAlt")
+                            {
+                                rowColor = "alt";
+                            }
+                            else
+                            {
+                                rowColor = "noAlt";
+                            }
+
+                            <tr class="@rowColor">
+                                @if (ViewBag.Role == "Agent")
+                                {
+                                    @*Determine if the user is sent to the old edit views (single category), or the new edit veiws (multi category).*@ 
+                                    if (request.Request.categoryID == "multi")
+                                    {
+                                        <td class="hide-on-med-and-down">
+                                            @Html.ActionLink((request.Request.reuqestID).ToString() + " (Edit)", "EditCase", new { requestID = @request.Request.reuqestID }, new { target = "_blank" })
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td class="hide-on-med-and-down">
+                                            @Html.ActionLink((request.Request.reuqestID).ToString() + " (Edit)", "RequestInfo", new { requestID = @request.Request.reuqestID }, new { target = "_blank" })
+                                        </td>
+                                    }
+                                }
+                                else
+                                {
+                                    <td class="hide-on-med-and-down">@request.Request.reuqestID</td>
+                                }
+
+                                @*Determine if the user is sent to the old read only views (single category), or new read only veiws (multi category).*@
+                                @if (request.Request.categoryID == "multi")
+                                {
+                                    <td>
+                                        @Html.ActionLink((request.Request.projectName).ToString(), "ViewCase", new { requestID = @request.Request.reuqestID }, new { target = "_blank" })
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td>
+                                        @Html.ActionLink((request.Request.projectName).ToString(), "ViewRequest", new { requestID = @request.Request.reuqestID }, new { target = "_blank" })
+                                    </td>
+                                }
+                                <td class="hide-on-med-and-down">@request.Request.name</td>
+                                <td class="hide-on-med-and-down">@request.Request.location</td>
+
+                                    <td class="hide-on-med-and-down">@request.Request.categoryID</td>
+
+                                <td class="hide-on-med-and-down">@request.Request.dateRequested.ToShortDateString()</td>
+                                <td class="hide-on-med-and-down">@request.Request.dueDate.ToString().Replace("12:00:00 AM", "")</td>
+                                <td class="hide-on-med-and-down">@request.Request.status</td>
+
+                                @*<td class="noPrint hide-on-med-and-down">@Html.ActionLink("Edit Case", "RequestInfo", new { requestID = @request.Request.reuqestID }, new { target = "_blank" }) </td>*@
+
+                                @*    <td class="noPrint hide-on-med-and-down">
+                                    @foreach (var attachment in myAttachments)
+                                    {
+                                        <a href="~/Attachments/@attachment.filePath" target="_blank">@attachment.filePath<br /></a>
+                                    }
+                                    </td>*@
+                            </tr>
+                        }
+
+                    </tbody>
+
+                    @*<tfoot>
+                        <tr>*@
+
+                            
+                        @*</tr>
+                    </tfoot>*@
+                </table>
+
+                <div class="row">
+                    <div class="col s12">
+                        <p class="paging">@Html.PageLinks(Model.PagingInfo, x => Url.Action((string)ViewBag.Method, new { page = x }))</p>
+                    </div>
+                </div>
+
+
+    </fieldset>
+
